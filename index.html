@@ -1,4 +1,4 @@
-OCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -156,7 +156,6 @@ OCTYPE html>
     <!-- NAVIGATION BAR -->
     <nav class="bg-white/90 backdrop-blur-md border-b-4 border-law-navy sticky top-0 z-50 px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Brand Trigger (Secret Vault Function) -->
             <div onclick="openVault()" class="flex items-center gap-3 cursor-help group active:scale-95 transition-transform">
                 <div class="h-10 w-10 bg-law-navy flex items-center justify-center rounded-lg shadow-lg border-2 border-white group-hover:rotate-[180deg] transition-transform duration-500">
                     <span class="text-white font-bold text-xl uppercase">LB</span>
@@ -169,7 +168,7 @@ OCTYPE html>
             
             <div class="hidden lg:flex gap-8 text-sm font-black text-stone-600 uppercase tracking-tight">
                 <button onclick="showPage('library')" class="hover:text-law-gold transition-colors">Act Library</button>
-                <a href="https://www.linkedin.com/in/abhishekyadav27001" target="_blank" class="text-law-accent hover:underline flex items-center gap-2">
+                <a href="https://www.linkedin.com/in/abhishek-yadav027/" target="_blank" class="text-law-accent hover:underline flex items-center gap-2">
                     <i class="fab fa-linkedin text-xl"></i> Follow Abhishek
                 </a>
             </div>
@@ -225,7 +224,6 @@ OCTYPE html>
         </header>
 
         <div class="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-3 gap-12">
-            <!-- BNSS 2023 (OPEN ACCESS) -->
             <div class="cartoon-card bg-white rounded-[2.5rem] p-10 flex flex-col shadow-cartoon">
                 <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center text-3xl mb-6 border-2 border-law-navy"><i class="fas fa-map-marked-alt"></i></div>
                 <h3 class="text-3xl font-black mb-2 tracking-tight">BNSS 2023</h3>
@@ -235,7 +233,6 @@ OCTYPE html>
                 </div>
             </div>
 
-            <!-- BNS (LOCKED) -->
             <div id="product-bns" class="cartoon-card bg-indigo-50 rounded-[2.5rem] p-10 flex flex-col shadow-cartoon relative overflow-hidden transition-all">
                 <div class="absolute top-4 right-4 bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">Locked</div>
                 <div class="w-16 h-16 bg-white border-2 border-law-navy text-indigo-600 rounded-3xl flex items-center justify-center text-3xl mb-6"><i class="fas fa-balance-scale"></i></div>
@@ -246,7 +243,6 @@ OCTYPE html>
                 </div>
             </div>
 
-            <!-- BSA (LOCKED) -->
             <div id="product-bsa" class="cartoon-card bg-emerald-50 rounded-[2.5rem] p-10 flex flex-col shadow-cartoon relative">
                 <div class="w-16 h-16 bg-white border-2 border-law-navy text-emerald-600 rounded-3xl flex items-center justify-center text-3xl mb-6"><i class="fas fa-file-invoice"></i></div>
                 <h3 class="text-3xl font-black mb-2 tracking-tight">BSA (Evidence)</h3>
@@ -269,10 +265,12 @@ OCTYPE html>
                 <div class="absolute top-0 right-0 p-8 opacity-10 text-[180px] -rotate-12 pointer-events-none"><i class="fas fa-gavel"></i></div>
                 <h2 class="text-5xl md:text-7xl font-black text-law-navy uppercase italic tracking-tighter mb-10">BNSS <span class="text-law-gold">2023</span> Roadmap</h2>
                 
-                <!-- CONTENT CONTAINER FOR YOUR READY CONTENT -->
                 <div id="bnss-injected-content" class="relative z-10 space-y-8">
-                    <!-- PASTE YOUR ENTIRE CONTENT BLOCKS BELOW THIS LINE -->
-                    <!DOCTYPE html>
+                    <!-- CONTENT BLOCKS -->
+                    <div class="p-8 bg-blue-50 rounded-[2.5rem] border-4 border-law-navy shadow-cartoon-sm">
+                        <h3 class="text-3xl font-black text-law-navy mb-4">Phase 1: Procedural Foundation</h3>
+                        <p class="text-slate-600 font-bold leading-relaxed">
+                           <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -3315,13 +3313,24 @@ OCTYPE html>
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </body>
 </html>
-                    <!-- PASTE YOUR ENTIRE CONTENT BLOCKS ABOVE THIS LINE -->
+                        </p>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="mt-20 pt-12 border-t-4 border-law-navy/10 flex justify-between items-center flex-wrap gap-4">
-                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Core v2.3 Active • System Healthy</p>
-                    <a href="https://abhishekyadav27001-lab.github.io/BNSS-roadmap/" target="_blank" class="text-law-gold font-black uppercase text-[10px] hover:underline">Launch External Source <i class="fas fa-external-link-alt ml-1"></i></a>
-                </div>
+    <!-- PAGE: COMING SOON -->
+    <section id="page-coming-soon" class="view-section hidden p-8 md:p-16">
+        <div class="max-w-4xl mx-auto space-y-12">
+            <button onclick="showPage('library')" class="text-sm font-black text-law-gold hover:underline uppercase tracking-widest"><i class="fas fa-arrow-left mr-2"></i> Library Home</button>
+            <div class="cartoon-card bg-white p-16 rounded-[4rem] text-center space-y-10 shadow-cartoon border-4 border-law-navy">
+                <div class="text-[140px] leading-none animate-bounce">⚖️ 😴</div>
+                <div class="speech-bubble text-2xl border-4 mx-auto max-w-md">"The Lawgic engine is still <br>compiling this module!"</div>
+                <h2 id="coming-soon-title" class="text-6xl font-black uppercase italic text-law-navy tracking-tighter">Act Name</h2>
+                <a href="https://www.linkedin.com/in/abhishek-yadav027/" target="_blank" class="bg-blue-600 text-white px-12 py-6 rounded-2xl font-black shadow-cartoon-sm flex items-center justify-center gap-4 hover:bg-blue-700 transition-all mx-auto w-fit text-xl">
+                    <i class="fab fa-linkedin text-3xl"></i> Notify on LinkedIn
+                </a>
             </div>
         </div>
     </section>
@@ -3332,10 +3341,13 @@ OCTYPE html>
             <button onclick="closeAuthModal()" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition-colors"><i class="fas fa-times text-xl"></i></button>
             <div class="h-20 w-20 bg-law-gold text-white rounded-2xl flex items-center justify-center text-4xl mx-auto mb-8 shadow-lg border-2 border-law-navy"><i class="fas fa-fingerprint"></i></div>
             <h3 class="text-4xl font-black text-law-navy mb-4 uppercase italic">Access Secured</h3>
-            <p class="text-slate-500 font-semibold mb-10 text-sm">Log in to unlock locked modules for free.</p>
-            <button onclick="loginWithGoogle()" class="w-full bg-white border-4 border-law-navy py-5 rounded-2xl font-black flex items-center justify-center gap-4 hover:bg-slate-50 transition-all shadow-cartoon-sm text-lg uppercase tracking-tight">
+            <p class="text-slate-500 font-semibold mb-6 text-sm">Log in to unlock locked modules for free.</p>
+            
+            <button id="google-login-btn" onclick="loginWithGoogle()" class="w-full bg-white border-4 border-law-navy py-5 rounded-2xl font-black flex items-center justify-center gap-4 hover:bg-slate-50 transition-all shadow-cartoon-sm text-lg uppercase tracking-tight">
                 <img src="https://www.gstatic.com/images/branding/product/1x/gsa_48dp.png" class="w-6" alt="Google"> Continue with Google
             </button>
+            
+            <p id="auth-error-msg" class="hidden mt-6 text-red-500 font-bold text-xs uppercase tracking-tighter"></p>
         </div>
     </div>
 
@@ -3363,8 +3375,8 @@ OCTYPE html>
             const firebaseConfig = JSON.parse(__firebase_config);
             firebase.initializeApp(firebaseConfig);
             auth = firebase.auth();
-            auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
-        } catch (e) { console.error("Firebase Auth initialization failed"); }
+            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        } catch (e) { console.error("Firebase config error"); }
 
         if (auth) {
             auth.onAuthStateChanged(user => {
@@ -3372,7 +3384,7 @@ OCTYPE html>
                 if (user) {
                     document.getElementById('login-nav-btn').classList.add('hidden');
                     document.getElementById('user-info').classList.remove('hidden');
-                    document.getElementById('user-display-email').textContent = user.email;
+                    document.getElementById('user-display-email').textContent = user.email || "Anonymous User";
                     updateButtonsForLogin();
                     closeAuthModal();
                     document.getElementById('logic-density').textContent = '100%';
@@ -3388,11 +3400,38 @@ OCTYPE html>
         async function loginWithGoogle() {
             if (!auth) return;
             const provider = new firebase.auth.GoogleAuthProvider();
+            const errorArea = document.getElementById('auth-error-msg');
+            const btn = document.getElementById('google-login-btn');
+            
+            errorArea.classList.add('hidden');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Connecting...';
+
             try { 
+                // Attempting popup first (Standard)
                 await auth.signInWithPopup(provider); 
             } catch (e) { 
-                // Fallback for preview environment limitations
-                auth.signInAnonymously(); 
+                console.error("Login Error:", e);
+                
+                if (e.code === 'auth/unauthorized-domain') {
+                    errorArea.textContent = "Domain Error: Add your GitHub URL to Firebase Authorized Domains.";
+                    errorArea.classList.remove('hidden');
+                } else if (e.code === 'auth/popup-blocked') {
+                    errorArea.textContent = "Popup Blocked: Enable popups for this site in your browser.";
+                    errorArea.classList.remove('hidden');
+                } else if (e.code === 'auth/popup-closed-by-user') {
+                    errorArea.textContent = "Window closed before login finished.";
+                    errorArea.classList.remove('hidden');
+                } else {
+                    // Failover for specific browser environments
+                    try {
+                        await auth.signInWithRedirect(provider);
+                    } catch (redirectError) {
+                        errorArea.textContent = "Login failed. Please try again.";
+                        errorArea.classList.remove('hidden');
+                    }
+                }
+            } finally {
+                btn.innerHTML = '<img src="https://www.gstatic.com/images/branding/product/1x/gsa_48dp.png" class="w-6" alt="Google"> Continue with Google';
             }
         }
 
@@ -3437,7 +3476,11 @@ OCTYPE html>
             cs.classList.remove('hidden');
         }
 
-        function openAuthModal() { const m = document.getElementById('auth-modal'); m.classList.remove('opacity-0', 'pointer-events-none'); }
+        function openAuthModal() { 
+            const m = document.getElementById('auth-modal'); 
+            m.classList.remove('opacity-0', 'pointer-events-none'); 
+            document.getElementById('auth-error-msg').classList.add('hidden');
+        }
         function closeAuthModal() { const m = document.getElementById('auth-modal'); m.classList.add('opacity-0', 'pointer-events-none'); }
 
         // --- 3. SECRET VAULT ---

@@ -117,7 +117,7 @@
     <div id="fx-container"></div>
     <canvas id="bg-canvas"></canvas>
 
-    <!-- THE LAWGIC CORE: SECRET VAULT (RESTORED) -->
+    <!-- THE LAWGIC CORE: SECRET VAULT -->
     <div id="vault-overlay" class="fixed inset-0 z-[300] opacity-0 pointer-events-none flex items-center justify-center p-6 overflow-auto">
         <div class="max-w-4xl w-full text-center space-y-12 py-20">
             <button onclick="closeVault()" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full border border-white/20 font-black transition-all mb-8 uppercase tracking-widest text-xs">
@@ -162,25 +162,33 @@
     <!-- NAVIGATION BAR -->
     <nav class="bg-white/90 backdrop-blur-md border-b-4 border-law-navy sticky top-0 z-50 px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div onclick="openVault()" class="flex items-center gap-3 cursor-pointer group active:scale-95 transition-transform">
-                <div class="h-10 w-10 bg-law-navy flex items-center justify-center rounded-lg shadow-lg border-2 border-white group-hover:rotate-[180deg] transition-transform duration-500">
-                    <span class="text-white font-bold text-xl uppercase">LB</span>
-                </div>
-                <div>
-                    <h1 class="text-xl font-black tracking-tight group-hover:text-law-gold transition-colors">Lawgic<span class="text-law-gold">Bytes</span></h1>
-                    <p class="text-[9px] uppercase tracking-widest text-stone-500 font-bold">System v2.3</p>
+            <div class="flex items-center gap-4">
+                <!-- Logo clicks back to home, right click/long press might feel like vault but we'll use a double interaction logic or just keep the openVault link -->
+                <div onclick="showPage('home')" oncontextmenu="openVault(); return false;" class="flex items-center gap-3 cursor-pointer group active:scale-95 transition-transform">
+                    <div class="h-10 w-10 bg-law-navy flex items-center justify-center rounded-lg shadow-lg border-2 border-white group-hover:rotate-[180deg] transition-transform duration-500">
+                        <span class="text-white font-bold text-xl uppercase">LB</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-black tracking-tight group-hover:text-law-gold transition-colors">Lawgic<span class="text-law-gold">Bytes</span></h1>
+                        <p class="text-[9px] uppercase tracking-widest text-stone-500 font-bold">System v2.3</p>
+                    </div>
                 </div>
             </div>
             
-            <div class="hidden lg:flex gap-8 text-sm font-black text-stone-600 uppercase tracking-tight">
-                <button onclick="showPage('home')" class="hover:text-law-gold transition-colors">Main Menu</button>
-                <button onclick="showPage('library')" class="hover:text-law-gold transition-colors">Act Library</button>
+            <!-- Desktop Links -->
+            <div class="hidden md:flex gap-6 text-xs font-black text-stone-600 uppercase tracking-tight items-center">
+                <button onclick="showPage('home')" class="hover:text-law-gold transition-colors border-b-2 border-transparent hover:border-law-gold pb-1">Main Menu</button>
+                <button onclick="showPage('library')" class="hover:text-law-gold transition-colors border-b-2 border-transparent hover:border-law-gold pb-1">Act Library</button>
                 <a href="https://www.linkedin.com/in/abhishek-yadav027/" target="_blank" class="text-law-accent hover:underline flex items-center gap-2">
-                    <i class="fab fa-linkedin text-xl"></i> Follow Abhishek
+                    <i class="fab fa-linkedin text-lg"></i> Follow
                 </a>
                 <a href="https://www.instagram.com/lawgicbytes27?igsh=Y3hlM29xNG1qMDlp" target="_blank" class="text-pink-600 hover:underline flex items-center gap-2">
-                    <i class="fab fa-instagram text-xl"></i> LawgicBytes
+                    <i class="fab fa-instagram text-lg"></i> Instagram
                 </a>
+                <!-- Restored Vault Access for those who can't right-click -->
+                <button onclick="openVault()" class="bg-slate-100 text-slate-400 p-2 rounded-lg hover:text-law-gold transition-colors" title="Open Lawgic Core">
+                    <i class="fas fa-microchip"></i>
+                </button>
             </div>
 
             <div id="auth-status" class="flex items-center gap-4">
@@ -311,8 +319,7 @@
             <button onclick="showPage('library')" class="text-sm font-black text-law-navy hover:text-law-gold uppercase tracking-widest flex items-center gap-2">
                 <i class="fas fa-arrow-left"></i> Back to Library
             </button>
-            
-        <!DOCTYPE html>
+            <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -3355,7 +3362,7 @@
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </body>
 </html>
-
+            
     <!-- SECTION: LIMITATION ACT ROADMAP -->
     <section id="page-limitation-roadmap" class="view-section hidden py-12 pb-24">
         <div class="max-w-7xl mx-auto px-6 space-y-12">
@@ -3452,16 +3459,32 @@
             auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         } catch (e) { console.error("Firebase config error"); }
 
+        const initAuthFlow = async () => {
+            if (!auth) return;
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await auth.signInWithCustomToken(__initial_auth_token);
+                } else if (!auth.currentUser) {
+                    await auth.signInAnonymously();
+                }
+            } catch (e) {
+                console.error("Auth init error:", e);
+                if (!auth.currentUser) await auth.signInAnonymously();
+            }
+        };
+
         if (auth) {
+            initAuthFlow();
             auth.onAuthStateChanged(user => {
                 currentUser = user;
                 if (user) {
-                    document.getElementById('login-nav-btn').classList.add('hidden');
-                    document.getElementById('user-info').classList.remove('hidden');
-                    document.getElementById('user-display-email').textContent = user.email || "User Connected";
+                    document.getElementById('login-nav-btn')?.classList.add('hidden');
+                    document.getElementById('user-info')?.classList.remove('hidden');
+                    document.getElementById('user-display-email').textContent = user.isAnonymous ? "Anonymous Explorer" : (user.email || "User Connected");
+                    listenToReviews();
                 } else {
-                    document.getElementById('login-nav-btn').classList.remove('hidden');
-                    document.getElementById('user-info').classList.add('hidden');
+                    document.getElementById('login-nav-btn')?.classList.remove('hidden');
+                    document.getElementById('user-info')?.classList.add('hidden');
                 }
             });
         }
@@ -3475,9 +3498,10 @@
         function logout() { auth.signOut().then(() => location.reload()); }
 
         // --- 2. REVIEWS SYSTEM (FIRESTORE) ---
-        const reviewsPath = db?.collection('artifacts').doc(appId).collection('public').doc('data').collection('reviews');
+        let unsubscribeReviews = null;
 
         async function submitReview() {
+            if (!db) return;
             const input = document.getElementById('comment-input');
             const status = document.getElementById('review-status');
             const btn = document.getElementById('submit-review-btn');
@@ -3489,10 +3513,11 @@
 
             try {
                 if (!currentUser) await auth.signInAnonymously();
+                const reviewsPath = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('reviews');
 
                 await reviewsPath.add({
                     text: input.value.trim(),
-                    user: currentUser?.email || "Community Member",
+                    user: currentUser?.isAnonymous ? "Community Member" : (currentUser?.email || "Community Member"),
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
@@ -3508,13 +3533,14 @@
         }
 
         function listenToReviews() {
-            if (!reviewsPath) return;
+            if (!db || !currentUser) return;
+            if (unsubscribeReviews) unsubscribeReviews();
+            const reviewsPath = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('reviews');
             
-            reviewsPath.onSnapshot(snapshot => {
+            unsubscribeReviews = reviewsPath.onSnapshot(snapshot => {
                 const container = document.getElementById('reviews-container');
                 const reviews = [];
                 snapshot.forEach(doc => reviews.push({ id: doc.id, ...doc.data() }));
-                
                 reviews.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
 
                 if (reviews.length === 0) {
@@ -3564,24 +3590,23 @@
 
         function openAuthModal() { 
             const m = document.getElementById('auth-modal'); 
-            m.classList.remove('opacity-0', 'pointer-events-none'); 
+            m?.classList.remove('opacity-0', 'pointer-events-none'); 
         }
         function closeAuthModal() { 
             const m = document.getElementById('auth-modal'); 
-            m.classList.add('opacity-0', 'pointer-events-none'); 
+            m?.classList.add('opacity-0', 'pointer-events-none'); 
         }
 
-        // Vault logic
         function openVault() {
             const vault = document.getElementById('vault-overlay');
-            vault.classList.remove('opacity-0', 'pointer-events-none');
-            vault.classList.add('opacity-100');
+            vault?.classList.remove('opacity-0', 'pointer-events-none');
+            vault?.classList.add('opacity-100');
         }
 
         function closeVault() {
             const vault = document.getElementById('vault-overlay');
-            vault.classList.remove('opacity-100');
-            vault.classList.add('opacity-0', 'pointer-events-none');
+            vault?.classList.remove('opacity-100');
+            vault?.classList.add('opacity-0', 'pointer-events-none');
         }
 
         const quotes = [
@@ -3598,8 +3623,10 @@
             setTimeout(() => document.body.classList.remove('shake-ui'), 200);
 
             currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
-            document.getElementById('wisdom-text').textContent = `"${quotes[currentQuoteIndex].text}"`;
-            document.getElementById('wisdom-author').textContent = `— ${quotes[currentQuoteIndex].author}`;
+            const textEl = document.getElementById('wisdom-text');
+            const authEl = document.getElementById('wisdom-author');
+            if (textEl) textEl.textContent = `"${quotes[currentQuoteIndex].text}"`;
+            if (authEl) authEl.textContent = `— ${quotes[currentQuoteIndex].author}`;
 
             const words = ['BNSS', 'CORE', 'DATA', 'JUSTICE'];
             for(let i=0; i<8; i++) {
@@ -3617,10 +3644,11 @@
 
         // --- 4. CANVAS ---
         const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas?.getContext('2d');
         let dots = [];
 
         function initCanvas() {
+            if (!canvas) return;
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             dots = Array.from({length: 50}, () => ({
@@ -3633,6 +3661,7 @@
         }
 
         function animateCanvas() {
+            if (!ctx || !canvas) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#6366f1';
             dots.forEach(dot => {
@@ -3648,7 +3677,6 @@
             initCanvas(); 
             animateCanvas(); 
             showPage('home');
-            listenToReviews();
         };
     </script>
 </body>

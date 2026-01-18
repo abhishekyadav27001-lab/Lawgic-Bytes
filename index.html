@@ -160,10 +160,10 @@
     </div>
 
     <!-- NAVIGATION BAR -->
-    <nav class="bg-white/90 backdrop-blur-md border-b-4 border-law-navy sticky top-0 z-50 px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <nav class="bg-white/90 backdrop-blur-md border-b-4 border-law-navy sticky top-0 z-50 px-4 md:px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center gap-4">
-                <!-- Logo clicks back to home, right click/long press might feel like vault but we'll use a double interaction logic or just keep the openVault link -->
+                <!-- Logo clicks back to home -->
                 <div onclick="showPage('home')" oncontextmenu="openVault(); return false;" class="flex items-center gap-3 cursor-pointer group active:scale-95 transition-transform">
                     <div class="h-10 w-10 bg-law-navy flex items-center justify-center rounded-lg shadow-lg border-2 border-white group-hover:rotate-[180deg] transition-transform duration-500">
                         <span class="text-white font-bold text-xl uppercase">LB</span>
@@ -175,17 +175,16 @@
                 </div>
             </div>
             
-            <!-- Desktop Links -->
-            <div class="hidden md:flex gap-6 text-xs font-black text-stone-600 uppercase tracking-tight items-center">
-                <button onclick="showPage('home')" class="hover:text-law-gold transition-colors border-b-2 border-transparent hover:border-law-gold pb-1">Main Menu</button>
-                <button onclick="showPage('library')" class="hover:text-law-gold transition-colors border-b-2 border-transparent hover:border-law-gold pb-1">Act Library</button>
-                <a href="https://www.linkedin.com/in/abhishek-yadav027/" target="_blank" class="text-law-accent hover:underline flex items-center gap-2">
-                    <i class="fab fa-linkedin text-lg"></i> Follow
+            <!-- Links - Simplified for better preview visibility -->
+            <div class="flex flex-wrap gap-4 md:gap-6 text-[10px] font-black text-stone-600 uppercase tracking-widest items-center">
+                <button onclick="showPage('home')" class="hover:text-law-gold transition-colors">Main Menu</button>
+                <button onclick="showPage('library')" class="hover:text-law-gold transition-colors">Act Library</button>
+                <a href="https://www.linkedin.com/in/abhishek-yadav027/" target="_blank" class="text-law-accent hover:underline flex items-center gap-1">
+                    <i class="fab fa-linkedin text-base"></i> LinkedIn
                 </a>
-                <a href="https://www.instagram.com/lawgicbytes27?igsh=Y3hlM29xNG1qMDlp" target="_blank" class="text-pink-600 hover:underline flex items-center gap-2">
-                    <i class="fab fa-instagram text-lg"></i> Instagram
+                <a href="https://www.instagram.com/lawgicbytes27?igsh=Y3hlM29xNG1qMDlp" target="_blank" class="text-pink-600 hover:underline flex items-center gap-1">
+                    <i class="fab fa-instagram text-base"></i> Instagram
                 </a>
-                <!-- Restored Vault Access for those who can't right-click -->
                 <button onclick="openVault()" class="bg-slate-100 text-slate-400 p-2 rounded-lg hover:text-law-gold transition-colors" title="Open Lawgic Core">
                     <i class="fas fa-microchip"></i>
                 </button>
@@ -228,7 +227,7 @@
             <h2 class="text-6xl md:text-8xl font-black text-law-navy leading-none tracking-tighter uppercase">Lawgic <span class="text-law-gold italic">Simplified.</span></h2>
             <div class="flex flex-wrap justify-center gap-6 pt-6">
                 <button onclick="showPage('library')" class="bg-law-navy text-white px-10 py-5 rounded-2xl font-black shadow-cartoon hover:bg-slate-800 transition-all text-xl uppercase tracking-tighter">
-                    Act Library
+                    Explore Act Library
                 </button>
             </div>
 
@@ -236,7 +235,7 @@
             <div class="pt-24 max-w-4xl mx-auto text-left">
                 <div class="mb-10 text-center">
                     <h3 class="text-4xl font-black text-law-navy italic uppercase tracking-tighter">Community <span class="text-law-gold">Feedback</span></h3>
-                    <p class="text-slate-500 font-bold uppercase text-[10px] tracking-[0.2em] mt-2">Share your thoughts to help us improve</p>
+                    <p class="text-slate-500 font-bold uppercase text-[10px] tracking-[0.2em] mt-2">Help us build the ultimate Lawgic engine</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
@@ -252,7 +251,7 @@
                     <!-- Comment List -->
                     <div class="md:col-span-3">
                         <div id="reviews-container" class="space-y-4 max-h-[500px] overflow-y-auto pr-4">
-                            <!-- Reviews will be injected here -->
+                            <div class="text-center py-20 opacity-20 uppercase font-black text-xs tracking-widest">Fetching reviews...</div>
                         </div>
                     </div>
                 </div>
@@ -299,21 +298,10 @@
                      <button onclick="handleAccess('BNS 2023')" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black hover:shadow-lg transition-all uppercase text-xs">Explore Module</button>
                 </div>
             </div>
-
-            <!-- BSA CARD -->
-            <div id="product-bsa" class="cartoon-card bg-emerald-50 rounded-[2.5rem] p-10 flex flex-col shadow-cartoon relative">
-                <div class="absolute top-4 right-4 bg-emerald-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">Open Access</div>
-                <div class="w-16 h-16 bg-white border-2 border-law-navy text-emerald-600 rounded-3xl flex items-center justify-center text-3xl mb-6"><i class="fas fa-file-invoice"></i></div>
-                <h3 class="text-3xl font-black mb-2 tracking-tight">BSA (Evidence)</h3>
-                <p class="text-sm text-slate-500 flex-grow mb-8 font-semibold">Mapping digital evidence and forensic mandates.</p>
-                <div id="action-bsa">
-                    <button onclick="handleAccess('BSA 2023')" class="w-full bg-emerald-600 text-white py-4 rounded-2xl font-black hover:shadow-lg transition-all uppercase text-xs">Explore Module</button>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- PAGE: BNSS CONTENT VIEWER -->
+    <!-- PAGE: BNSS CONTENT -->
     <section id="page-bnss-content" class="view-section hidden pb-24">
         <div class="max-w-7xl mx-auto px-6 py-12 space-y-8">
             <button onclick="showPage('library')" class="text-sm font-black text-law-navy hover:text-law-gold uppercase tracking-widest flex items-center gap-2">
@@ -3362,42 +3350,13 @@
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </body>
 </html>
-            
     <!-- SECTION: LIMITATION ACT ROADMAP -->
     <section id="page-limitation-roadmap" class="view-section hidden py-12 pb-24">
         <div class="max-w-7xl mx-auto px-6 space-y-12">
             <button onclick="showPage('library')" class="text-sm font-black text-law-navy hover:text-law-gold flex items-center gap-2 uppercase tracking-widest">
                 <i class="fas fa-arrow-left"></i> Back to Library
             </button>
-            <div class="text-center space-y-4">
-                <h2 class="text-5xl font-black tracking-tight text-law-navy italic uppercase">The Clock of Justice</h2>
-                <p class="text-slate-500 font-medium leading-relaxed">The Limitation Act, 1963: Where time bars the remedy but does not extinguish the right.</p>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white p-10 rounded-[3rem] border-4 border-law-navy shadow-cartoon">
-                    <div class="text-xs font-black text-orange-600 mb-2 uppercase tracking-widest">Mandatory Dismissal</div>
-                    <h3 class="text-3xl font-black mb-4">Section 3: The Bar</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium leading-relaxed">
-                        Every suit instituted, appeal preferred, and application made after the prescribed period shall be dismissed.
-                    </p>
-                    <div class="p-6 bg-red-50 rounded-2xl border-2 border-red-100 text-xs font-bold text-red-700 italic">
-                        "Limitation must be set up as a defense, but even if it isn't, the Court is duty-bound to dismiss it if it's time-barred."
-                    </div>
-                </div>
-                <div class="bg-blue-50 p-10 rounded-[3rem] border-4 border-law-navy shadow-cartoon">
-                    <div class="text-xs font-black text-blue-600 mb-2 uppercase tracking-widest">Extension of Time</div>
-                    <h3 class="text-3xl font-black mb-4">Section 5: Condonation</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium leading-relaxed">
-                        Allows extension of the prescribed period for appeals and applications if "Sufficient Cause" is shown.
-                    </p>
-                    <div class="p-6 bg-white rounded-2xl border-2 border-blue-100 text-xs font-bold text-blue-800">
-                        <i class="fas fa-exclamation-triangle mr-2"></i> IMPORTANT: Section 5 does NOT apply to regular Suits.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+           
     <!-- PAGE: COMING SOON -->
     <section id="page-coming-soon" class="view-section hidden p-8 md:p-16">
         <div class="max-w-4xl mx-auto space-y-12">
@@ -3406,9 +3365,6 @@
                 <div class="text-[140px] leading-none animate-bounce">⚖️ 😴</div>
                 <div class="speech-bubble text-2xl border-4 mx-auto max-w-md">"The Lawgic engine is still <br>compiling this module!"</div>
                 <h2 id="coming-soon-title" class="text-6xl font-black uppercase italic text-law-navy tracking-tighter">Act Name</h2>
-                <a href="https://www.linkedin.com/in/abhishek-yadav027/" target="_blank" class="bg-blue-600 text-white px-12 py-6 rounded-2xl font-black shadow-cartoon-sm flex items-center justify-center gap-4 hover:bg-blue-700 transition-all mx-auto w-fit text-xl">
-                    <i class="fab fa-linkedin text-3xl"></i> Notify on LinkedIn
-                </a>
             </div>
         </div>
     </section>
@@ -3420,11 +3376,9 @@
             <div class="h-20 w-20 bg-law-gold text-white rounded-2xl flex items-center justify-center text-4xl mx-auto mb-8 shadow-lg border-2 border-law-navy"><i class="fas fa-fingerprint"></i></div>
             <h3 class="text-4xl font-black text-law-navy mb-4 uppercase italic">Access Secured</h3>
             <p class="text-slate-500 font-semibold mb-6 text-sm">Log in to unlock locked modules for free.</p>
-            
-            <button id="google-login-btn" onclick="loginWithGoogle()" class="w-full bg-white border-4 border-law-navy py-5 rounded-2xl font-black flex items-center justify-center gap-4 hover:bg-slate-50 transition-all shadow-cartoon-sm text-lg uppercase tracking-tight">
+            <button id="google-login-btn" onclick="loginWithGoogle()" class="w-full bg-white border-4 border-law-navy py-5 rounded-2xl font-black flex items-center justify-center gap-4 hover:bg-slate-50 transition-all shadow-cartoon text-lg uppercase tracking-tight">
                 <img src="https://www.gstatic.com/images/branding/product/1x/gsa_48dp.png" class="w-6" alt="Google"> Continue with Google
             </button>
-            
             <p id="auth-error-msg" class="hidden mt-6 text-red-500 font-bold text-xs uppercase tracking-tighter"></p>
         </div>
     </div>
@@ -3432,17 +3386,23 @@
     <!-- COMMAND CENTER HUD -->
     <div class="fixed bottom-6 left-6 z-40 bg-law-navy text-white p-4 rounded-2xl border-2 border-law-gold shadow-glow hidden lg:block opacity-80 hover:opacity-100 transition-opacity">
         <div class="hud-text text-[9px] space-y-2">
-            <p class="flex justify-between gap-6 border-b border-white/10 pb-1"><span>STATUS:</span> <span class="text-green-400 font-bold uppercase tracking-widest">Online</span></p>
+            <p class="flex justify-between gap-6 border-b border-white/10 pb-1"><span>STATUS:</span> <span id="auth-status-text" class="text-green-400 font-bold uppercase tracking-widest">Online</span></p>
             <p class="flex justify-between gap-6 border-b border-white/10 pb-1"><span>LAWGIC LOAD:</span> <span id="logic-density" class="text-law-gold font-bold">100%</span></p>
-            <p class="flex justify-between gap-6"><span>CORE:</span> <span class="text-blue-400 uppercase">OPEN_ACCESS_2026</span></p>
+            <p class="flex justify-between gap-6"><span>CORE:</span> <span class="text-blue-400 uppercase">ABHISHEK_2026</span></p>
         </div>
     </div>
 
     <!-- FOOTER -->
     <footer id="contact" class="bg-white border-t-8 border-law-navy py-20 px-6 mt-12 text-center">
-        <div class="max-w-4xl mx-auto">
-            <img src="https://komarev.com/ghpvc/?username=abhishekyadav27001-lab&repo=bnss-roadmap&color=FFD700&style=flat-square&label=LAWGIC+VISITORS" alt="Visitor Counter" class="mx-auto rounded border-2 border-law-navy">
-            <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest pt-12">© 2026 Lawgic Bytes by Abhishek Yadav • Justice in Bytes</p>
+        <div class="max-w-4xl mx-auto space-y-8">
+            <div class="flex flex-col items-center gap-4">
+                <img src="https://komarev.com/ghpvc/?username=abhishekyadav27001-lab&repo=bnss-roadmap&color=FFD700&style=flat-square&label=LAWGIC+VISITORS" alt="Visitor Counter" class="rounded border-2 border-law-navy">
+                <!-- LIVE FIREBASE VISITOR COUNT DISPLAY -->
+                <div class="bg-law-navy text-law-gold px-4 py-2 rounded-xl font-black text-xs border-2 border-white shadow-glow">
+                    LIVE VISITORS: <span id="live-visitor-count">1</span>
+                </div>
+            </div>
+            <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest pt-6">© 2026 Lawgic Bytes by Abhishek Yadav • Justice in Bytes</p>
         </div>
     </footer>
 
@@ -3480,8 +3440,10 @@
                 if (user) {
                     document.getElementById('login-nav-btn')?.classList.add('hidden');
                     document.getElementById('user-info')?.classList.remove('hidden');
-                    document.getElementById('user-display-email').textContent = user.isAnonymous ? "Anonymous Explorer" : (user.email || "User Connected");
+                    document.getElementById('user-display-email').textContent = user.isAnonymous ? "Guest Mode" : (user.email || "Connected");
+                    document.getElementById('auth-status-text').textContent = user.isAnonymous ? "Guest Active" : "Linked";
                     listenToReviews();
+                    trackVisitors();
                 } else {
                     document.getElementById('login-nav-btn')?.classList.remove('hidden');
                     document.getElementById('user-info')?.classList.add('hidden');
@@ -3492,16 +3454,34 @@
         async function loginWithGoogle() {
             if (!auth) return;
             const provider = new firebase.auth.GoogleAuthProvider();
-            try { await auth.signInWithPopup(provider); } catch (e) { console.error(e); }
+            try { await auth.signInWithPopup(provider); closeAuthModal(); } catch (e) { console.error(e); }
         }
 
         function logout() { auth.signOut().then(() => location.reload()); }
 
-        // --- 2. REVIEWS SYSTEM (FIRESTORE) ---
+        // --- 2. VISITOR TRACKING ---
+        async function trackVisitors() {
+            if (!db || !currentUser) return;
+            // RULE 1 - Strict Paths
+            const statsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('stats').doc('visitors');
+            
+            try {
+                await statsRef.set({ count: firebase.firestore.FieldValue.increment(1) }, { merge: true });
+                statsRef.onSnapshot(doc => {
+                    const data = doc.data();
+                    if (data && data.count) {
+                        const countEl = document.getElementById('live-visitor-count');
+                        if (countEl) countEl.textContent = data.count.toLocaleString();
+                    }
+                }, err => console.error("Visitor Sync Error:", err));
+            } catch (e) { console.error("Tracking Error:", e); }
+        }
+
+        // --- 3. REVIEWS SYSTEM (FIRESTORE) ---
         let unsubscribeReviews = null;
 
         async function submitReview() {
-            if (!db) return;
+            if (!db || !auth) return;
             const input = document.getElementById('comment-input');
             const status = document.getElementById('review-status');
             const btn = document.getElementById('submit-review-btn');
@@ -3509,24 +3489,27 @@
             if (!input.value.trim()) return;
             
             btn.disabled = true;
-            status.textContent = "Syncing with cloud...";
+            status.textContent = "Processing submission...";
 
             try {
-                if (!currentUser) await auth.signInAnonymously();
+                // Ensure auth before writing (Rule 3)
+                if (!auth.currentUser) await auth.signInAnonymously();
+                
+                // Rule 1 - Path
                 const reviewsPath = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('reviews');
 
                 await reviewsPath.add({
                     text: input.value.trim(),
-                    user: currentUser?.isAnonymous ? "Community Member" : (currentUser?.email || "Community Member"),
+                    user: auth.currentUser.isAnonymous ? "Community Member" : (auth.currentUser.email || "Community Member"),
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
                 input.value = "";
-                status.textContent = "Suggestion synced successfully!";
+                status.textContent = "Review shared successfully!";
                 setTimeout(() => status.textContent = "", 3000);
             } catch (e) {
-                console.error(e);
-                status.textContent = "Sync failed. Retry later.";
+                console.error("Submission Error:", e);
+                status.textContent = "Submission failed: " + e.message;
             } finally {
                 btn.disabled = false;
             }
@@ -3535,16 +3518,21 @@
         function listenToReviews() {
             if (!db || !currentUser) return;
             if (unsubscribeReviews) unsubscribeReviews();
+            
             const reviewsPath = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('reviews');
             
             unsubscribeReviews = reviewsPath.onSnapshot(snapshot => {
                 const container = document.getElementById('reviews-container');
+                if (!container) return;
+                
                 const reviews = [];
                 snapshot.forEach(doc => reviews.push({ id: doc.id, ...doc.data() }));
+                
+                // Rule 2 - Sorting in Memory
                 reviews.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
 
                 if (reviews.length === 0) {
-                    container.innerHTML = `<div class="p-8 text-center text-slate-300 font-bold uppercase text-[10px]">Be the first to share a suggestion!</div>`;
+                    container.innerHTML = `<div class="p-8 text-center text-slate-300 font-bold uppercase text-[10px]">No reviews yet. Share yours!</div>`;
                     return;
                 }
 
@@ -3558,12 +3546,10 @@
                         </div>
                     </div>
                 `).join('');
-            }, err => {
-                console.error("Firestore Listen Error:", err);
-            });
+            }, err => { console.error("Firestore Listen Error:", err); });
         }
 
-        // --- 3. NAVIGATION LOGIC ---
+        // --- 4. NAVIGATION ---
         function handleAccess(act) {
             if (act === "BNSS 2023") {
                 showPage('bnss-content');
@@ -3642,7 +3628,6 @@
             }
         }
 
-        // --- 4. CANVAS ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas?.getContext('2d');
         let dots = [];

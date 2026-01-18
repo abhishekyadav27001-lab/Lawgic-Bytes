@@ -11,6 +11,7 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore-compat.js"></script>
 
     <script>
         tailwind.config = {
@@ -104,6 +105,11 @@
             50% { transform: translateY(-20px) rotate(5deg); }
         }
         .float-anim { animation: float 4s ease-in-out infinite; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fdfbf7; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
     </style>
 </head>
 <body class="antialiased">
@@ -111,7 +117,7 @@
     <div id="fx-container"></div>
     <canvas id="bg-canvas"></canvas>
 
-    <!-- THE LAWGIC CORE: SECRET VAULT -->
+    <!-- THE LAWGIC CORE: SECRET VAULT (RESTORED) -->
     <div id="vault-overlay" class="fixed inset-0 z-[300] opacity-0 pointer-events-none flex items-center justify-center p-6 overflow-auto">
         <div class="max-w-4xl w-full text-center space-y-12 py-20">
             <button onclick="closeVault()" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full border border-white/20 font-black transition-all mb-8 uppercase tracking-widest text-xs">
@@ -156,7 +162,7 @@
     <!-- NAVIGATION BAR -->
     <nav class="bg-white/90 backdrop-blur-md border-b-4 border-law-navy sticky top-0 z-50 px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div onclick="openVault()" class="flex items-center gap-3 cursor-help group active:scale-95 transition-transform">
+            <div onclick="openVault()" class="flex items-center gap-3 cursor-pointer group active:scale-95 transition-transform">
                 <div class="h-10 w-10 bg-law-navy flex items-center justify-center rounded-lg shadow-lg border-2 border-white group-hover:rotate-[180deg] transition-transform duration-500">
                     <span class="text-white font-bold text-xl uppercase">LB</span>
                 </div>
@@ -167,9 +173,13 @@
             </div>
             
             <div class="hidden lg:flex gap-8 text-sm font-black text-stone-600 uppercase tracking-tight">
+                <button onclick="showPage('home')" class="hover:text-law-gold transition-colors">Main Menu</button>
                 <button onclick="showPage('library')" class="hover:text-law-gold transition-colors">Act Library</button>
                 <a href="https://www.linkedin.com/in/abhishek-yadav027/" target="_blank" class="text-law-accent hover:underline flex items-center gap-2">
                     <i class="fab fa-linkedin text-xl"></i> Follow Abhishek
+                </a>
+                <a href="https://www.instagram.com/lawgicbytes27?igsh=Y3hlM29xNG1qMDlp" target="_blank" class="text-pink-600 hover:underline flex items-center gap-2">
+                    <i class="fab fa-instagram text-xl"></i> LawgicBytes
                 </a>
             </div>
 
@@ -179,7 +189,7 @@
                     <div class="text-right hidden sm:block">
                         <p id="user-display-email" class="text-[10px] font-black text-law-navy truncate w-32"></p>
                     </div>
-                    <button onclick="logout()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fas fa-power-off"></i></button>
+                    <button onclick="logout()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
         </div>
@@ -210,8 +220,34 @@
             <h2 class="text-6xl md:text-8xl font-black text-law-navy leading-none tracking-tighter uppercase">Lawgic <span class="text-law-gold italic">Simplified.</span></h2>
             <div class="flex flex-wrap justify-center gap-6 pt-6">
                 <button onclick="showPage('library')" class="bg-law-navy text-white px-10 py-5 rounded-2xl font-black shadow-cartoon hover:bg-slate-800 transition-all text-xl uppercase tracking-tighter">
-                    Library
+                    Act Library
                 </button>
+            </div>
+
+            <!-- COMMUNITY REVIEWS SECTION -->
+            <div class="pt-24 max-w-4xl mx-auto text-left">
+                <div class="mb-10 text-center">
+                    <h3 class="text-4xl font-black text-law-navy italic uppercase tracking-tighter">Community <span class="text-law-gold">Feedback</span></h3>
+                    <p class="text-slate-500 font-bold uppercase text-[10px] tracking-[0.2em] mt-2">Share your thoughts to help us improve</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+                    <!-- Comment Form -->
+                    <div class="md:col-span-2 space-y-4">
+                        <div class="bg-white p-6 rounded-[2rem] border-4 border-law-navy shadow-cartoon-sm">
+                            <textarea id="comment-input" class="w-full h-32 p-4 text-sm font-semibold bg-slate-50 rounded-xl border-2 border-slate-200 focus:border-law-gold focus:outline-none transition-colors" placeholder="Write a review or suggestion..."></textarea>
+                            <button onclick="submitReview()" id="submit-review-btn" class="w-full mt-4 bg-law-navy text-white py-3 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-slate-800 transition-all">Post Review</button>
+                            <p id="review-status" class="text-[9px] font-bold text-center mt-3 text-slate-400 uppercase tracking-tighter"></p>
+                        </div>
+                    </div>
+
+                    <!-- Comment List -->
+                    <div class="md:col-span-3">
+                        <div id="reviews-container" class="space-y-4 max-h-[500px] overflow-y-auto pr-4">
+                            <!-- Reviews will be injected here -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -233,22 +269,37 @@
                 </div>
             </div>
 
+            <!-- Limitation Act Card -->
+            <div class="cartoon-card bg-white border-4 border-law-navy rounded-[2.5rem] p-10 shadow-cartoon flex flex-col">
+                <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-3xl flex items-center justify-center text-3xl mb-6 border-2 border-law-navy">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+                <h3 class="text-3xl font-black mb-2 tracking-tight">Limitation Act</h3>
+                <p class="text-sm text-slate-500 flex-grow mb-8 font-semibold">The Law of Time. Roadmap for suits and applications.</p>
+                <button onclick="handleAccess('Limitation Act')" class="w-full bg-orange-600 text-white py-4 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-orange-700 transition-all">
+                    Launch Roadmap
+                </button>
+            </div>
+
+            <!-- BNS CARD -->
             <div id="product-bns" class="cartoon-card bg-indigo-50 rounded-[2.5rem] p-10 flex flex-col shadow-cartoon relative overflow-hidden transition-all">
-                <div class="absolute top-4 right-4 bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">Locked</div>
+                <div class="absolute top-4 right-4 bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">Open Access</div>
                 <div class="w-16 h-16 bg-white border-2 border-law-navy text-indigo-600 rounded-3xl flex items-center justify-center text-3xl mb-6"><i class="fas fa-balance-scale"></i></div>
                 <h3 class="text-3xl font-black mb-2 tracking-tight">BNS (Penal)</h3>
                 <p class="text-sm text-slate-500 flex-grow mb-8 font-semibold">Interactive comparison of IPC vs Bharatiya Nyaya Sanhita.</p>
                 <div id="action-bns">
-                     <button onclick="handleAccess('BNS 2023')" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black hover:shadow-lg transition-all uppercase text-xs">Unlock</button>
+                     <button onclick="handleAccess('BNS 2023')" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black hover:shadow-lg transition-all uppercase text-xs">Explore Module</button>
                 </div>
             </div>
 
+            <!-- BSA CARD -->
             <div id="product-bsa" class="cartoon-card bg-emerald-50 rounded-[2.5rem] p-10 flex flex-col shadow-cartoon relative">
+                <div class="absolute top-4 right-4 bg-emerald-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">Open Access</div>
                 <div class="w-16 h-16 bg-white border-2 border-law-navy text-emerald-600 rounded-3xl flex items-center justify-center text-3xl mb-6"><i class="fas fa-file-invoice"></i></div>
                 <h3 class="text-3xl font-black mb-2 tracking-tight">BSA (Evidence)</h3>
                 <p class="text-sm text-slate-500 flex-grow mb-8 font-semibold">Mapping digital evidence and forensic mandates.</p>
                 <div id="action-bsa">
-                    <button onclick="handleAccess('BSA 2023')" class="w-full bg-emerald-600 text-white py-4 rounded-2xl font-black hover:shadow-lg transition-all uppercase text-xs">Unlock</button>
+                    <button onclick="handleAccess('BSA 2023')" class="w-full bg-emerald-600 text-white py-4 rounded-2xl font-black hover:shadow-lg transition-all uppercase text-xs">Explore Module</button>
                 </div>
             </div>
         </div>
@@ -261,16 +312,7 @@
                 <i class="fas fa-arrow-left"></i> Back to Library
             </button>
             
-            <div class="cartoon-card bg-white rounded-[3.5rem] p-10 md:p-16 shadow-cartoon border-4 border-law-navy relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-8 opacity-10 text-[180px] -rotate-12 pointer-events-none"><i class="fas fa-gavel"></i></div>
-                <h2 class="text-5xl md:text-7xl font-black text-law-navy uppercase italic tracking-tighter mb-10">BNSS <span class="text-law-gold">2023</span> Roadmap</h2>
-                
-                <div id="bnss-injected-content" class="relative z-10 space-y-8">
-                    <!-- CONTENT BLOCKS -->
-                    <div class="p-8 bg-blue-50 rounded-[2.5rem] border-4 border-law-navy shadow-cartoon-sm">
-                        <h3 class="text-3xl font-black text-law-navy mb-4">Phase 1: Procedural Foundation</h3>
-                        <p class="text-slate-600 font-bold leading-relaxed">
-                           <!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -3313,7 +3355,36 @@
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </body>
 </html>
-                        </p>
+
+    <!-- SECTION: LIMITATION ACT ROADMAP -->
+    <section id="page-limitation-roadmap" class="view-section hidden py-12 pb-24">
+        <div class="max-w-7xl mx-auto px-6 space-y-12">
+            <button onclick="showPage('library')" class="text-sm font-black text-law-navy hover:text-law-gold flex items-center gap-2 uppercase tracking-widest">
+                <i class="fas fa-arrow-left"></i> Back to Library
+            </button>
+            <div class="text-center space-y-4">
+                <h2 class="text-5xl font-black tracking-tight text-law-navy italic uppercase">The Clock of Justice</h2>
+                <p class="text-slate-500 font-medium leading-relaxed">The Limitation Act, 1963: Where time bars the remedy but does not extinguish the right.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-10 rounded-[3rem] border-4 border-law-navy shadow-cartoon">
+                    <div class="text-xs font-black text-orange-600 mb-2 uppercase tracking-widest">Mandatory Dismissal</div>
+                    <h3 class="text-3xl font-black mb-4">Section 3: The Bar</h3>
+                    <p class="text-sm text-slate-600 mb-6 font-medium leading-relaxed">
+                        Every suit instituted, appeal preferred, and application made after the prescribed period shall be dismissed.
+                    </p>
+                    <div class="p-6 bg-red-50 rounded-2xl border-2 border-red-100 text-xs font-bold text-red-700 italic">
+                        "Limitation must be set up as a defense, but even if it isn't, the Court is duty-bound to dismiss it if it's time-barred."
+                    </div>
+                </div>
+                <div class="bg-blue-50 p-10 rounded-[3rem] border-4 border-law-navy shadow-cartoon">
+                    <div class="text-xs font-black text-blue-600 mb-2 uppercase tracking-widest">Extension of Time</div>
+                    <h3 class="text-3xl font-black mb-4">Section 5: Condonation</h3>
+                    <p class="text-sm text-slate-600 mb-6 font-medium leading-relaxed">
+                        Allows extension of the prescribed period for appeals and applications if "Sufficient Cause" is shown.
+                    </p>
+                    <div class="p-6 bg-white rounded-2xl border-2 border-blue-100 text-xs font-bold text-blue-800">
+                        <i class="fas fa-exclamation-triangle mr-2"></i> IMPORTANT: Section 5 does NOT apply to regular Suits.
                     </div>
                 </div>
             </div>
@@ -3337,7 +3408,7 @@
 
     <!-- MODAL: LOGIN -->
     <div id="auth-modal" class="fixed inset-0 z-[200] flex items-center justify-center bg-law-navy/90 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
-        <div class="modal-content bg-white w-full max-w-md rounded-[3.5rem] p-12 text-center">
+        <div class="modal-content bg-white w-full max-w-md rounded-[3.5rem] p-12 text-center relative">
             <button onclick="closeAuthModal()" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition-colors"><i class="fas fa-times text-xl"></i></button>
             <div class="h-20 w-20 bg-law-gold text-white rounded-2xl flex items-center justify-center text-4xl mx-auto mb-8 shadow-lg border-2 border-law-navy"><i class="fas fa-fingerprint"></i></div>
             <h3 class="text-4xl font-black text-law-navy mb-4 uppercase italic">Access Secured</h3>
@@ -3354,9 +3425,9 @@
     <!-- COMMAND CENTER HUD -->
     <div class="fixed bottom-6 left-6 z-40 bg-law-navy text-white p-4 rounded-2xl border-2 border-law-gold shadow-glow hidden lg:block opacity-80 hover:opacity-100 transition-opacity">
         <div class="hud-text text-[9px] space-y-2">
-            <p class="flex justify-between gap-6 border-b border-white/10 pb-1"><span>AUTH:</span> <span class="text-green-400 font-bold uppercase tracking-widest">Linked</span></p>
-            <p class="flex justify-between gap-6 border-b border-white/10 pb-1"><span>LAWGIC LOAD:</span> <span id="logic-density" class="text-law-gold font-bold">40%</span></p>
-            <p class="flex justify-between gap-6"><span>CORE:</span> <span class="text-blue-400 uppercase">ABHISHEK_2026</span></p>
+            <p class="flex justify-between gap-6 border-b border-white/10 pb-1"><span>STATUS:</span> <span class="text-green-400 font-bold uppercase tracking-widest">Online</span></p>
+            <p class="flex justify-between gap-6 border-b border-white/10 pb-1"><span>LAWGIC LOAD:</span> <span id="logic-density" class="text-law-gold font-bold">100%</span></p>
+            <p class="flex justify-between gap-6"><span>CORE:</span> <span class="text-blue-400 uppercase">OPEN_ACCESS_2026</span></p>
         </div>
     </div>
 
@@ -3370,11 +3441,14 @@
 
     <script>
         // --- 1. CONFIG & AUTH ---
-        let auth, currentUser = null;
+        let auth, db, currentUser = null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'lawgic-bytes';
+
         try {
             const firebaseConfig = JSON.parse(__firebase_config);
             firebase.initializeApp(firebaseConfig);
             auth = firebase.auth();
+            db = firebase.firestore();
             auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         } catch (e) { console.error("Firebase config error"); }
 
@@ -3384,15 +3458,10 @@
                 if (user) {
                     document.getElementById('login-nav-btn').classList.add('hidden');
                     document.getElementById('user-info').classList.remove('hidden');
-                    document.getElementById('user-display-email').textContent = user.email || "Anonymous User";
-                    updateButtonsForLogin();
-                    closeAuthModal();
-                    document.getElementById('logic-density').textContent = '100%';
+                    document.getElementById('user-display-email').textContent = user.email || "User Connected";
                 } else {
                     document.getElementById('login-nav-btn').classList.remove('hidden');
                     document.getElementById('user-info').classList.add('hidden');
-                    resetStoreButtons();
-                    document.getElementById('logic-density').textContent = '40%';
                 }
             });
         }
@@ -3400,66 +3469,83 @@
         async function loginWithGoogle() {
             if (!auth) return;
             const provider = new firebase.auth.GoogleAuthProvider();
-            const errorArea = document.getElementById('auth-error-msg');
-            const btn = document.getElementById('google-login-btn');
-            
-            errorArea.classList.add('hidden');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Connecting...';
-
-            try { 
-                // Attempting popup first (Standard)
-                await auth.signInWithPopup(provider); 
-            } catch (e) { 
-                console.error("Login Error:", e);
-                
-                if (e.code === 'auth/unauthorized-domain') {
-                    errorArea.textContent = "Domain Error: Add your GitHub URL to Firebase Authorized Domains.";
-                    errorArea.classList.remove('hidden');
-                } else if (e.code === 'auth/popup-blocked') {
-                    errorArea.textContent = "Popup Blocked: Enable popups for this site in your browser.";
-                    errorArea.classList.remove('hidden');
-                } else if (e.code === 'auth/popup-closed-by-user') {
-                    errorArea.textContent = "Window closed before login finished.";
-                    errorArea.classList.remove('hidden');
-                } else {
-                    // Failover for specific browser environments
-                    try {
-                        await auth.signInWithRedirect(provider);
-                    } catch (redirectError) {
-                        errorArea.textContent = "Login failed. Please try again.";
-                        errorArea.classList.remove('hidden');
-                    }
-                }
-            } finally {
-                btn.innerHTML = '<img src="https://www.gstatic.com/images/branding/product/1x/gsa_48dp.png" class="w-6" alt="Google"> Continue with Google';
-            }
+            try { await auth.signInWithPopup(provider); } catch (e) { console.error(e); }
         }
 
         function logout() { auth.signOut().then(() => location.reload()); }
 
-        // --- 2. NAVIGATION LOGIC ---
-        function handleAccess(act) {
-            if (act === "BNSS 2023") {
-                showPage('bnss-content');
-            } else if (!currentUser) { 
-                openAuthModal(); 
-            } else { 
-                showComingSoon(act);
+        // --- 2. REVIEWS SYSTEM (FIRESTORE) ---
+        const reviewsPath = db?.collection('artifacts').doc(appId).collection('public').doc('data').collection('reviews');
+
+        async function submitReview() {
+            const input = document.getElementById('comment-input');
+            const status = document.getElementById('review-status');
+            const btn = document.getElementById('submit-review-btn');
+            
+            if (!input.value.trim()) return;
+            
+            btn.disabled = true;
+            status.textContent = "Syncing with cloud...";
+
+            try {
+                if (!currentUser) await auth.signInAnonymously();
+
+                await reviewsPath.add({
+                    text: input.value.trim(),
+                    user: currentUser?.email || "Community Member",
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                input.value = "";
+                status.textContent = "Suggestion synced successfully!";
+                setTimeout(() => status.textContent = "", 3000);
+            } catch (e) {
+                console.error(e);
+                status.textContent = "Sync failed. Retry later.";
+            } finally {
+                btn.disabled = false;
             }
         }
 
-        function updateButtonsForLogin() {
-            const bns = document.getElementById('action-bns');
-            const bsa = document.getElementById('action-bsa');
-            if (bns) bns.innerHTML = `<button onclick="handleAccess('BNS 2023')" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black shadow-cartoon-sm uppercase text-xs">Open Module</button>`;
-            if (bsa) bsa.innerHTML = `<button onclick="handleAccess('BSA 2023')" class="w-full bg-emerald-600 text-white py-4 rounded-2xl font-black shadow-cartoon-sm uppercase text-xs">Open Module</button>`;
+        function listenToReviews() {
+            if (!reviewsPath) return;
+            
+            reviewsPath.onSnapshot(snapshot => {
+                const container = document.getElementById('reviews-container');
+                const reviews = [];
+                snapshot.forEach(doc => reviews.push({ id: doc.id, ...doc.data() }));
+                
+                reviews.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+                if (reviews.length === 0) {
+                    container.innerHTML = `<div class="p-8 text-center text-slate-300 font-bold uppercase text-[10px]">Be the first to share a suggestion!</div>`;
+                    return;
+                }
+
+                container.innerHTML = reviews.map(r => `
+                    <div class="bg-white p-5 rounded-2xl border-2 border-slate-100 shadow-sm hover:border-law-gold transition-colors group relative overflow-hidden text-left">
+                        <div class="absolute top-0 right-0 h-1 w-full bg-slate-50 group-hover:bg-law-gold transition-colors"></div>
+                        <p class="text-sm font-semibold text-slate-700 leading-relaxed mb-3">"${r.text}"</p>
+                        <div class="flex items-center justify-between border-t border-slate-50 pt-3">
+                            <span class="text-[9px] font-black text-law-navy uppercase tracking-tighter italic">${r.user}</span>
+                            <span class="text-[8px] font-bold text-slate-300 uppercase">${r.timestamp ? new Date(r.timestamp.seconds * 1000).toLocaleDateString() : 'Syncing...'}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }, err => {
+                console.error("Firestore Listen Error:", err);
+            });
         }
 
-        function resetStoreButtons() {
-            const bns = document.getElementById('action-bns');
-            const bsa = document.getElementById('action-bsa');
-            if (bns) bns.innerHTML = `<button onclick="handleAccess('BNS 2023')" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black shadow-cartoon-sm uppercase text-xs">Unlock</button>`;
-            if (bsa) bsa.innerHTML = `<button onclick="handleAccess('BSA 2023')" class="w-full border-4 border-law-navy py-4 rounded-2xl font-black hover:bg-law-navy hover:text-white transition-all uppercase text-xs shadow-cartoon-sm">Unlock</button>`;
+        // --- 3. NAVIGATION LOGIC ---
+        function handleAccess(act) {
+            if (act === "BNSS 2023") {
+                showPage('bnss-content');
+            } else if (act === "Limitation Act") {
+                showPage('limitation-roadmap');
+            } else { 
+                showComingSoon(act);
+            }
         }
 
         function showPage(pageId) {
@@ -3479,46 +3565,42 @@
         function openAuthModal() { 
             const m = document.getElementById('auth-modal'); 
             m.classList.remove('opacity-0', 'pointer-events-none'); 
-            document.getElementById('auth-error-msg').classList.add('hidden');
         }
-        function closeAuthModal() { const m = document.getElementById('auth-modal'); m.classList.add('opacity-0', 'pointer-events-none'); }
+        function closeAuthModal() { 
+            const m = document.getElementById('auth-modal'); 
+            m.classList.add('opacity-0', 'pointer-events-none'); 
+        }
 
-        // --- 3. SECRET VAULT ---
+        // Vault logic
         function openVault() {
-            document.body.classList.add('swim-active');
-            document.getElementById('bg-canvas').style.opacity = '1';
-            document.getElementById('logic-density').textContent = 'CORE_LINK';
-            setTimeout(() => {
-                const vault = document.getElementById('vault-overlay');
-                vault.classList.remove('opacity-0', 'pointer-events-none');
-                vault.classList.add('opacity-100');
-                document.body.classList.remove('swim-active');
-            }, 600);
+            const vault = document.getElementById('vault-overlay');
+            vault.classList.remove('opacity-0', 'pointer-events-none');
+            vault.classList.add('opacity-100');
         }
 
         function closeVault() {
             const vault = document.getElementById('vault-overlay');
             vault.classList.remove('opacity-100');
             vault.classList.add('opacity-0', 'pointer-events-none');
-            document.getElementById('bg-canvas').style.opacity = '0.3';
-            document.getElementById('logic-density').textContent = currentUser ? '100%' : '40%';
         }
 
-        // --- 4. LAWGIC STRIKE ---
         const quotes = [
             { text: "The law must be stable and yet it cannot stand still.", author: "Roscoe Pound" },
-            { text: "Justice delayed is justice denied.", author: "William Gladstone" }
+            { text: "Justice delayed is justice denied.", author: "William Gladstone" },
+            { text: "Laws are like cobwebs, which may catch small flies, but let wasps and hornets break through.", author: "Jonathan Swift" },
+            { text: "Ignorance of the law excuses no man.", author: "John Selden" },
+            { text: "The first duty of society is justice.", author: "Alexander Hamilton" }
         ];
-        let currentQuote = 0;
+        let currentQuoteIndex = 0;
 
         function wisdomStrike(e) {
             document.body.classList.add('shake-ui');
             setTimeout(() => document.body.classList.remove('shake-ui'), 200);
-            currentQuote = (currentQuote + 1) % quotes.length;
-            document.getElementById('wisdom-text').textContent = `"${quotes[currentQuote].text}"`;
-            document.getElementById('wisdom-author').textContent = `— ${quotes[currentQuote].author}`;
-            
-            // Particles
+
+            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+            document.getElementById('wisdom-text').textContent = `"${quotes[currentQuoteIndex].text}"`;
+            document.getElementById('wisdom-author').textContent = `— ${quotes[currentQuoteIndex].author}`;
+
             const words = ['BNSS', 'CORE', 'DATA', 'JUSTICE'];
             for(let i=0; i<8; i++) {
                 const p = document.createElement('div');
@@ -3533,7 +3615,7 @@
             }
         }
 
-        // --- 5. CANVAS ---
+        // --- 4. CANVAS ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let dots = [];
@@ -3541,46 +3623,32 @@
         function initCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            dots = [];
-            for (let i = 0; i < 50; i++) {
-                dots.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.4,
-                    vy: (Math.random() - 0.5) * 0.4,
-                    size: Math.random() * 2 + 1
-                });
-            }
+            dots = Array.from({length: 50}, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4,
+                size: Math.random() * 2 + 1
+            }));
         }
 
         function animateCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#6366f1';
-            ctx.strokeStyle = 'rgba(99, 102, 241, 0.15)';
-            dots.forEach((dot, idx) => {
+            dots.forEach(dot => {
                 dot.x += dot.vx; dot.y += dot.vy;
                 if (dot.x < 0 || dot.x > canvas.width) dot.vx *= -1;
                 if (dot.y < 0 || dot.y > canvas.height) dot.vy *= -1;
                 ctx.beginPath(); ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2); ctx.fill();
-                for (let j = idx + 1; j < dots.length; j++) {
-                    const d2 = dots[j];
-                    const dist = Math.hypot(dot.x - d2.x, dot.y - d2.y);
-                    if (dist < 150) {
-                        ctx.beginPath();
-                        ctx.moveTo(dot.x, dot.y);
-                        ctx.lineTo(d2.x, d2.y);
-                        ctx.stroke();
-                    }
-                }
             });
             requestAnimationFrame(animateCanvas);
         }
 
-        window.onresize = initCanvas;
         window.onload = () => { 
             initCanvas(); 
-            animateCanvas();
-            showPage('home'); 
+            animateCanvas(); 
+            showPage('home');
+            listenToReviews();
         };
     </script>
 </body>

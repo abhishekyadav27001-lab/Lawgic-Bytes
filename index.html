@@ -81,10 +81,21 @@
         ::-webkit-scrollbar-track { background: #fdfbf7; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
 
-        /* Generic Animation Classes for Acts */
+        /* Limitation Act / Act UI Styles */
+        .flip-card { perspective: 1000px; height: 320px; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 1.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; border: 2px solid #e2e8f0; }
+        .flip-card-back { transform: rotateY(180deg); background-color: #1e293b; color: white; }
         .clock-needle { transform-origin: 50% 50%; transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1); }
         .tip-reveal { animation: slideUp 0.5s ease-out forwards; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .dripping { animation: dripping 2s infinite; opacity: 0; }
+        @keyframes dripping { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(40px); opacity: 0; } }
+        .animate-boulder { animation: rolling 4s linear infinite; }
+        @keyframes rolling { 0% { transform: rotate(0deg); left: -10%; } 100% { transform: rotate(360deg); left: 110%; } }
+        .speech-bubble { position: relative; background: #ffffff; border: 2px solid #1e293b; border-radius: 1rem; padding: 0.5rem 1rem; }
+        .speech-bubble::after { content: ''; position: absolute; bottom: -10px; left: 20px; border-width: 10px 10px 0; border-style: solid; border-color: #1e293b transparent; display: block; width: 0; }
     </style>
 </head>
 <body class="antialiased">
@@ -106,7 +117,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
                 <div class="p-10 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3.5rem] space-y-6">
                     <h3 class="text-2xl font-bold text-law-gold tracking-tight">The Architect's Vision</h3>
-                    <p class="text-slate-300 leading-relaxed font-medium">Welcome to the source code of <b>Lawgic Bytes</b>. Breaking down complex Acts into interactive visual roadmaps.</p>
+                    <p class="text-slate-300 leading-relaxed font-medium">Welcome to the source code of <b>Lawgic Bytes</b>. This hub serves as the bridge between static legal texts and interactive digital intelligence.</p>
                     <div class="flex items-center gap-5 pt-4">
                         <div class="h-14 w-14 bg-law-gold rounded-2xl flex items-center justify-center text-law-navy font-black text-xl border-2 border-white shadow-glow">AY</div>
                         <div>
@@ -119,17 +130,17 @@
                     <h3 class="text-3xl font-black text-law-navy uppercase tracking-tighter italic text-center">Founders Protocol</h3>
                     <p class="text-law-navy font-bold text-lg leading-snug">"We build automated legal brains for the 2026 digital era."</p>
                     <div class="h-2 w-full bg-law-navy/20 rounded-full overflow-hidden"><div class="h-full bg-law-navy w-[88%] animate-pulse"></div></div>
-                    <p class="text-[10px] font-black text-law-navy/60 uppercase tracking-widest text-center">Integration: 88% Stable</p>
+                    <p class="text-[10px] font-black text-law-navy/60 uppercase tracking-widest text-center">Lawgic Integration: 88% Stable</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- NAVIGATION BAR -->
-    <nav class="bg-white/90 backdrop-blur-md border-b-4 border-law-navy sticky top-0 z-50 px-4 md:px-6 py-4">
+    <nav class="bg-white/90 backdrop-blur-md border-b-4 border-law-navy sticky top-0 z-50 px-4 md:px-6 py-4 shadow-sm">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center gap-4">
-                <div onclick="showPage('home')" class="flex items-center gap-3 cursor-pointer group active:scale-95 transition-transform">
+                <div onclick="showPage('home')" oncontextmenu="openVault(); return false;" class="flex items-center gap-3 cursor-pointer group active:scale-95 transition-transform">
                     <div class="h-10 w-10 bg-law-navy flex items-center justify-center rounded-lg shadow-lg border-2 border-white group-hover:rotate-[180deg] transition-transform duration-500">
                         <span class="text-white font-bold text-xl uppercase">LB</span>
                     </div>
@@ -140,8 +151,9 @@
                 </div>
             </div>
             
+            <!-- Desktop Links -->
             <div class="flex flex-wrap gap-4 md:gap-6 text-[10px] font-black text-stone-600 uppercase tracking-widest items-center">
-                <button onclick="showPage('home')" class="hover:text-law-gold transition-colors">Main Menu</button>
+                <button onclick="showPage('home')" class="hover:text-law-gold transition-colors underline decoration-law-gold decoration-2 underline-offset-4">Main Menu</button>
                 <button onclick="showPage('library')" class="hover:text-law-gold transition-colors">Act Library</button>
                 <a href="https://www.linkedin.com/in/abhishek-yadav027/" target="_blank" class="text-law-accent hover:underline flex items-center gap-1">
                     <i class="fab fa-linkedin text-base"></i> LinkedIn
@@ -176,7 +188,7 @@
                         <div class="flex flex-col items-center space-y-4">
                             <i class="fas fa-shield-halved text-5xl text-law-gold mb-2 transition-transform group-hover:scale-125"></i>
                             <h3 id="wisdom-text" class="text-xl md:text-2xl font-black italic text-law-navy leading-tight">"The law must be stable and yet it cannot stand still."</h3>
-                            <p id="wisdom-author" class="text-sm font-bold text-law-accent uppercase tracking-widest">— Roscoe Pound</p>
+                            <p id="wisdom-author" class="text-sm font-bold text-law-accent uppercase tracking-widest mt-4">— Roscoe Pound</p>
                             <div class="pt-4 flex items-center gap-2">
                                 <span class="h-2 w-2 rounded-full bg-law-gold animate-ping"></span>
                                 <p class="text-[9px] font-black text-slate-400 uppercase tracking-tighter italic">Click card to strike</p>
@@ -213,7 +225,7 @@
                     <!-- Comment List -->
                     <div class="md:col-span-3">
                         <div id="reviews-container" class="space-y-4 max-h-[500px] overflow-y-auto pr-4">
-                            <div class="text-center py-20 opacity-20 uppercase font-black text-xs tracking-widest">Fetching reviews...</div>
+                            <div class="text-center py-20 opacity-20 uppercase font-black text-xs tracking-widest italic">Syncing with core database...</div>
                         </div>
                     </div>
                 </div>
@@ -256,9 +268,9 @@
             </div>
         </section>
 
-        <!-- [PASTE BNSS CONTENT HERE] -->
+
         <section id="page-bnss-content" class="view-section hidden py-12 px-6">
-           <!DOCTYPE html>
+            <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -3303,9 +3315,8 @@
 </html>
         </section>
 
-        <!-- [PASTE LIMITATION ACT CONTENT HERE] -->
         <section id="page-limitation-roadmap" class="view-section hidden py-12 px-6">
-           <!DOCTYPE html>
+            <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -5271,7 +5282,7 @@
             </div>
         </div>
 
-         <!-- NEW SECTION: PRO-TIPS COMMAND CENTER -->
+        <!-- NEW SECTION: PRO-TIPS COMMAND CENTER -->
         <div id="protips" class="relative mb-32">
             <div class="flex flex-col items-center mb-16 relative">
                 <div class="w-12 h-12 bg-law-gold text-white rounded-full flex items-center justify-center font-black z-10 shadow-xl border-4 border-white">
@@ -5486,9 +5497,6 @@
 
 
 
-
-
-
         </section>
 
         <!-- PAGE: COMING SOON -->
@@ -5498,7 +5506,7 @@
                 <div class="cartoon-card bg-white p-16 rounded-[4rem] border-4 border-law-navy shadow-cartoon">
                     <div class="text-[140px] leading-none animate-bounce">⚖️ 😴</div>
                     <h2 id="coming-soon-title" class="text-6xl font-black uppercase italic text-law-navy tracking-tighter">Act Name</h2>
-                    <p class="text-xl mt-4 font-bold">The Lawgic engine is currently compiling this module.</p>
+                    <p class="text-xl mt-4 font-bold text-slate-500 uppercase italic">Module currently being compiled in the Lawgic Core.</p>
                 </div>
             </div>
         </section>
@@ -5506,10 +5514,10 @@
 
     <!-- FOOTER -->
     <footer id="contact" class="bg-white border-t-8 border-law-navy py-12 text-center">
-        <div class="max-w-4xl mx-auto space-y-8">
+        <div class="max-w-4xl mx-auto space-y-6">
             <div class="flex flex-col items-center gap-4">
-                <img src="https://komarev.com/ghpvc/?username=abhishekyadav27001-lab&repo=bnss-roadmap&color=FFD700&style=flat-square&label=LAWGIC+VISITORS" alt="Visitor Counter" class="rounded border-2 border-law-navy">
-                <!-- LIVE FIREBASE VISITOR COUNT DISPLAY -->
+                <img src="https://komarev.com/ghpvc/?username=abhishekyadav27001-lab&repo=bnss-roadmap&color=FFD700&style=flat-square&label=LAWGIC+VISITORS" alt="Badge" class="rounded border-2 border-law-navy shadow-sm">
+                <!-- LIVE FIREBASE VISITOR COUNT -->
                 <div class="bg-law-navy text-law-gold px-4 py-2 rounded-xl font-black text-xs border-2 border-white shadow-glow">
                     LIVE VISITORS: <span id="live-visitor-count">1</span>
                 </div>
@@ -5524,16 +5532,16 @@
             <button onclick="closeAuthModal()" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition-colors"><i class="fas fa-times text-xl"></i></button>
             <div class="h-20 w-20 bg-law-gold text-white rounded-2xl flex items-center justify-center text-4xl mx-auto mb-8 shadow-lg border-2 border-law-navy"><i class="fas fa-fingerprint"></i></div>
             <h3 class="text-4xl font-black text-law-navy mb-4 uppercase italic leading-none">Access Secured</h3>
-            <p class="text-slate-500 font-semibold mb-6 text-sm">Login with Google to unlock advanced features.</p>
+            <p class="text-slate-500 font-semibold mb-6 text-sm">Login with Google to unlock advanced community features.</p>
             <button id="google-login-btn" onclick="loginWithGoogle()" class="w-full bg-white border-4 border-law-navy py-5 rounded-2xl font-black flex items-center justify-center gap-4 hover:bg-slate-50 transition-all shadow-cartoon text-lg uppercase tracking-tight">
                 <img src="https://www.gstatic.com/images/branding/product/1x/gsa_48dp.png" class="w-6" alt="Google"> Continue with Google
             </button>
-            <p id="auth-error-msg" class="hidden mt-6 text-red-500 font-bold text-xs uppercase"></p>
+            <p id="auth-error-msg" class="hidden mt-6 text-red-500 font-bold text-xs uppercase italic"></p>
         </div>
     </div>
 
     <script>
-        // --- 1. CONFIG & AUTH (RULE 3) ---
+        // --- 1. CONFIG & AUTH (STRICT RULE 3) ---
         let auth, db, currentUser = null;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'lawgic-bytes';
 
@@ -5543,31 +5551,32 @@
             auth = firebase.auth();
             db = firebase.firestore();
             auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-        } catch (e) { console.error("Firebase Config Error"); }
+        } catch (e) { console.error("Firebase Config Error: System limited."); }
 
         const initAuthFlow = async () => {
             if (!auth) return;
             try {
+                // Await auth before starting DB listeners
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await auth.signInWithCustomToken(__initial_auth_token);
                 } else if (!auth.currentUser) {
                     await auth.signInAnonymously();
                 }
-            } catch (e) {
-                console.error("Auth init error:", e);
-                if (!auth.currentUser) await auth.signInAnonymously();
+            } catch (e) { 
+                console.error("Auth init failure:", e); 
+                if (!auth.currentUser) await auth.signInAnonymously().catch(err => console.log("Final fallback failed"));
             }
         };
 
         if (auth) {
-            initAuthFlow();
             auth.onAuthStateChanged(user => {
                 currentUser = user;
                 if (user) {
                     document.getElementById('login-nav-btn')?.classList.add('hidden');
                     document.getElementById('user-info')?.classList.remove('hidden');
-                    document.getElementById('user-display-email').textContent = user.isAnonymous ? "Guest Mode" : (user.email || "User Connected");
-                    // Guard database operations (Rule 3)
+                    document.getElementById('user-display-email').textContent = user.isAnonymous ? "Guest Mode" : (user.email || "Explorer");
+                    
+                    // Database Ops only AFTER auth (Rule 3)
                     listenToReviews();
                     trackVisitors();
                 } else {
@@ -5580,28 +5589,32 @@
         async function loginWithGoogle() {
             if (!auth) return;
             const provider = new firebase.auth.GoogleAuthProvider();
-            try { await auth.signInWithPopup(provider); closeAuthModal(); } catch (e) { console.error(e); }
+            try { 
+                await auth.signInWithPopup(provider); 
+                closeAuthModal(); 
+            } catch (e) { 
+                document.getElementById('auth-error-msg').textContent = "Login failed. Try again.";
+                document.getElementById('auth-error-msg').classList.remove('hidden');
+            }
         }
 
         function logout() { auth.signOut().then(() => location.reload()); }
 
-        // --- 2. DATA SYSTEMS (RULE 1 PATHS) ---
+        // --- 2. DATA SYSTEMS (STRICT RULE 1 PATHS) ---
         async function trackVisitors() {
             if (!db || !currentUser) return;
+            // RULE 1 PATH
             const statsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('stats').doc('visitors');
             try {
-                await statsRef.set({
-                    count: firebase.firestore.FieldValue.increment(1)
-                }, { merge: true });
-
+                await statsRef.set({ count: firebase.firestore.FieldValue.increment(1) }, { merge: true });
                 statsRef.onSnapshot(doc => {
                     const data = doc.data();
                     if (data && data.count) {
-                        const countEl = document.getElementById('live-visitor-count');
-                        if (countEl) countEl.textContent = data.count.toLocaleString();
+                        const el = document.getElementById('live-visitor-count');
+                        if (el) el.textContent = data.count.toLocaleString();
                     }
-                }, err => console.error("Visitor Permission Error:", err));
-            } catch (e) { console.error("Tracking Error:", e); }
+                }, err => console.error("Snapshot error (visitors):", err));
+            } catch (e) { console.error("Tracking error:", e); }
         }
 
         let unsubscribeReviews = null;
@@ -5614,10 +5627,13 @@
             if (!input.value.trim()) return;
             
             btn.disabled = true;
-            status.textContent = "Syncing with Lawgic Core...";
+            status.textContent = "Processing submission...";
 
             try {
+                // Ensure auth before writing (Rule 3)
                 if (!auth.currentUser) await auth.signInAnonymously();
+                
+                // RULE 1 PATH
                 const reviewsPath = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('reviews');
 
                 await reviewsPath.add({
@@ -5627,11 +5643,11 @@
                 });
 
                 input.value = "";
-                status.textContent = "Suggestion captured!";
+                status.textContent = "Review shared successfully!";
                 setTimeout(() => status.textContent = "", 3000);
             } catch (e) {
                 console.error("Submission Error:", e);
-                status.textContent = "Sync failed. Retry later.";
+                status.textContent = "Submission failed: Permissions or Network.";
             } finally {
                 btn.disabled = false;
             }
@@ -5650,11 +5666,11 @@
                 const reviews = [];
                 snapshot.forEach(doc => reviews.push({ id: doc.id, ...doc.data() }));
                 
-                // Rule 2 - Memory Sort
+                // RULE 2 - Memory Sort
                 reviews.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
 
                 if (reviews.length === 0) {
-                    container.innerHTML = `<div class="p-8 text-center text-slate-300 font-bold uppercase text-[10px]">No reviews yet. Share yours!</div>`;
+                    container.innerHTML = `<div class="p-8 text-center text-slate-300 font-black uppercase text-[10px]">Be the first to share a suggestion!</div>`;
                     return;
                 }
 
@@ -5664,22 +5680,18 @@
                         <p class="text-sm font-semibold text-slate-700 leading-relaxed mb-3">"${r.text}"</p>
                         <div class="flex items-center justify-between border-t border-slate-50 pt-3">
                             <span class="text-[9px] font-black text-law-navy uppercase tracking-tighter italic">${r.user}</span>
-                            <span class="text-[8px] font-bold text-slate-300 uppercase">${r.timestamp ? new Date(r.timestamp.seconds * 1000).toLocaleDateString() : 'Saving...'}</span>
+                            <span class="text-[8px] font-bold text-slate-300 uppercase">${r.timestamp ? new Date(r.timestamp.seconds * 1000).toLocaleDateString() : 'Syncing...'}</span>
                         </div>
                     </div>
                 `).join('');
-            }, err => console.error("Firestore Permission Error:", err));
+            }, err => console.error("Snapshot error (reviews):", err));
         }
 
-        // --- 3. NAVIGATION ---
+        // --- 3. NAVIGATION & UI ---
         function handleAccess(act) {
-            if (act === "BNSS 2023") {
-                showPage('bnss-content');
-            } else if (act === "Limitation Act") {
-                showPage('limitation-roadmap');
-            } else { 
-                showComingSoon(act);
-            }
+            if (act === "BNSS 2023") showPage('bnss-content');
+            else if (act === "Limitation Act") showPage('limitation-roadmap');
+            else showComingSoon(act);
         }
 
         function showPage(pageId) {
@@ -5700,107 +5712,55 @@
         function closeAuthModal() { document.getElementById('auth-modal')?.classList.add('opacity-0', 'pointer-events-none'); }
 
         function openVault() {
-            const vault = document.getElementById('vault-overlay');
-            vault?.classList.remove('opacity-0', 'pointer-events-none');
-            vault?.classList.add('opacity-100');
+            const v = document.getElementById('vault-overlay');
+            v?.classList.remove('opacity-0', 'pointer-events-none');
+            v?.classList.add('opacity-100');
         }
-
         function closeVault() {
-            const vault = document.getElementById('vault-overlay');
-            vault?.classList.remove('opacity-100');
-            vault?.classList.add('opacity-0', 'pointer-events-none');
+            const v = document.getElementById('vault-overlay');
+            v?.classList.remove('opacity-100');
+            v?.classList.add('opacity-0', 'pointer-events-none');
         }
 
-        // --- 4. FX & QUOTES ---
         const quotes = [
             { text: "The law must be stable and yet it cannot stand still.", author: "Roscoe Pound" },
             { text: "Justice delayed is justice denied.", author: "William Gladstone" },
-            { text: "Laws are like cobwebs, which may catch small flies, but let wasps break through.", author: "Jonathan Swift" },
             { text: "Ignorance of the law excuses no man.", author: "John Selden" },
             { text: "The first duty of society is justice.", author: "Alexander Hamilton" }
         ];
         let currentQuoteIndex = 0;
-
         function wisdomStrike(e) {
             document.body.classList.add('shake-ui');
             setTimeout(() => document.body.classList.remove('shake-ui'), 200);
-
             currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
-            const textEl = document.getElementById('wisdom-text');
-            const authEl = document.getElementById('wisdom-author');
-            if (textEl) textEl.textContent = `"${quotes[currentQuoteIndex].text}"`;
-            if (authEl) authEl.textContent = `— ${quotes[currentQuoteIndex].author}`;
-
-            const words = ['BNSS', 'CORE', 'DATA', 'JUSTICE'];
+            document.getElementById('wisdom-text').textContent = `"${quotes[currentQuoteIndex].text}"`;
+            document.getElementById('wisdom-author').textContent = `— ${quotes[currentQuoteIndex].author}`;
+            const words = ['DATA', 'JUSTICE', 'BYTE'];
             for(let i=0; i<8; i++) {
                 const p = document.createElement('div');
-                p.className = 'lawgic-particle';
-                p.textContent = words[Math.floor(Math.random()*words.length)];
-                p.style.setProperty('--tw-x', (Math.random() * 400 - 200) + 'px');
-                p.style.setProperty('--tw-y', (Math.random() * -400 - 50) + 'px');
-                p.style.left = e.clientX + 'px';
-                p.style.top = e.clientY + 'px';
+                p.className = 'lawgic-particle'; p.textContent = words[Math.floor(Math.random()*words.length)];
+                p.style.setProperty('--tw-x', (Math.random()*400-200)+'px'); p.style.setProperty('--tw-y', (Math.random()*-400-50)+'px');
+                p.style.left = e.clientX+'px'; p.style.top = e.clientY+'px';
                 document.getElementById('fx-container').appendChild(p);
                 setTimeout(() => p.remove(), 1200);
             }
         }
 
-        // Pro-Tips logic for when you paste your Limitation Act content
-        function revealNextTip() {
-            const tips = [
-                { title: "The 'Suit' Trap", tip: "Never miss the deadline for a Suit.", why: "Sec. 5 mercy does NOT apply to Suits.", icon: "fa-gavel", color: "text-law-red" },
-                { title: "Reset Switch", tip: "Get a written admission of debt.", why: "Sec. 18 acknowledgment zaps the clock to zero.", icon: "fa-redo", color: "text-law-gold" }
-            ];
-            if (typeof window.tipRotation === 'undefined') window.tipRotation = 0;
-            if (typeof window.tipIdx === 'undefined') window.tipIdx = -1;
-            
-            window.tipIdx = (window.tipIdx + 1) % tips.length;
-            window.tipRotation += 1440 + 90;
-            document.getElementById('clock-needle').style.transform = `rotate(${window.tipRotation}deg)`;
-            
-            const display = document.getElementById('tip-display');
-            const data = tips[window.tipIdx];
-            display.classList.remove('tip-reveal');
-            void display.offsetWidth;
-            setTimeout(() => {
-                display.innerHTML = `
-                    <div class="tip-reveal space-y-6 w-full text-left">
-                        <div class="flex items-center gap-4">
-                            <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-3xl ${data.color} shadow-inner"><i class="fas ${data.icon}"></i></div>
-                            <h3 class="text-2xl font-black italic uppercase tracking-tighter">${data.title}</h3>
-                        </div>
-                        <div class="p-6 bg-slate-50 rounded-3xl border-l-8 border-law-gold">
-                            <p class="font-bold italic">💡 Tip: ${data.tip}</p>
-                            <p class="text-sm text-slate-500 mt-2">${data.why}</p>
-                        </div>
-                    </div>
-                `;
-                display.classList.add('tip-reveal');
-            }, 300);
-        }
-
-        // --- 5. CANVAS ---
+        // --- 4. CANVAS BACKGROUND ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas?.getContext('2d');
         let dots = [];
-
         function initCanvas() {
             if (!canvas) return;
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             dots = Array.from({length: 40}, () => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.4,
-                vy: (Math.random() - 0.5) * 0.4,
-                size: Math.random() * 2 + 1
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4, size: 2
             }));
         }
-
         function animateCanvas() {
             if (!ctx || !canvas) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#6366f1';
+            ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = '#6366f1';
             dots.forEach(dot => {
                 dot.x += dot.vx; dot.y += dot.vy;
                 if (dot.x < 0 || dot.x > canvas.width) dot.vx *= -1;
@@ -5810,8 +5770,7 @@
             requestAnimationFrame(animateCanvas);
         }
 
-        window.onload = () => { initCanvas(); animateCanvas(); showPage('home'); };
+        window.onload = async () => { initCanvas(); animateCanvas(); showPage('home'); await initAuthFlow(); };
     </script>
 </body>
 </html>
-

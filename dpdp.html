@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPDP Protocol: The Digital Domain</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dpdp-navy': '#0f172a',
+                        'dpdp-blue': '#0ea5e9',
+                        'dpdp-glow': '#22d3ee',
+                        'dpdp-gold': '#d97706',
+                        'dpdp-bg': '#f8fafc'
+                    },
+                    boxShadow: {
+                        'cyber': '0 0 20px rgba(14, 165, 233, 0.2)',
+                        'cyber-gold': '0 0 20px rgba(217, 119, 6, 0.2)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Fira+Code:wght@400;700&display=swap');
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
+        .mono { font-family: 'Fira Code', monospace; }
+
+        .actor-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid #e2e8f0;
+        }
+        .actor-card:hover {
+            transform: translateY(-8px);
+            border-color: #0ea5e9;
+            box-shadow: 0 20px 25px -5px rgba(14, 165, 233, 0.1);
+        }
+
+        .notice-scroll {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.8s ease-out;
+        }
+        .notice-scroll.active {
+            max-height: 800px;
+        }
+
+        .lock-pulse {
+            animation: lockPulse 2s infinite;
+        }
+        @keyframes lockPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .stream-line {
+            background: linear-gradient(90deg, transparent, #0ea5e9, transparent);
+            background-size: 200% 100%;
+            animation: stream 2s linear infinite;
+        }
+        @keyframes stream {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="text-dpdp-navy antialiased">
+
+    <!-- HERO SECTION -->
+    <header class="bg-dpdp-navy text-white py-24 px-6 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto relative z-10 text-center space-y-8">
+            <div class="inline-flex items-center gap-2 bg-dpdp-blue/10 text-dpdp-blue px-5 py-2 rounded-full border border-dpdp-blue/20 text-xs font-black uppercase tracking-[0.4em]">
+                <i class="fas fa-shield-halved"></i> Data Protection Protocol
+            </div>
+            <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter leading-none italic uppercase">The Digital <br><span class="text-dpdp-blue">Domain.</span></h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed italic">
+                Part 1: The Setup & The Key. Understanding the players, the rules of notice, and the power of verifiable consent under the DPDP Act, 2023.
+            </p>
+            <div class="pt-8 flex flex-wrap justify-center gap-4">
+                <a href="#players" class="bg-dpdp-blue hover:bg-sky-500 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-cyber">System Access</a>
+            </div>
+        </div>
+        <!-- Digital Grid BG -->
+        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#0ea5e9 1px, transparent 1px); background-size: 40px 40px;"></div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-20 space-y-32">
+
+        <!-- 1. THE PLAYERS (Character Cards) -->
+        <section id="players" class="space-y-16">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter">Who is in the Game?</h2>
+                <p class="text-slate-400 font-bold uppercase text-xs tracking-[0.3em]">Section 2: Definitions & Roles</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Data Principal -->
+                <div class="actor-card bg-white p-8 rounded-[2.5rem] flex flex-col items-center text-center space-y-6">
+                    <div class="w-20 h-20 bg-sky-50 text-dpdp-blue rounded-3xl flex items-center justify-center text-4xl shadow-inner">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-xl uppercase tracking-tighter">Data Principal</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">"The Owner"</p>
+                    </div>
+                    <p class="text-sm text-slate-500 leading-relaxed italic"><strong>Section 2(j):</strong> The individual to whom the personal data relates. Includes parents/guardians for children or persons with disabilities.</p>
+                </div>
+
+                <!-- Data Fiduciary -->
+                <div class="actor-card bg-white p-8 rounded-[2.5rem] flex flex-col items-center text-center space-y-6">
+                    <div class="w-20 h-20 bg-amber-50 text-dpdp-gold rounded-3xl flex items-center justify-center text-4xl shadow-inner">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-xl uppercase tracking-tighter">Data Fiduciary</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">"The Keeper"</p>
+                    </div>
+                    <p class="text-sm text-slate-500 leading-relaxed italic"><strong>Section 2(i):</strong> The entity (e.g., Bank, App, State) that determines the <strong>purpose and means</strong> of processing personal data.</p>
+                </div>
+
+                <!-- Data Processor -->
+                <div class="actor-card bg-white p-8 rounded-[2.5rem] flex flex-col items-center text-center space-y-6">
+                    <div class="w-20 h-20 bg-slate-100 text-slate-600 rounded-3xl flex items-center justify-center text-4xl shadow-inner">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-xl uppercase tracking-tighter">Data Processor</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">"The Worker"</p>
+                    </div>
+                    <p class="text-sm text-slate-500 leading-relaxed italic"><strong>Section 2(k):</strong> Any person who processes personal data <strong>on behalf</strong> of a Data Fiduciary.</p>
+                </div>
+
+                <!-- Consent Manager -->
+                <div class="actor-card bg-dpdp-navy p-8 rounded-[2.5rem] flex flex-col items-center text-center space-y-6 text-white border-2 border-dpdp-blue shadow-cyber">
+                    <div class="w-20 h-20 bg-dpdp-blue text-white rounded-3xl flex items-center justify-center text-4xl shadow-lg animate-pulse">
+                        <i class="fas fa-user-gear"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-xl uppercase tracking-tighter">Consent Manager</h3>
+                        <p class="text-[10px] text-dpdp-blue font-bold uppercase mt-1">"The Agent"</p>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed italic"><strong>Section 2(g) & Rule 4:</strong> A registered entity acting as a single point of contact to give, manage, review, and withdraw consent.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. THE GOLDEN RULE: NOTICE FIRST -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8">
+                <div class="inline-block bg-dpdp-blue/10 text-dpdp-blue px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Section 5 | Rule 3</div>
+                <h2 class="text-5xl font-black uppercase italic tracking-tighter">Notice <span class="text-dpdp-blue">First.</span></h2>
+                <p class="text-lg text-slate-500 font-medium leading-relaxed">
+                    Under <strong>Section 5(1)</strong>, every request for consent must be preceded or accompanied by a notice. Rule 3 details what this notice must contain.
+                </p>
+                
+                <div class="space-y-4">
+                    <button onclick="document.getElementById('notice-example').classList.toggle('active')" class="bg-dpdp-navy text-white px-8 py-3 rounded-xl font-bold flex items-center gap-3 hover:bg-slate-800 transition-all">
+                        <i class="fas fa-scroll"></i> View Compliant Notice (Rule 3)
+                    </button>
+                    <div id="notice-example" class="notice-scroll bg-white border-2 border-dashed border-slate-200 rounded-3xl">
+                        <div class="p-8 space-y-6">
+                            <div class="flex justify-between items-center border-b pb-4">
+                                <h4 class="font-black uppercase text-sm">Official Data Notice</h4>
+                                <span class="text-[10px] bg-sky-50 text-dpdp-blue px-2 py-0.5 rounded font-bold">Bank Y</span>
+                            </div>
+                            <div class="space-y-4 text-xs font-medium text-slate-600">
+                                <p><strong>1. Itemized Data [Rule 3(b)(i)]:</strong> We need your Live Video Feed and PAN details.</p>
+                                <p><strong>2. Purpose [Rule 3(b)(ii)]:</strong> To complete identity verification (KYC) for your new account.</p>
+                                <p><strong>3. Withdrawal & Grievance [Rule 3(c)]:</strong> You can withdraw consent or contact our Data Protection Officer via the link below.</p>
+                                <p><strong>4. Language [Sec 5(3)]:</strong> Available in English & 22 Eighth Schedule languages.</p>
+                            </div>
+                            <div class="flex gap-4">
+                                <button class="bg-dpdp-blue text-white px-4 py-2 rounded-lg font-black text-[10px] uppercase">Accept</button>
+                                <button class="border border-slate-200 px-4 py-2 rounded-lg font-black text-[10px] uppercase">Withdraw</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-10 bg-white border-4 border-dpdp-navy rounded-[4rem] shadow-cartoon relative overflow-hidden">
+                <div class="text-center space-y-6">
+                    <div class="text-7xl">🏦</div>
+                    <div class="speech-bubble mx-auto max-w-[280px]">
+                        "I want to open an account."
+                    </div>
+                    <div class="text-4xl">🏢 ➔ 📋</div>
+                    <p class="text-xs font-black uppercase text-slate-400 tracking-widest italic">The Bank must show the Rule 3 notice before taking the scan.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. VERIFIABLE CONSENT & NO BUNDLING -->
+        <section class="bg-dpdp-navy text-white rounded-[4rem] p-12 md:p-20 shadow-2xl relative overflow-hidden">
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10">
+                <div class="space-y-8">
+                    <h2 class="text-4xl font-black uppercase italic tracking-tighter text-dpdp-blue">The Key: Consent.</h2>
+                    <p class="text-slate-400 font-medium leading-relaxed italic">
+                        <strong>Section 6(1)</strong> mandates that consent must be free, specific, informed, unconditional, and unambiguous.
+                    </p>
+                    <div class="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-4">
+                        <h4 class="text-law-gold font-black uppercase text-xs italic tracking-widest">The "No Bundling" Rule</h4>
+                        <p class="text-xs text-slate-300">You cannot be forced to agree to processing personal data that is not necessary for the specified purpose.</p>
+                        <div class="flex items-center gap-4 text-[10px] font-bold">
+                            <span class="bg-red-500/20 text-red-400 px-2 py-1 rounded">HEALTH APP</span>
+                            <i class="fas fa-times"></i>
+                            <span class="bg-red-500/20 text-red-400 px-2 py-1 rounded">CONTACT LIST</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="relative w-64 h-64 flex items-center justify-center">
+                        <i class="fas fa-key text-[150px] text-dpdp-blue opacity-20 lock-pulse"></i>
+                        <div class="text-center absolute">
+                            <i class="fas fa-fingerprint text-6xl text-white mb-2"></i>
+                            <p class="text-[10px] font-black uppercase tracking-[0.5em] text-dpdp-blue">Verifying...</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 bg-dpdp-blue/20 p-4 rounded-2xl border border-dpdp-blue/40 text-[10px] font-bold uppercase tracking-widest">Withdrawal Ease (Sec 6(4))</div>
+                </div>
+            </div>
+            <!-- BG Decor -->
+            <div class="absolute -top-10 -right-10 text-[15rem] font-black text-white/5 pointer-events-none select-none">KEY</div>
+        </section>
+
+        <!-- 4. CHILDREN & PWD: EXTRA LOCKS -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="p-12 bg-white border-4 border-dpdp-gold rounded-[4rem] shadow-cartoon-sm flex flex-col items-center text-center space-y-8">
+                <div class="flex items-center gap-4">
+                    <div class="text-6xl">👶</div>
+                    <div class="w-12 h-1 bg-dpdp-gold rounded-full"></div>
+                    <div class="text-6xl">🎮</div>
+                </div>
+                <div class="speech-bubble bg-amber-50 border-dpdp-gold">
+                    "I want to play!"
+                </div>
+                <div class="p-6 bg-slate-900 text-white rounded-3xl w-full space-y-4">
+                    <p class="text-xs font-black uppercase text-dpdp-gold italic">Rule 10 Logic</p>
+                    <p class="text-[11px] text-slate-400 leading-relaxed uppercase tracking-tighter">
+                        Platform: "Parent P, please verify your adult status via Digital Locker to let Child C play."
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="inline-block bg-dpdp-gold/10 text-dpdp-gold px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Section 9 | Rule 10</div>
+                <h2 class="text-5xl font-black uppercase italic tracking-tighter leading-none">Extra <br><span class="text-dpdp-gold">Locks.</span></h2>
+                <ul class="space-y-6">
+                    <li class="flex items-start gap-4">
+                        <i class="fas fa-lock text-dpdp-gold text-xl mt-1"></i>
+                        <p class="text-sm text-slate-500 font-medium leading-relaxed"><strong>Verifiable Parental Consent (Sec 9(1)):</strong> Companies must obtain verifiable consent from the parent/guardian before processing any data of a child.</p>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <i class="fas fa-user-shield text-dpdp-gold text-xl mt-1"></i>
+                        <p class="text-sm text-slate-500 font-medium leading-relaxed"><strong>Prohibitions (Sec 9(2) & 9(3)):</strong> Tracking, behavioral monitoring, or targeted advertising directed at children is strictly forbidden.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. THE FAST PASS (Legitimate Uses) -->
+        <section class="py-24 px-6 bg-white border-y border-slate-100 relative overflow-hidden">
+            <div class="max-w-4xl mx-auto text-center space-y-12 relative z-10">
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter">The "Fast Pass" Lane</h2>
+                <p class="text-slate-400 font-bold uppercase text-xs tracking-[0.3em]">Section 7: Processing without Consent (Legitimate Uses)</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="p-8 bg-slate-50 rounded-3xl border-2 border-slate-100 flex flex-col items-center space-y-4 hover:border-dpdp-blue transition-all">
+                        <div class="text-4xl">💊</div>
+                        <h4 class="font-black uppercase text-sm">Voluntary Sharing (Sec 7(a))</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed italic">Giving your number to a pharmacist for a receipt? Consent is implied for that specific purpose.</p>
+                    </div>
+                    <div class="p-8 bg-slate-50 rounded-3xl border-2 border-slate-100 flex flex-col items-center space-y-4 hover:border-dpdp-blue transition-all">
+                        <div class="text-4xl">🏥</div>
+                        <h4 class="font-black uppercase text-sm">Emergencies (Sec 7(c) - 7(e))</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed italic">Medical emergencies, epidemics, or disaster management. Immediate processing allowed for safety.</p>
+                    </div>
+                    <div class="p-8 bg-slate-50 rounded-3xl border-2 border-slate-100 flex flex-col items-center space-y-4 hover:border-dpdp-blue transition-all">
+                        <div class="text-4xl">💼</div>
+                        <h4 class="font-black uppercase text-sm">Employment (Sec 7(i))</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed italic">Processing for employment purposes, safeguarding trade secrets, or providing benefits.</p>
+                    </div>
+                    <div class="p-8 bg-slate-50 rounded-3xl border-2 border-slate-100 flex flex-col items-center space-y-4 hover:border-dpdp-blue transition-all">
+                        <div class="text-4xl">🏛️</div>
+                        <h4 class="font-black uppercase text-sm">State Services (Sec 7(b))</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed italic">Processing by the State for providing subsidies, benefits, services, certificates, or licenses.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Fast Pass Visual -->
+            <div class="absolute bottom-0 left-0 w-full h-2 stream-line opacity-30"></div>
+        </section>
+
+        <!-- 6. CONSENT MANAGER DASHBOARD (Interactive Simulation) -->
+        <section class="space-y-12">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter">Your Remote Control</h2>
+                <p class="text-slate-400 font-bold uppercase text-xs tracking-[0.3em]">The Consent Manager Dashboard (Sec 6(7) & Rule 4)</p>
+            </div>
+
+            <div class="bg-white rounded-[3rem] border-[8px] border-dpdp-navy shadow-2xl overflow-hidden max-w-4xl mx-auto">
+                <!-- Dashboard Header -->
+                <div class="bg-dpdp-navy p-6 text-white flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-dpdp-blue rounded-lg"></div>
+                        <span class="font-black uppercase tracking-widest text-xs">Lawgic Consent Manager v1.0</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-dpdp-blue">₹2Cr Net Worth Verified (Rule 4)</span>
+                </div>
+                
+                <div class="p-10 grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="space-y-6">
+                        <h3 class="font-black uppercase text-lg italic tracking-tighter">Live Request</h3>
+                        <div class="p-6 bg-slate-50 rounded-2xl border-2 border-slate-200 relative">
+                            <span class="absolute -top-3 -right-3 bg-red-500 text-white text-[8px] font-black px-2 py-1 rounded-full animate-bounce">URGENT</span>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="text-3xl">🏦</div>
+                                <div>
+                                    <h4 class="font-bold text-xs">Loan App (Bank B)</h4>
+                                    <p class="text-[10px] text-slate-400">Requests Bank Statement</p>
+                                </div>
+                            </div>
+                            <button onclick="simulateConsent()" id="consent-btn" class="w-full bg-dpdp-blue text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg active:scale-95 transition-all">Grant Access</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <h3 class="font-black uppercase text-lg italic tracking-tighter">Data Stream</h3>
+                        <div class="h-40 bg-slate-900 rounded-2xl flex flex-col items-center justify-center p-6 text-center space-y-4 relative overflow-hidden">
+                            <div id="sim-status" class="text-xs text-slate-500 font-mono italic">Waiting for your command...</div>
+                            <div id="sim-visual" class="hidden flex items-center gap-6">
+                                <div class="text-3xl">🏦 <span class="text-[8px] block uppercase opacity-50">Bank A</span></div>
+                                <div class="w-24 h-1 bg-slate-700 relative overflow-hidden">
+                                    <div class="absolute inset-0 stream-line"></div>
+                                </div>
+                                <div class="text-3xl">📱 <span class="text-[8px] block uppercase opacity-50 text-dpdp-blue">Bank B</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-xs text-slate-400 font-bold italic">"You don't talk to Bank B directly. You use the Dashboard to manage consent."</p>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dpdp-navy py-20 px-6 text-center text-white border-t-8 border-dpdp-blue">
+        <div class="max-w-4xl mx-auto space-y-8">
+            <div class="text-6xl text-dpdp-blue"><i class="fas fa-shield-virus"></i></div>
+            <h2 class="text-3xl font-black uppercase italic tracking-tighter">Digital Literacy Complete.</h2>
+            <p class="text-slate-400 text-lg mx-auto max-w-lg leading-relaxed">
+                The setup is done. The keys are in your hand. Next, we explore the **Liabilities of companies** and the **Data Protection Board**.
+            </p>
+            <div class="pt-12">
+                <div class="bg-dpdp-blue/10 border border-dpdp-blue/20 inline-block px-8 py-3 rounded-full text-xs font-black tracking-widest uppercase text-dpdp-blue">
+                    Protocol Part 1 Analysis: SEC 1-10 Completed
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function simulateConsent() {
+            const btn = document.getElementById('consent-btn');
+            const status = document.getElementById('sim-status');
+            const visual = document.getElementById('sim-visual');
+
+            btn.disabled = true;
+            btn.textContent = "Processing...";
+            status.textContent = "Routing Consent via API...";
+
+            setTimeout(() => {
+                status.classList.add('hidden');
+                visual.classList.remove('hidden');
+                btn.textContent = "Access Granted";
+                btn.className = "w-full bg-emerald-500 text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg";
+            }, 1500);
+        }
+    </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPDP Protocol: The Control Panel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dpdp-navy': '#0f172a',
+                        'dpdp-blue': '#0ea5e9',
+                        'dpdp-alert': '#ef4444',
+                        'dpdp-safe': '#10b981',
+                        'dpdp-gold': '#d97706',
+                        'dpdp-bg': '#f8fafc'
+                    },
+                    boxShadow: {
+                        'cyber': '0 0 20px rgba(14, 165, 233, 0.2)',
+                        'cyber-alert': '0 0 20px rgba(239, 68, 68, 0.4)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Fira+Code:wght@400;700&display=swap');
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
+        .mono { font-family: 'Fira Code', monospace; }
+
+        .shield-icon {
+            transition: all 0.5s ease;
+        }
+        .shield-icon:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 15px #10b981);
+        }
+
+        .siren-animation {
+            animation: flashRed 1s infinite;
+        }
+        @keyframes flashRed {
+            0%, 100% { color: #ef4444; text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+            50% { color: #fee2e2; text-shadow: none; }
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+        .timer-fill {
+            height: 100%;
+            background: #d97706;
+            width: 0%;
+            animation: fillTimer 3s linear infinite;
+        }
+        @keyframes fillTimer {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .super-btn {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .super-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #22d3ee;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body class="text-dpdp-navy antialiased">
+
+    <!-- HERO SECTION -->
+    <header class="bg-dpdp-navy text-white py-20 px-6 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto relative z-10 text-center space-y-6">
+            <div class="inline-flex items-center gap-2 bg-dpdp-blue/10 text-dpdp-blue px-5 py-2 rounded-full border border-dpdp-blue/20 text-xs font-black uppercase tracking-[0.4em]">
+                <i class="fas fa-gamepad"></i> Part 2: Operations
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter leading-none italic uppercase">The Control <br><span class="text-dpdp-safe">Panel.</span></h1>
+            <p class="text-lg text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed italic">
+                Security Safeguards, Breach Protocols, and the "Delete" Button. Understanding your rights and the Fiduciary's duties.
+            </p>
+        </div>
+        <!-- Digital Grid BG -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#10b981 1px, transparent 1px); background-size: 40px 40px;"></div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-16 space-y-24">
+
+        <!-- 1. THE INVISIBLE SHIELD (Security) -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8">
+                <div class="inline-block bg-dpdp-safe/10 text-dpdp-safe px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Section 8(5) | Rule 6</div>
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter">The Invisible <span class="text-dpdp-safe">Shield.</span></h2>
+                <p class="text-slate-600 font-medium leading-relaxed">
+                    The Data Fiduciary must use "Reasonable Security Safeguards." They must treat your data like gold.
+                </p>
+                <ul class="space-y-4 text-sm font-bold text-slate-500">
+                    <li class="flex items-center gap-3"><i class="fas fa-mask text-dpdp-safe text-xl"></i> Masking/Encryption (Rule 6)</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-id-badge text-dpdp-safe text-xl"></i> Strict Access Control</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-database text-dpdp-safe text-xl"></i> Regular Backups</li>
+                </ul>
+            </div>
+
+            <div class="bg-white p-10 rounded-[3rem] shadow-cyber border-2 border-slate-100 flex flex-col items-center text-center space-y-6">
+                <div class="shield-icon text-8xl text-dpdp-safe mb-4"><i class="fas fa-shield-alt"></i></div>
+                <div class="code-block w-full text-left">
+                    <span class="text-slate-500">// Raw Data</span><br>
+                    Card: 4532 1234 5678 9010<br><br>
+                    <span class="text-dpdp-safe">// Encrypted (Stored)</span><br>
+                    Token: a7x9-b2v1-c8z0-f5k3
+                </div>
+                <p class="text-xs font-black uppercase text-slate-400 tracking-widest italic">Live Illustration: Tokenization in Shopping Apps</p>
+            </div>
+        </section>
+
+        <!-- 2. THE RED ALERT (Data Breach) -->
+        <section class="bg-slate-900 text-white rounded-[4rem] p-12 md:p-16 shadow-2xl relative overflow-hidden border-4 border-dpdp-alert/20">
+            <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h2 class="text-4xl font-black uppercase italic tracking-tighter text-dpdp-alert">Red Alert.</h2>
+                    <p class="text-slate-300 font-medium"><strong>Section 8(6) & Rule 7:</strong> If a breach occurs, the company cannot hide it.</p>
+                    <div class="bg-dpdp-alert/10 p-6 rounded-2xl border border-dpdp-alert/30 space-y-2">
+                        <h4 class="font-black uppercase text-xs text-dpdp-alert tracking-widest">Mandatory Notification</h4>
+                        <p class="text-sm">1. To the Data Protection Board (within 72 hours).</p>
+                        <p class="text-sm">2. To YOU (Data Principal) without delay.</p>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <div class="bg-black/50 p-8 rounded-[2.5rem] border-2 border-dpdp-alert w-64 text-center space-y-4">
+                        <i class="fas fa-bell text-6xl siren-animation"></i>
+                        <h4 class="font-black text-dpdp-alert uppercase text-lg">Warning</h4>
+                        <p class="text-[10px] text-white/80">"Your email was part of a leak. Click here to secure your account."</p>
+                        <button class="bg-dpdp-alert text-white w-full py-2 rounded-lg text-xs font-bold uppercase">Secure Now</button>
+                    </div>
+                </div>
+            </div>
+            <!-- BG Alarm -->
+            <div class="absolute -right-20 -bottom-20 text-[15rem] text-dpdp-alert/5 pointer-events-none"><i class="fas fa-exclamation-triangle"></i></div>
+        </section>
+
+        <!-- 3. SELF-DESTRUCT TIMER (Data Retention) -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="order-2 lg:order-1 p-10 bg-white border-4 border-dpdp-gold rounded-[3rem] shadow-cartoon relative">
+                <div class="text-center space-y-6">
+                    <div class="text-6xl">📚 ➔ 🗑️</div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="h-full bg-dpdp-gold w-3/4"></div>
+                    </div>
+                    <div class="speech-bubble mx-auto max-w-[250px]">
+                        "You bought the E-book. Transaction done. I must delete your data now."
+                    </div>
+                    <p class="text-xs font-black uppercase text-slate-400 tracking-widest italic">"Use It or Lose It" Rule</p>
+                </div>
+            </div>
+
+            <div class="order-1 lg:order-2 space-y-8">
+                <div class="inline-block bg-dpdp-gold/10 text-dpdp-gold px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Section 8(7) | Rule 8</div>
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter">Self-Destruct Timer.</h2>
+                <p class="text-lg text-slate-500 font-medium leading-relaxed">
+                    Companies cannot keep data "just in case." They must erase it when you withdraw consent or the purpose is served.
+                </p>
+                <div class="bg-amber-50 p-6 rounded-2xl border-l-4 border-dpdp-gold">
+                    <h4 class="font-bold text-dpdp-gold text-sm mb-2">The "3-Year Rule" (Schedule 3)</h4>
+                    <p class="text-xs text-amber-900 leading-relaxed">For Significant Data Fiduciaries (Gaming/Social Media): If you are inactive for 3 years, they MUST delete your data after a 48-hour warning.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. YOUR SUPERPOWERS (Rights) -->
+        <section class="space-y-12">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter">Your Superpowers</h2>
+                <p class="text-slate-400 font-bold uppercase text-xs tracking-[0.3em]">Sections 11–14: The Control Panel</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Access -->
+                <div class="super-btn bg-white p-6 rounded-3xl border-2 border-slate-100 text-center space-y-4">
+                    <div class="w-14 h-14 bg-blue-100 text-dpdp-blue rounded-full flex items-center justify-center text-2xl mx-auto"><i class="fas fa-eye"></i></div>
+                    <h4 class="font-black uppercase text-sm">Show Me</h4>
+                    <p class="text-xs text-slate-500"><strong>Sec 11:</strong> Summary of personal data being processed and identities of all other Fiduciaries/Processors.</p>
+                </div>
+                <!-- Correction -->
+                <div class="super-btn bg-white p-6 rounded-3xl border-2 border-slate-100 text-center space-y-4">
+                    <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl mx-auto"><i class="fas fa-pen"></i></div>
+                    <h4 class="font-black uppercase text-sm">Fix It</h4>
+                    <p class="text-xs text-slate-500"><strong>Sec 12:</strong> Correction of misleading/inaccurate data, completion of incomplete data, and updating of data.</p>
+                </div>
+                <!-- Erasure -->
+                <div class="super-btn bg-white p-6 rounded-3xl border-2 border-slate-100 text-center space-y-4">
+                    <div class="w-14 h-14 bg-red-100 text-dpdp-alert rounded-full flex items-center justify-center text-2xl mx-auto"><i class="fas fa-eraser"></i></div>
+                    <h4 class="font-black uppercase text-sm">Delete It</h4>
+                    <p class="text-xs text-slate-500"><strong>Sec 12:</strong> Erasure of personal data that is no longer necessary for the specified purpose.</p>
+                </div>
+                <!-- Grievance -->
+                <div class="super-btn bg-white p-6 rounded-3xl border-2 border-slate-100 text-center space-y-4">
+                    <div class="w-14 h-14 bg-amber-100 text-dpdp-gold rounded-full flex items-center justify-center text-2xl mx-auto"><i class="fas fa-bullhorn"></i></div>
+                    <h4 class="font-black uppercase text-sm">Complain</h4>
+                    <p class="text-xs text-slate-500"><strong>Sec 13:</strong> Right to grievance redressal. Complain to Fiduciary first, then Board.</p>
+                </div>
+            </div>
+            
+            <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-200 text-center">
+                <span class="font-black text-indigo-700 text-sm uppercase mr-2">New Power Unlocked:</span>
+                <span class="text-xs text-indigo-600 font-medium"><strong>Section 14:</strong> Right to Nominate. You can appoint someone to manage your rights in case of death or incapacity.</span>
+            </div>
+        </section>
+
+        <!-- 5. BIG FISH RULES -->
+        <section class="bg-slate-900 text-white rounded-[3rem] p-12 relative overflow-hidden">
+            <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-black uppercase italic tracking-tighter">The "Big Fish" Rules</h2>
+                    <p class="text-slate-400 font-bold uppercase text-xs tracking-widest">Significant Data Fiduciaries (Sec 10)</p>
+                    <ul class="space-y-4 text-sm font-medium text-slate-300">
+                        <li class="flex items-center gap-3"><i class="fas fa-user-check text-dpdp-blue"></i> Appoint Data Protection Officer (DPO) in India.</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-file-contract text-dpdp-blue"></i> Appoint Independent Data Auditor.</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-sync text-dpdp-blue"></i> Periodic Data Audits.</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-chart-line text-dpdp-blue"></i> Data Protection Impact Assessments.</li>
+                    </ul>
+                </div>
+                <div class="flex justify-center">
+                    <i class="fab fa-google text-6xl m-4 opacity-50"></i>
+                    <i class="fab fa-facebook text-6xl m-4 opacity-50"></i>
+                    <i class="fab fa-amazon text-6xl m-4 opacity-50"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRO TIP -->
+        <section class="bg-emerald-500 text-white p-8 rounded-2xl text-center shadow-lg">
+            <h4 class="font-black uppercase text-lg mb-2"><i class="fas fa-lightbulb text-yellow-300"></i> Pro-Tip: The 48-Hour Warning</h4>
+            <p class="text-sm font-medium">If you get an email saying "We will delete your account in 48 hours," don't panic! It's Rule 8 protecting you. Log in to save it, or ignore to let it vanish.</p>
+        </section>
+
+    </main>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPDP Protocol: The Enforcers</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dpdp-navy': '#0f172a',
+                        'dpdp-blue': '#0ea5e9',
+                        'dpdp-alert': '#ef4444',
+                        'dpdp-gold': '#d97706',
+                        'dpdp-bg': '#f8fafc'
+                    },
+                    boxShadow: {
+                        'cyber': '0 0 25px rgba(14, 165, 233, 0.25)',
+                        'cyber-alert': '0 0 25px rgba(239, 68, 68, 0.4)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Fira+Code:wght@400;700&display=swap');
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
+        .mono { font-family: 'Fira Code', monospace; }
+
+        .digital-grid {
+            background-image: linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .penalty-card {
+            transition: all 0.3s ease;
+        }
+        .penalty-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #ef4444;
+        }
+
+        .map-dot {
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes ping {
+            75%, 100% { transform: scale(2); opacity: 0; }
+        }
+
+        .timeline-node {
+            position: relative;
+        }
+        .timeline-node::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -20px;
+            width: 10px;
+            height: 10px;
+            background: #d97706;
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+
+        .gavel-strike {
+            animation: hammer 0.5s ease-in-out;
+        }
+        @keyframes hammer {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(-45deg); }
+            100% { transform: rotate(0deg); }
+        }
+    </style>
+</head>
+<body class="text-dpdp-navy antialiased">
+
+    <!-- HERO SECTION -->
+    <header class="bg-dpdp-navy text-white py-24 px-6 relative overflow-hidden digital-grid">
+        <div class="max-w-6xl mx-auto relative z-10 text-center space-y-6">
+            <div class="inline-flex items-center gap-2 bg-dpdp-alert/10 text-dpdp-alert px-5 py-2 rounded-full border border-dpdp-alert/20 text-xs font-black uppercase tracking-[0.4em]">
+                <i class="fas fa-gavel"></i> Part 3: Enforcement
+            </div>
+            <h1 class="text-5xl md:text-8xl font-extrabold tracking-tighter leading-none italic uppercase">The <span class="text-dpdp-alert">Enforcers.</span></h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed italic">
+                Sections 18–33: Who watches the watchmen? The Data Protection Board, the massive fines, and the rules of cross-border data flow.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-20 space-y-32">
+
+        <!-- 1. THE DIGITAL REFEREE (DPBI) -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8">
+                <div class="inline-block bg-dpdp-blue/10 text-dpdp-blue px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Sections 18–28 | Rules 17–21</div>
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter">The Digital <span class="text-dpdp-blue">Referee.</span></h2>
+                <p class="text-lg text-slate-500 font-medium leading-relaxed">
+                    The <strong>Data Protection Board of India (DPBI)</strong> isn't a dusty old court. It's "Digital by Design." The headquarters are in the National Capital Region (NCR), but you never have to go there.
+                </p>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="bg-dpdp-navy text-white w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"><i class="fas fa-laptop-code"></i></div>
+                        <div>
+                            <h4 class="font-bold text-sm uppercase">Digital Office (Rule 20)</h4>
+                            <p class="text-xs text-slate-500 mt-1">"Techno-legal measures." Hearings via video conference. No physical presence required.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="bg-dpdp-navy text-white w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"><i class="fas fa-search"></i></div>
+                        <div>
+                            <h4 class="font-bold text-sm uppercase">Civil Court Powers (Sec 28)</h4>
+                            <p class="text-xs text-slate-500 mt-1">Can summon anyone, inspect any document, and issue binding orders.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Scenario -->
+            <div class="bg-slate-900 p-8 rounded-[3rem] shadow-2xl border-4 border-slate-800 relative overflow-hidden">
+                <div class="absolute top-4 right-8 text-xs font-mono text-dpdp-blue animate-pulse">● LIVE CASE: #DPBI-2026-001</div>
+                <div class="mt-8 space-y-6">
+                    <!-- Step 1 -->
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-xl">👤</div>
+                        <div class="bg-white/5 p-3 rounded-xl rounded-tl-none text-xs text-slate-300 w-full">
+                            "Complaint: App 'X' ignores my deletion request."
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="flex items-center gap-4 flex-row-reverse">
+                        <div class="w-12 h-12 bg-dpdp-blue text-white rounded-full flex items-center justify-center text-xl"><i class="fas fa-balance-scale"></i></div>
+                        <div class="bg-dpdp-blue/20 p-3 rounded-xl rounded-tr-none text-xs text-white w-full text-right border border-dpdp-blue/30">
+                            <strong>BOARD ORDER:</strong> <br> "Digital Summons Issued. Delete data immediately."
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <button onclick="this.classList.add('gavel-strike')" class="bg-dpdp-blue hover:bg-sky-500 text-white px-8 py-3 rounded-full font-black uppercase text-xs tracking-widest shadow-cyber transition-all">
+                        <i class="fas fa-gavel mr-2"></i> Issue Order
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. MENU OF FINES (The Schedule) -->
+        <section class="bg-white rounded-[4rem] p-12 shadow-xl border border-slate-100 relative overflow-hidden">
+            <div class="text-center space-y-4 mb-16 relative z-10">
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter text-dpdp-alert">The Menu of Fines</h2>
+                <p class="text-slate-400 font-bold uppercase text-xs tracking-[0.3em]">Section 33 & The Schedule</p>
+                <p class="text-sm text-slate-500 max-w-xl mx-auto">No Jail Time. Just massive financial hits. Fines depend on severity (Sec 33(2)).</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+                <!-- Card 1 -->
+                <div class="penalty-card bg-slate-50 p-6 rounded-3xl border-2 border-slate-100 text-center">
+                    <div class="text-4xl mb-4">🛡️💔</div>
+                    <h3 class="text-3xl font-black text-dpdp-navy">₹250 Cr</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mt-2 tracking-widest">Security Fail</p>
+                    <p class="text-xs text-slate-600 mt-4 font-medium">Failure to take reasonable security safeguards to prevent a breach.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="penalty-card bg-slate-50 p-6 rounded-3xl border-2 border-slate-100 text-center">
+                    <div class="text-4xl mb-4">🔔🚫</div>
+                    <h3 class="text-3xl font-black text-dpdp-navy">₹200 Cr</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mt-2 tracking-widest">Silence</p>
+                    <p class="text-xs text-slate-600 mt-4 font-medium">Failure to notify the Board or YOU about a data breach.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="penalty-card bg-slate-50 p-6 rounded-3xl border-2 border-slate-100 text-center">
+                    <div class="text-4xl mb-4">👶🚫</div>
+                    <h3 class="text-3xl font-black text-dpdp-navy">₹200 Cr</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mt-2 tracking-widest">Child Safety</p>
+                    <p class="text-xs text-slate-600 mt-4 font-medium">Tracking children, behavioral monitoring, or targeted ads.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="penalty-card bg-slate-50 p-6 rounded-3xl border-2 border-slate-100 text-center">
+                    <div class="text-4xl mb-4">🤥</div>
+                    <h3 class="text-3xl font-black text-dpdp-navy">₹10,000</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mt-2 tracking-widest">User Penalty</p>
+                    <p class="text-xs text-slate-600 mt-4 font-medium">For users filing false or frivolous complaints (Sec 15 duties).</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <span class="inline-block bg-dpdp-navy text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest">
+                    <i class="fas fa-university mr-2"></i> Money goes to Consolidated Fund of India
+                </span>
+            </div>
+        </section>
+
+        <!-- 3. HIGHER COURT (TDSAT) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-dpdp-navy text-white p-10 rounded-3xl">
+            <div>
+                <h3 class="text-2xl font-black uppercase italic">The Appellate Tribunal</h3>
+                <p class="text-xs text-slate-400 mt-2 font-mono">Section 29 | Rule 22</p>
+            </div>
+            <div class="text-sm text-slate-300 space-y-2">
+                <p><i class="fas fa-arrow-up text-dpdp-blue mr-2"></i> Disagree with the Board? Go upstairs to <strong>TDSAT</strong>.</p>
+                <p><i class="fas fa-clock text-dpdp-gold mr-2"></i> Strict Timer: Must file appeal within <strong>60 Days</strong>.</p>
+                <p><i class="fas fa-laptop text-dpdp-blue mr-2"></i> Fully Digital Process enabled by law.</p>
+            </div>
+        </section>
+
+        <!-- 4. PASSPORT CONTROL (Cross-Border) -->
+        <section class="py-16 text-center space-y-8">
+            <h2 class="text-4xl font-black uppercase italic tracking-tighter">Passport <span class="text-dpdp-gold">Control.</span></h2>
+            <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Section 16 & Rule 15</p>
+            
+            <div class="bg-white p-10 rounded-[3rem] border-2 border-slate-100 shadow-xl max-w-3xl mx-auto relative overflow-hidden">
+                
+                <div class="flex justify-center items-center gap-12">
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center text-4xl text-green-600 shadow-lg border-4 border-white">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <p class="mt-4 font-black uppercase text-xs tracking-widest text-green-600">Green List</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Default: Allowed</p>
+                    </div>
+                    
+                    <div class="text-2xl text-slate-300"><i class="fas fa-exchange-alt"></i></div>
+                    
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center text-4xl text-red-600 shadow-lg border-4 border-white relative">
+                            <i class="fas fa-ban"></i>
+                            <span class="absolute top-0 right-0 flex h-4 w-4">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-4 w-4 bg-red-500"></span>
+                            </span>
+                        </div>
+                        <p class="mt-4 font-black uppercase text-xs tracking-widest text-red-600">Negative List</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Govt Restricted Zones</p>
+                    </div>
+                </div>
+                <p class="mt-8 text-sm text-slate-600 italic">"The Blacklist Approach: Data flows freely to any country UNLESS explicitly blocked by the Government."</p>
+            </div>
+        </section>
+
+        <!-- 5. FREE ZONES (Exemptions) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="col-span-full text-center mb-8">
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter">The Free Zones</h2>
+                <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Section 17: No Consent Needed</p>
+            </div>
+
+            <!-- Exemption Cards -->
+            <div class="p-6 bg-white border border-slate-200 rounded-2xl hover:border-dpdp-blue transition-all">
+                <i class="fas fa-gavel text-2xl text-slate-700 mb-2"></i>
+                <h4 class="font-bold text-sm uppercase">Legal Rights</h4>
+                <p class="text-xs text-slate-500 mt-2">Processing to enforce legal rights or claims in court.</p>
+            </div>
+            <div class="p-6 bg-white border border-slate-200 rounded-2xl hover:border-dpdp-blue transition-all">
+                <i class="fas fa-user-secret text-2xl text-slate-700 mb-2"></i>
+                <h4 class="font-bold text-sm uppercase">Law Enforcement</h4>
+                <p class="text-xs text-slate-500 mt-2">Police investigation, crime prevention, and prosecution.</p>
+            </div>
+            <div class="p-6 bg-white border border-slate-200 rounded-2xl hover:border-dpdp-blue transition-all">
+                <i class="fas fa-hand-holding-usd text-2xl text-slate-700 mb-2"></i>
+                <h4 class="font-bold text-sm uppercase">Debt Recovery</h4>
+                <p class="text-xs text-slate-500 mt-2">Banks tracing assets of loan defaulters.</p>
+            </div>
+            <div class="p-6 bg-white border border-slate-200 rounded-2xl hover:border-dpdp-blue transition-all">
+                <i class="fas fa-handshake text-2xl text-slate-700 mb-2"></i>
+                <h4 class="font-bold text-sm uppercase">M&A</h4>
+                <p class="text-xs text-slate-500 mt-2">Sharing user data during company mergers/acquisitions.</p>
+            </div>
+            <div class="p-6 bg-white border border-slate-200 rounded-2xl hover:border-dpdp-blue transition-all">
+                <i class="fas fa-microscope text-2xl text-slate-700 mb-2"></i>
+                <h4 class="font-bold text-sm uppercase">Research</h4>
+                <p class="text-xs text-slate-500 mt-2">Statistical research (if not used for decisions about specific individuals).</p>
+            </div>
+            <!-- Voluntary Undertaking -->
+            <div class="p-6 bg-dpdp-gold/10 border border-dpdp-gold rounded-2xl">
+                <i class="fas fa-file-signature text-2xl text-dpdp-gold mb-2"></i>
+                <h4 class="font-bold text-sm uppercase text-dpdp-gold">Voluntary Undertaking</h4>
+                <p class="text-xs text-slate-600 mt-2"><strong>Sec 32:</strong> The "Safety Valve." Admit fault, fix it, pay fine -> Stop Inquiry.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- TIMELINE FOOTER -->
+    <footer class="bg-dpdp-navy py-16 px-6 text-white text-center border-t-8 border-dpdp-blue">
+        <div class="max-w-3xl mx-auto space-y-8">
+            <h3 class="text-2xl font-black uppercase italic">Timeline Alert!</h3>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 text-left md:text-center relative">
+                <!-- Line -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-700 -z-10"></div>
+                
+                <div class="bg-dpdp-navy p-4 rounded-xl border border-slate-700 z-10 w-full md:w-auto">
+                    <p class="text-dpdp-blue font-bold text-xs uppercase">Now</p>
+                    <p class="text-sm font-black">Board Established</p>
+                </div>
+                <div class="bg-dpdp-navy p-4 rounded-xl border border-slate-700 z-10 w-full md:w-auto">
+                    <p class="text-dpdp-gold font-bold text-xs uppercase">+12 Months</p>
+                    <p class="text-sm font-black">Consent Managers</p>
+                </div>
+                <div class="bg-dpdp-navy p-4 rounded-xl border border-slate-700 z-10 w-full md:w-auto">
+                    <p class="text-emerald-400 font-bold text-xs uppercase">+18 Months</p>
+                    <p class="text-sm font-black">Full Enforcement</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500 font-mono mt-8">DPDP Protocol Analysis Completed.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPDP Protocol: The Launchpad</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dpdp-navy': '#0f172a',
+                        'dpdp-blue': '#0ea5e9',
+                        'dpdp-alert': '#ef4444',
+                        'dpdp-safe': '#10b981',
+                        'dpdp-gold': '#d97706',
+                        'dpdp-bg': '#f8fafc'
+                    },
+                    boxShadow: {
+                        'cyber': '0 0 25px rgba(14, 165, 233, 0.25)',
+                        'cyber-green': '0 0 25px rgba(16, 185, 129, 0.25)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Fira+Code:wght@400;700&display=swap');
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
+        .mono { font-family: 'Fira Code', monospace; }
+
+        .rocket-launch {
+            animation: launch 2s ease-in-out infinite alternate;
+        }
+        @keyframes launch {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #0ea5e9, #10b981, #d97706);
+            z-index: 0;
+        }
+
+        .wallet-card {
+            transition: all 0.3s ease;
+        }
+        .wallet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .zone-toggle {
+            transition: all 0.5s ease;
+        }
+
+        .shredder-anim {
+            animation: shred 3s infinite linear;
+        }
+        @keyframes shred {
+            0% { transform: translateY(-100%); opacity: 1; }
+            50% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="text-dpdp-navy antialiased">
+
+    <!-- HERO SECTION -->
+    <header class="bg-dpdp-navy text-white py-24 px-6 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto relative z-10 text-center space-y-6">
+            <div class="inline-flex items-center gap-2 bg-dpdp-safe/10 text-dpdp-safe px-5 py-2 rounded-full border border-dpdp-safe/20 text-xs font-black uppercase tracking-[0.4em]">
+                <i class="fas fa-rocket"></i> Part 4: Implementation
+            </div>
+            <h1 class="text-5xl md:text-8xl font-extrabold tracking-tighter leading-none italic uppercase">The <span class="text-dpdp-safe">Launchpad.</span></h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed italic">
+                The Government has pressed the button. Here is the timeline, the mechanics of the "Consent Wallet," and the new Digital Courtroom.
+            </p>
+        </div>
+        <!-- Grid BG -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#10b981 1px, transparent 1px); background-size: 40px 40px;"></div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-20 space-y-32">
+
+        <!-- 1. THE OFFICIAL COUNTDOWN (TIMELINE) -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <div class="space-y-8">
+                <div class="inline-block bg-dpdp-blue/10 text-dpdp-blue px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Rule 1 & Notification G.S.R. 843(E)</div>
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter">The Official <span class="text-dpdp-blue">Countdown.</span></h2>
+                <p class="text-lg text-slate-500 font-medium leading-relaxed">
+                    The Act doesn't happen all at once. It rolls out in phases to give the ecosystem time to adapt.
+                </p>
+                <div class="rocket-launch text-8xl text-dpdp-blue opacity-20"><i class="fas fa-space-shuttle transform -rotate-45"></i></div>
+            </div>
+
+            <div class="relative pl-12 space-y-12">
+                <div class="timeline-line"></div>
+                
+                <!-- T-Minus 0 -->
+                <div class="relative z-10">
+                    <div class="absolute -left-[38px] w-12 h-12 bg-dpdp-blue rounded-full border-4 border-white shadow-lg flex items-center justify-center text-white font-black text-sm">0</div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                        <span class="text-[10px] font-black uppercase text-dpdp-blue tracking-widest">Immediate Effect</span>
+                        <h4 class="text-xl font-black mt-2">The Board is Born</h4>
+                        <p class="text-sm text-slate-500 mt-2">Data Protection Board established. Definitions live. Rules for digital office set.</p>
+                    </div>
+                </div>
+
+                <!-- T-Plus 12 -->
+                <div class="relative z-10">
+                    <div class="absolute -left-[38px] w-12 h-12 bg-dpdp-safe rounded-full border-4 border-white shadow-lg flex items-center justify-center text-white font-black text-sm">12</div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                        <span class="text-[10px] font-black uppercase text-dpdp-safe tracking-widest">T-Plus 12 Months</span>
+                        <h4 class="text-xl font-black mt-2">The Middleman Arrives</h4>
+                        <p class="text-sm text-slate-500 mt-2">Consent Manager registration begins. Tech companies start building the "Wallet" infrastructure.</p>
+                    </div>
+                </div>
+
+                <!-- T-Plus 18 -->
+                <div class="relative z-10">
+                    <div class="absolute -left-[38px] w-12 h-12 bg-dpdp-gold rounded-full border-4 border-white shadow-lg flex items-center justify-center text-white font-black text-sm">18</div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                        <span class="text-[10px] font-black uppercase text-dpdp-gold tracking-widest">T-Plus 18 Months</span>
+                        <h4 class="text-xl font-black mt-2">Full Enforcement</h4>
+                        <p class="text-sm text-slate-500 mt-2">The Big Switch. Rights, Obligations, and Penalties go live. Compliance mandatory.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. THE CONSENT WALLET (SIMULATION) -->
+        <section class="bg-slate-900 text-white rounded-[4rem] p-12 shadow-2xl relative overflow-hidden">
+            <div class="relative z-10 text-center space-y-12">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black uppercase italic tracking-tighter text-dpdp-safe">The Consent Wallet</h2>
+                    <p class="text-slate-400 font-bold uppercase text-xs tracking-[0.3em]">Rule 4 & Schedule 1</p>
+                    <p class="text-sm text-slate-300 max-w-2xl mx-auto">
+                        A registered intermediary (Net Worth ₹2Cr+) that manages your permissions. Independent from Data Fiduciaries.
+                    </p>
+                </div>
+
+                <!-- Interactive Phone Mockup -->
+                <div class="max-w-sm mx-auto bg-black border-8 border-slate-800 rounded-[3rem] p-4 shadow-2xl relative">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-6 bg-black rounded-b-xl z-20"></div>
+                    <div class="bg-slate-100 rounded-[2rem] h-[500px] overflow-hidden text-dpdp-navy relative">
+                        <!-- Screen Content -->
+                        <div class="p-6 space-y-6 pt-12">
+                            <div class="flex justify-between items-center">
+                                <span class="font-black text-sm">My Consents</span>
+                                <i class="fas fa-wallet text-dpdp-blue"></i>
+                            </div>
+                            
+                            <!-- Request Card -->
+                            <div id="loan-request" class="bg-white p-4 rounded-xl shadow-md border border-slate-200">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600"><i class="fas fa-university"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-xs">Loan App X</h4>
+                                        <p class="text-[8px] text-slate-400">Wants: Bank Y Statement</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="denyRequest()" class="bg-slate-100 text-slate-500 py-2 rounded-lg text-[10px] font-bold uppercase">Deny</button>
+                                    <button onclick="allowRequest()" class="bg-dpdp-blue text-white py-2 rounded-lg text-[10px] font-bold uppercase">Allow</button>
+                                </div>
+                            </div>
+
+                            <!-- Active Consents List -->
+                            <div class="space-y-2">
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active</p>
+                                <div class="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-shopping-bag text-orange-500"></i>
+                                        <span class="text-xs font-bold">Shop Z</span>
+                                    </div>
+                                    <button class="text-[10px] text-red-500 font-bold uppercase border border-red-200 px-2 py-1 rounded">Revoke</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Success Overlay -->
+                        <div id="success-overlay" class="absolute inset-0 bg-emerald-500 flex flex-col items-center justify-center text-white hidden">
+                            <i class="fas fa-check-circle text-6xl mb-4"></i>
+                            <h4 class="font-black uppercase">Approved!</h4>
+                            <p class="text-xs mt-2 px-8 text-center">Instruction sent to Bank Y to share data with App X.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SAFE ZONES (Tracking Children) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="space-y-6">
+                <div class="inline-block bg-emerald-100 text-emerald-600 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Rule 12 | Schedule 4</div>
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter">The Safe <span class="text-emerald-500">Zones.</span></h2>
+                <p class="text-lg text-slate-500 font-medium leading-relaxed">
+                    Tracking children is generally banned. However, specific "Safe Zones" exist where tracking is allowed for safety and well-being.
+                </p>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Green Zone -->
+                <div class="p-6 bg-emerald-50 border-l-8 border-emerald-500 rounded-r-2xl">
+                    <h4 class="font-black uppercase text-sm text-emerald-800 mb-2"><i class="fas fa-check-circle mr-2"></i> Allowed (Green Zone)</h4>
+                    <ul class="text-xs text-emerald-700 space-y-2 font-medium">
+                        <li class="flex items-center gap-2"><i class="fas fa-bus"></i> School Buses (Safety Tracking)</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-school"></i> Schools (Educational Activity)</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-hospital-user"></i> Hospitals (Health Services)</li>
+                    </ul>
+                </div>
+
+                <!-- Red Zone -->
+                <div class="p-6 bg-red-50 border-l-8 border-red-500 rounded-r-2xl">
+                    <h4 class="font-black uppercase text-sm text-red-800 mb-2"><i class="fas fa-ban mr-2"></i> Banned (Red Zone)</h4>
+                    <p class="text-xs text-red-700 font-medium leading-relaxed">
+                        <strong>Ad-Tech:</strong> Tracking a child's behavior to show targeted advertisements (e.g., toys, games) is strictly prohibited.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. DIGITAL COURTROOM (Adjudication) -->
+        <section class="bg-white rounded-[3rem] p-12 shadow-cyber border-2 border-slate-100 text-center space-y-8">
+            <h2 class="text-4xl font-black uppercase italic tracking-tighter">The Digital Courtroom</h2>
+            <p class="text-slate-400 font-bold uppercase text-xs tracking-[0.3em]">Rule 20 & 22: Digital by Design</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                    <div class="text-4xl mb-4">📹</div>
+                    <h4 class="font-black uppercase text-sm">Video Hearing</h4>
+                    <p class="text-xs text-slate-500 mt-2">No physical presence. Hearings via secure video conference.</p>
+                </div>
+                <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                    <div class="text-4xl mb-4">💸</div>
+                    <h4 class="font-black uppercase text-sm">Digital Fees</h4>
+                    <p class="text-xs text-slate-500 mt-2">Appeals must be paid instantly via digital modes like UPI.</p>
+                </div>
+                <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h4 class="font-black uppercase text-sm">Fast Track</h4>
+                    <p class="text-xs text-slate-500 mt-2">Inquiries ideally completed within 6 months.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. DATA GRAVEYARD & PRO TIP -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <!-- Deletion -->
+            <div class="bg-slate-900 text-white p-10 rounded-[3rem] relative overflow-hidden flex flex-col justify-center text-center">
+                <div class="z-10 space-y-6">
+                    <h3 class="text-3xl font-black uppercase text-dpdp-alert">Data Graveyard</h3>
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Rule 8 | Schedule 3</p>
+                    <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                        <span class="text-4xl block mb-2">3 YEARS</span>
+                        <span class="text-[10px] uppercase">Inactivity Limit</span>
+                    </div>
+                    <p class="text-sm text-slate-300 italic">"48 hours before the limit, you get a warning. If no reply, POOF! Data erased."</p>
+                </div>
+                <!-- Shredder Effect -->
+                <div class="absolute inset-0 opacity-10 flex justify-center gap-4 pointer-events-none">
+                    <div class="w-1 h-full bg-white shredder-anim"></div>
+                    <div class="w-1 h-full bg-white shredder-anim" style="animation-delay: 0.5s"></div>
+                    <div class="w-1 h-full bg-white shredder-anim" style="animation-delay: 1s"></div>
+                </div>
+            </div>
+
+            <!-- Startup Pro-Tip -->
+            <div class="bg-dpdp-gold text-white p-10 rounded-[3rem] flex flex-col justify-center text-center shadow-lg">
+                <i class="fas fa-lightbulb text-6xl mb-6 text-yellow-200"></i>
+                <h3 class="text-3xl font-black uppercase italic">Startup Pass</h3>
+                <p class="text-xs font-bold uppercase tracking-widest mt-2 opacity-80">Section 17(3)</p>
+                <p class="text-lg font-medium mt-6 leading-relaxed">
+                    "Are you a small startup? The government can exempt you from strict rules like Data Erasure or Access Rights to help you grow. Watch for notifications!"
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function allowRequest() {
+            const overlay = document.getElementById('success-overlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                document.getElementById('loan-request').style.display = 'none'; // Hide request after approval
+            }, 2000);
+        }
+
+        function denyRequest() {
+            document.getElementById('loan-request').style.opacity = '0.5';
+            setTimeout(() => {
+                document.getElementById('loan-request').style.display = 'none';
+            }, 500);
+        }
+    </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPDP Protocol: The Safety Net</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dpdp-navy': '#0f172a',
+                        'dpdp-blue': '#0ea5e9',
+                        'dpdp-alert': '#ef4444',
+                        'dpdp-safe': '#10b981',
+                        'dpdp-gold': '#d97706',
+                        'dpdp-bg': '#f8fafc'
+                    },
+                    boxShadow: {
+                        'cyber': '0 0 25px rgba(14, 165, 233, 0.25)',
+                        'cyber-green': '0 0 25px rgba(16, 185, 129, 0.25)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Fira+Code:wght@400;700&display=swap');
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
+        .mono { font-family: 'Fira Code', monospace; }
+
+        /* Startup Speedboat Animation */
+        .sea-track {
+            position: relative;
+            height: 120px;
+            background: linear-gradient(to right, #0f172a, #1e293b);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .speedboat {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            font-size: 3rem;
+            animation: race 3s linear infinite;
+        }
+        .cruiseship {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            font-size: 4rem;
+            animation: slowRace 10s linear infinite;
+            opacity: 0.7;
+        }
+        @keyframes race {
+            0% { left: -10%; transform: rotate(5deg); }
+            100% { left: 110%; transform: rotate(5deg); }
+        }
+        @keyframes slowRace {
+            0% { left: -20%; }
+            100% { left: 110%; }
+        }
+
+        /* Ladder Animation */
+        .step-node {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 4px solid #e2e8f0;
+        }
+        .step-node:hover {
+            border-left-color: #0ea5e9;
+            transform: translateX(10px);
+            background-color: #f0f9ff;
+        }
+
+        /* Torch Pass Animation */
+        .torch-pass {
+            animation: pass 2s infinite alternate;
+        }
+        @keyframes pass {
+            0% { transform: translateX(-10px); opacity: 0.6; }
+            100% { transform: translateX(10px); opacity: 1; }
+        }
+
+        /* Checklist */
+        .check-item {
+            transition: all 0.2s;
+        }
+        .check-item:hover {
+            background-color: #f0fdf4;
+            transform: scale(1.02);
+        }
+
+        /* Peace of Mind */
+        .shield-glow {
+            animation: glow 2s infinite;
+        }
+        @keyframes glow {
+            0% { filter: drop-shadow(0 0 5px #10b981); }
+            50% { filter: drop-shadow(0 0 20px #10b981); }
+            100% { filter: drop-shadow(0 0 5px #10b981); }
+        }
+    </style>
+</head>
+<body class="text-dpdp-navy antialiased">
+
+    <!-- HERO SECTION -->
+    <header class="bg-dpdp-navy text-white py-24 px-6 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto relative z-10 text-center space-y-6">
+            <div class="inline-flex items-center gap-2 bg-dpdp-gold/10 text-dpdp-gold px-5 py-2 rounded-full border border-dpdp-gold/20 text-xs font-black uppercase tracking-[0.4em]">
+                <i class="fas fa-shield-alt"></i> Part 5: Safety Net
+            </div>
+            <h1 class="text-5xl md:text-8xl font-extrabold tracking-tighter leading-none italic uppercase">Special <br><span class="text-dpdp-gold">Scenarios.</span></h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed italic">
+                Startups get speed, users get a ladder to justice, and your data gets a "Digital Will."
+            </p>
+        </div>
+        <!-- Digital Grid BG -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 40px 40px;"></div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-20 space-y-32">
+
+        <!-- 1. STARTUP SPEEDBOAT (EXEMPTIONS) -->
+        <section class="bg-white rounded-[4rem] p-12 shadow-xl border border-slate-100 overflow-hidden relative">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8 relative z-10">
+                    <div class="inline-block bg-dpdp-blue/10 text-dpdp-blue px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Section 17(3)</div>
+                    <h2 class="text-4xl font-black uppercase italic tracking-tighter">The Startup <span class="text-dpdp-blue">Speedboat.</span></h2>
+                    <p class="text-lg text-slate-500 font-medium leading-relaxed">
+                        Big compliance can sink small ships. To encourage innovation, the Government exempts notified Startups from "heavy" rules.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl">
+                            <i class="fas fa-eye-slash text-slate-400 text-xl"></i>
+                            <div class="text-sm font-bold text-slate-600">No Notice Required (Sec 5)</div>
+                        </li>
+                        <li class="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl">
+                            <i class="fas fa-trash-restore text-slate-400 text-xl"></i>
+                            <div class="text-sm font-bold text-slate-600">No Immediate Erasure (Sec 8(7))</div>
+                        </li>
+                        <li class="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl">
+                            <i class="fas fa-user-lock text-slate-400 text-xl"></i>
+                            <div class="text-sm font-bold text-slate-600">No Access Rights (Sec 11)</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="relative">
+                    <div class="sea-track shadow-inner mb-4">
+                        <!-- Speedboat (Startup) -->
+                        <div class="speedboat">🚤 <span class="text-[10px] text-white absolute -top-4 left-0 font-bold uppercase tracking-widest">Startup</span></div>
+                        <!-- Cruise Ship (Big Tech) -->
+                        <div class="cruiseship">🚢</div>
+                    </div>
+                    <p class="text-center text-xs text-slate-400 font-bold italic">"Startups zip past while Big Tech navigates heavy compliance."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. THE GRIEVANCE LADDER -->
+        <section class="space-y-12">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter">The Grievance Ladder</h2>
+                <p class="text-slate-400 font-bold uppercase text-xs tracking-[0.3em]">Section 13 | Rule 14(3) | Rule 22</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="step-node bg-white p-8 rounded-3xl shadow-sm group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🎧</div>
+                    <h3 class="text-xl font-black text-dpdp-navy mb-2">Step 1: Helpdesk</h3>
+                    <p class="text-xs text-slate-500 font-medium">Complain to the Company first. They have <strong>90 Days</strong> (or less) to solve it.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="step-node bg-white p-8 rounded-3xl shadow-sm group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🔨</div>
+                    <h3 class="text-xl font-black text-dpdp-navy mb-2">Step 2: The Board</h3>
+                    <p class="text-xs text-slate-500 font-medium">Not satisfied? File a digital complaint with the <strong>Data Protection Board</strong>.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="step-node bg-white p-8 rounded-3xl shadow-sm group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">⚖️</div>
+                    <h3 class="text-xl font-black text-dpdp-navy mb-2">Step 3: Tribunal</h3>
+                    <p class="text-xs text-slate-500 font-medium">Still unhappy? Appeal to <strong>TDSAT</strong> within 60 days. Pay fees via UPI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. THE DIGITAL WILL (Nomination) -->
+        <section class="bg-indigo-900 text-white rounded-[4rem] p-12 relative overflow-hidden">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
+                <div class="md:w-1/2 space-y-6">
+                    <h2 class="text-4xl font-black uppercase italic tracking-tighter text-indigo-300">The Digital Will.</h2>
+                    <p class="text-lg text-indigo-100 leading-relaxed">
+                        <strong>Section 14:</strong> Who manages your data when you are gone? You can now Nominate someone to exercise your rights in case of death or incapacity.
+                    </p>
+                    <div class="bg-indigo-800 p-6 rounded-2xl border border-indigo-700">
+                        <h4 class="font-bold text-xs uppercase mb-2 text-indigo-300">Live Scene</h4>
+                        <p class="text-xs italic leading-relaxed">"Mr. A suffers a stroke. His son logs in as a Nominee to manage his crypto wallet data. No more blocked accounts."</p>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="text-8xl torch-pass">🕯️ ➔ 🔦</div>
+                </div>
+            </div>
+            <!-- BG Effect -->
+            <div class="absolute -right-20 -top-20 text-[15rem] text-white/5 pointer-events-none select-none">LEGACY</div>
+        </section>
+
+        <!-- 4. SAFE ZONES FOR KIDS (Green vs Red) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="p-8 bg-emerald-50 border-l-8 border-emerald-500 rounded-r-3xl space-y-4">
+                <div class="flex items-center gap-4">
+                    <i class="fas fa-check-circle text-3xl text-emerald-500"></i>
+                    <h3 class="text-2xl font-black uppercase text-emerald-900">Green Lane</h3>
+                </div>
+                <p class="text-xs font-bold uppercase tracking-widest text-emerald-700">Tracking Allowed (Safety)</p>
+                <ul class="space-y-3 text-sm font-medium text-emerald-800">
+                    <li>✅ School Bus Tracking</li>
+                    <li>✅ School Attendance</li>
+                    <li>✅ Real-time location for security</li>
+                </ul>
+            </div>
+            
+            <div class="p-8 bg-red-50 border-l-8 border-red-500 rounded-r-3xl space-y-4">
+                <div class="flex items-center gap-4">
+                    <i class="fas fa-ban text-3xl text-red-500"></i>
+                    <h3 class="text-2xl font-black uppercase text-red-900">Red Lane</h3>
+                </div>
+                <p class="text-xs font-bold uppercase tracking-widest text-red-700">Tracking Banned (Detrimental)</p>
+                <ul class="space-y-3 text-sm font-medium text-red-800">
+                    <li>❌ Targeted Toy Ads</li>
+                    <li>❌ Behavioral Monitoring</li>
+                    <li>❌ Influencing choices</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. PERSONAL BUBBLE (Exclusions) -->
+        <section class="text-center space-y-8 py-12">
+            <h2 class="text-3xl font-black uppercase italic tracking-tighter">The Personal Bubble</h2>
+            <p class="text-slate-400 font-bold uppercase text-xs tracking-[0.3em]">Section 3(c): What is NOT covered?</p>
+            
+            <div class="flex justify-center gap-12">
+                <div class="text-center">
+                    <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center text-5xl shadow-lg mx-auto mb-4 border-4 border-slate-100">📔</div>
+                    <p class="font-black text-sm uppercase">Personal Use</p>
+                    <p class="text-[10px] text-slate-500">Phone Diary / Wedding List</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center text-5xl shadow-lg mx-auto mb-4 border-4 border-slate-100">📢</div>
+                    <p class="font-black text-sm uppercase">Public Data</p>
+                    <p class="text-[10px] text-slate-500">Tweeted by you yourself</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. MASTER CHECKLIST -->
+        <section class="bg-white rounded-[3rem] p-12 border-2 border-slate-200 shadow-xl max-w-4xl mx-auto">
+            <h3 class="text-2xl font-black uppercase italic tracking-tighter text-center mb-8">Is Your Business Ready?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="check-item p-4 rounded-xl border border-slate-100 flex gap-3 items-center">
+                    <input type="checkbox" class="w-5 h-5 accent-dpdp-blue">
+                    <span class="text-sm font-bold text-slate-700">The Notice Check (Sec 5)</span>
+                </div>
+                <div class="check-item p-4 rounded-xl border border-slate-100 flex gap-3 items-center">
+                    <input type="checkbox" class="w-5 h-5 accent-dpdp-blue">
+                    <span class="text-sm font-bold text-slate-700">The Consent Check (Sec 6)</span>
+                </div>
+                <div class="check-item p-4 rounded-xl border border-slate-100 flex gap-3 items-center">
+                    <input type="checkbox" class="w-5 h-5 accent-dpdp-blue">
+                    <span class="text-sm font-bold text-slate-700">The Delete Timer (Rule 8)</span>
+                </div>
+                <div class="check-item p-4 rounded-xl border border-slate-100 flex gap-3 items-center">
+                    <input type="checkbox" class="w-5 h-5 accent-dpdp-blue">
+                    <span class="text-sm font-bold text-slate-700">The Kids Check (Rule 10)</span>
+                </div>
+                <div class="check-item p-4 rounded-xl border border-slate-100 flex gap-3 items-center">
+                    <input type="checkbox" class="w-5 h-5 accent-dpdp-blue">
+                    <span class="text-sm font-bold text-slate-700">The Breach Plan (Rule 7)</span>
+                </div>
+                <div class="check-item p-4 rounded-xl border border-slate-100 flex gap-3 items-center">
+                    <input type="checkbox" class="w-5 h-5 accent-dpdp-blue">
+                    <span class="text-sm font-bold text-slate-700">Grievance Officer (Rule 14)</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PEACE OF MIND FOOTER -->
+    <footer class="bg-dpdp-navy py-24 px-6 text-center text-white border-t-8 border-dpdp-safe relative overflow-hidden">
+        <div class="max-w-xl mx-auto relative z-10 space-y-6">
+            <div class="shield-glow text-8xl mb-4 text-dpdp-safe"><i class="fas fa-shield-check"></i></div>
+            <h2 class="text-4xl font-black uppercase italic tracking-tighter">Your Data. Your Choice.</h2>
+            <p class="text-lg text-slate-400 font-medium">Protected by Law. Enabled by Tech.</p>
+            <div class="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10 text-xs italic">
+                "Swiping left on spammy apps... Data Access Revoked."
+            </div>
+        </div>
+        <!-- BG Decor -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#10b981 1px, transparent 1px); background-size: 30px 30px;"></div>
+    </footer>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPDP Protocol: Memory Fortress</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'game-dark': '#0f172a',
+                        'game-accent': '#22d3ee',
+                        'game-gold': '#fbbf24',
+                        'game-red': '#f43f5e',
+                        'game-green': '#10b981'
+                    },
+                    boxShadow: {
+                        'neon': '0 0 15px rgba(34, 211, 238, 0.4)',
+                        'neon-gold': '0 0 15px rgba(251, 191, 36, 0.4)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; color: white; scroll-behavior: smooth; }
+        .pixel-font { font-family: 'Press Start 2P', cursive; }
+
+        .level-card {
+            transition: all 0.3s ease;
+            border: 2px solid #1e293b;
+        }
+        .level-card:hover {
+            transform: translateY(-5px);
+            border-color: #22d3ee;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+        }
+
+        .inventory-item {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .cheat-row:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-game-accent selection:text-game-dark">
+
+    <!-- HERO: GAME START -->
+    <header class="py-20 px-6 text-center relative overflow-hidden">
+        <div class="relative z-10 space-y-6">
+            <div class="inline-block bg-game-accent/10 text-game-accent px-4 py-2 rounded-lg text-xs pixel-font uppercase tracking-widest border border-game-accent/20">
+                Protocol Memory Map
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight italic">
+                The Digital <span class="text-game-accent">Fortress.</span>
+            </h1>
+            <p class="text-slate-400 max-w-xl mx-auto text-lg">
+                Memorize the DPDP Act 2023 like a Video Game. 5 Levels. 1 Final Boss.
+            </p>
+            <div class="pt-8">
+                <a href="#level1" class="bg-game-accent hover:bg-cyan-400 text-game-dark px-8 py-3 rounded-xl font-black uppercase tracking-widest shadow-neon transition-all inline-flex items-center gap-3">
+                    <i class="fas fa-gamepad"></i> Press Start
+                </a>
+            </div>
+        </div>
+        <!-- BG Grid -->
+        <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(#22d3ee 1px, transparent 1px), linear-gradient(90deg, #22d3ee 1px, transparent 1px); background-size: 40px 40px;"></div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-32">
+
+        <!-- LEVEL 1: THE ARENA -->
+        <section id="level1" class="level-card bg-slate-900/50 p-8 md:p-12 rounded-[3rem]">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="text-4xl">🗺️</div>
+                <div>
+                    <h2 class="text-2xl font-black uppercase italic text-game-gold">Level 1: The Arena</h2>
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest">Chapter I (Sections 1–3)</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                    <h4 class="font-black text-game-accent text-sm mb-2">Sec 1: Title</h4>
+                    <p class="text-xs text-slate-400">"Digital Personal Data Protection Act, 2023."</p>
+                </div>
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                    <h4 class="font-black text-game-accent text-sm mb-2">Sec 2: Profiles</h4>
+                    <ul class="text-xs text-slate-400 space-y-2">
+                        <li>👤 <strong>Principal:</strong> The Hero (You)</li>
+                        <li>🏢 <strong>Fiduciary:</strong> The Keeper</li>
+                        <li>🤝 <strong>Consent Mgr:</strong> The Helper</li>
+                    </ul>
+                </div>
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                    <h4 class="font-black text-game-accent text-sm mb-2">Sec 3: Map</h4>
+                    <p class="text-xs text-slate-400"><strong>Cheat Code:</strong> My Data, My Territory. Applies even outside India if selling goods to India.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEVEL 2: THE GATEKEEPERS -->
+        <section class="level-card bg-slate-900/50 p-8 md:p-12 rounded-[3rem]">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="text-4xl">🛡️</div>
+                <div>
+                    <h2 class="text-2xl font-black uppercase italic text-game-red">Level 2: The Gatekeepers</h2>
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest">Chapter II (Sections 4–10)</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 bg-white/5 p-4 rounded-xl border-l-4 border-game-gold">
+                        <i class="fas fa-exclamation-triangle text-game-gold text-2xl"></i>
+                        <div>
+                            <h4 class="font-bold text-sm">Sec 5: Warning Sign</h4>
+                            <p class="text-[10px] text-slate-400">Notice First. "Tell me before you take it."</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white/5 p-4 rounded-xl border-l-4 border-game-green">
+                        <i class="fas fa-key text-game-green text-2xl"></i>
+                        <div>
+                            <h4 class="font-bold text-sm">Sec 6: The Key</h4>
+                            <p class="text-[10px] text-slate-400">Consent: Free, Specific, Informed.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white/5 p-4 rounded-xl border-l-4 border-game-accent">
+                        <i class="fas fa-trash text-game-accent text-2xl"></i>
+                        <div>
+                            <h4 class="font-bold text-sm">Sec 8: The Shield</h4>
+                            <p class="text-[10px] text-slate-400">Use it, then Lose it (Erasure).</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-black/40 p-8 rounded-3xl flex flex-col justify-center items-center text-center border-2 border-game-red/30">
+                    <i class="fas fa-baby-carriage text-6xl text-game-red mb-4"></i>
+                    <h3 class="text-xl font-black text-game-red uppercase">Sec 9: Child Lock</h3>
+                    <p class="text-xs text-slate-400 mt-2">"No tracking kids. Verifiable Parental Consent Required."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEVEL 3: PLAYER WEAPONS -->
+        <section class="level-card bg-slate-900/50 p-8 md:p-12 rounded-[3rem]">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="text-4xl">🎮</div>
+                <div>
+                    <h2 class="text-2xl font-black uppercase italic text-game-green">Level 3: Your Weapons</h2>
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest">Acronym: A.C.G.N.</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-8">
+                <!-- Weapon A -->
+                <div class="text-center w-32 inventory-item">
+                    <div class="w-20 h-20 bg-game-green/20 rounded-2xl flex items-center justify-center text-4xl mb-4 mx-auto border border-game-green">🔍</div>
+                    <h4 class="font-bold text-game-green">Access</h4>
+                    <p class="text-[10px] text-slate-400 mt-1">Sec 11</p>
+                </div>
+                <!-- Weapon C -->
+                <div class="text-center w-32 inventory-item" style="animation-delay: 0.5s;">
+                    <div class="w-20 h-20 bg-game-green/20 rounded-2xl flex items-center justify-center text-4xl mb-4 mx-auto border border-game-green">✏️</div>
+                    <h4 class="font-bold text-game-green">Correct</h4>
+                    <p class="text-[10px] text-slate-400 mt-1">Sec 12</p>
+                </div>
+                <!-- Weapon G -->
+                <div class="text-center w-32 inventory-item" style="animation-delay: 1s;">
+                    <div class="w-20 h-20 bg-game-green/20 rounded-2xl flex items-center justify-center text-4xl mb-4 mx-auto border border-game-green">📢</div>
+                    <h4 class="font-bold text-game-green">Grievance</h4>
+                    <p class="text-[10px] text-slate-400 mt-1">Sec 13</p>
+                </div>
+                <!-- Weapon N -->
+                <div class="text-center w-32 inventory-item" style="animation-delay: 1.5s;">
+                    <div class="w-20 h-20 bg-game-green/20 rounded-2xl flex items-center justify-center text-4xl mb-4 mx-auto border border-game-green">📜</div>
+                    <h4 class="font-bold text-game-green">Nominate</h4>
+                    <p class="text-[10px] text-slate-400 mt-1">Sec 14</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEVEL 4 & 5: WARP ZONES & HIGH COUNCIL -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="level-card bg-slate-900/50 p-8 rounded-[3rem]">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">🚀</span>
+                    <h3 class="text-xl font-black uppercase text-game-gold">Level 4: Warp Zones</h3>
+                </div>
+                <div class="space-y-4">
+                    <div class="p-4 bg-white/5 rounded-xl">
+                        <h4 class="font-bold text-sm text-game-gold">Sec 16: The Passport</h4>
+                        <p class="text-xs text-slate-400">Data travels freely unless "Blacklisted."</p>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-xl">
+                        <h4 class="font-bold text-sm text-game-gold">Sec 17: Hall Pass</h4>
+                        <p class="text-xs text-slate-400">Exemptions for Police, Courts, & Startups.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-card bg-slate-900/50 p-8 rounded-[3rem] border-game-red">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">🏛️</span>
+                    <h3 class="text-xl font-black uppercase text-game-red">Level 5: High Council</h3>
+                </div>
+                <div class="text-center space-y-4">
+                    <div class="text-5xl font-black text-white">₹250 Cr</div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-game-red">Max Penalty (Sec 33)</p>
+                    <div class="flex justify-center gap-2 mt-4">
+                        <span class="bg-game-red px-2 py-1 rounded text-[10px] font-bold text-black">Red Card</span>
+                        <span class="bg-slate-700 px-2 py-1 rounded text-[10px] font-bold">No Jail</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE CHEAT SHEET -->
+        <section class="bg-white text-slate-900 rounded-[2.5rem] p-10 shadow-2xl">
+            <h2 class="text-3xl font-black uppercase italic text-center mb-8 tracking-tighter">🧠 The "Cheat Sheet"</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b-2 border-slate-200">
+                            <th class="p-4 font-black text-sm uppercase text-slate-400">Sec</th>
+                            <th class="p-4 font-black text-sm uppercase text-slate-400 text-center">Icon</th>
+                            <th class="p-4 font-black text-sm uppercase text-slate-400">Concept</th>
+                            <th class="p-4 font-black text-sm uppercase text-slate-400">Catchphrase</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm font-bold">
+                        <tr class="cheat-row border-b border-slate-100">
+                            <td class="p-4">Sec 5</td>
+                            <td class="p-4 text-center text-xl">📜</td>
+                            <td class="p-4">Notice</td>
+                            <td class="p-4 italic text-slate-500">"Tell me before you take it."</td>
+                        </tr>
+                        <tr class="cheat-row border-b border-slate-100">
+                            <td class="p-4">Sec 6</td>
+                            <td class="p-4 text-center text-xl">🤝</td>
+                            <td class="p-4">Consent</td>
+                            <td class="p-4 italic text-slate-500">"My Yes must be specific."</td>
+                        </tr>
+                        <tr class="cheat-row border-b border-slate-100">
+                            <td class="p-4">Sec 8</td>
+                            <td class="p-4 text-center text-xl">🗑️</td>
+                            <td class="p-4">Erasure</td>
+                            <td class="p-4 italic text-slate-500">"Use it, then lose it."</td>
+                        </tr>
+                        <tr class="cheat-row border-b border-slate-100">
+                            <td class="p-4">Sec 9</td>
+                            <td class="p-4 text-center text-xl">👶</td>
+                            <td class="p-4">Children</td>
+                            <td class="p-4 italic text-slate-500">"No tracking kids."</td>
+                        </tr>
+                        <tr class="cheat-row border-b border-slate-100">
+                            <td class="p-4">Sec 11</td>
+                            <td class="p-4 text-center text-xl">🔍</td>
+                            <td class="p-4">Access</td>
+                            <td class="p-4 italic text-slate-500">"What do you know?"</td>
+                        </tr>
+                        <tr class="cheat-row">
+                            <td class="p-4">Sec 33</td>
+                            <td class="p-4 text-center text-xl">💰</td>
+                            <td class="p-4">Penalty</td>
+                            <td class="p-4 italic text-slate-500">"Up to ₹250 Crores!"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center py-16 px-6 border-t border-slate-800">
+        <p class="text-lg font-black text-game-accent italic mb-2">"Notice First, Consent Next, Rights Forever, Fines Heavy."</p>
+        <p class="text-xs text-slate-500 uppercase tracking-widest">The DPDP Memory Mantra</p>
+        <div class="mt-8">
+            <a href="index.html" class="text-xs font-bold text-slate-400 hover:text-white transition-colors underline">Back to Main Hub</a>
+        </div>
+    </footer>
+
+</body>
+</html>

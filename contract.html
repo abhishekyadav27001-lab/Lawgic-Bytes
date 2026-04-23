@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lawgic Bytes | Contract Act: The Anatomy of a Promise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'law-navy': '#0f172a',
+                        'harvard-crimson': '#A51C30',
+                        'crimson-light': '#E5B8BE',
+                        'parchment': '#FDFBF7',
+                        'law-gold': '#d97706',
+                    },
+                    boxShadow: {
+                        'academic': '0 20px 40px -10px rgba(165, 28, 48, 0.15)',
+                        'cartoon': '8px 8px 0px #0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FDFBF7; color: #1e293b; scroll-behavior: smooth; }
+        h1, h2, h3, h4, .serif-font { font-family: 'Playfair Display', serif; }
+
+        /* Book/Parchment effect for cases */
+        .case-card {
+            background-color: #fff;
+            background-image: linear-gradient(#f8fafc 1px, transparent 1px);
+            background-size: 100% 2rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        .case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-left: 6px solid #A51C30;
+        }
+
+        .equation-node {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .equation-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(165, 28, 48, 0.3);
+        }
+
+        /* Smooth reveal for moot court answers */
+        .verdict-reveal {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.6s ease-in-out;
+        }
+        .verdict-reveal.show {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="bg-white/90 backdrop-blur-md border-b-4 border-harvard-crimson sticky top-0 z-50 px-6 py-4 shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer">
+                <div class="h-10 w-10 bg-harvard-crimson flex items-center justify-center rounded-lg shadow-lg border-2 border-white">
+                    <span class="text-white font-bold text-xl leading-none serif-font">LB</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight uppercase leading-none text-law-navy">Lawgic<span class="text-harvard-crimson">Bytes</span></h1>
+                    <p class="text-[9px] uppercase tracking-widest text-stone-500 font-black mt-1">Contract Protocol 1872</p>
+                </div>
+            </div>
+            <div class="hidden lg:flex gap-8 text-xs font-black text-stone-600 uppercase tracking-widest">
+                <a href="#equation" class="hover:text-harvard-crimson transition-colors">The Equation</a>
+                <a href="#cases" class="hover:text-harvard-crimson transition-colors">Landmark Cases</a>
+                <a href="#mootcourt" class="hover:text-harvard-crimson transition-colors">Moot Court</a>
+            </div>
+            <button onclick="window.history.back()" class="bg-law-navy text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-all">Back to Hub</button>
+        </div>
+    </nav>
+
+    <header class="bg-law-navy text-white py-24 px-6 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto relative z-10">
+            <div class="flex flex-col items-center text-center space-y-6">
+                <div class="inline-flex items-center gap-2 bg-harvard-crimson/20 text-crimson-light px-5 py-2 rounded-full border border-harvard-crimson/30 text-xs font-black uppercase tracking-[0.4em]">
+                    <i class="fas fa-university"></i> Professor's Module 01
+                </div>
+                <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-none italic serif-font">The Anatomy of a <br><span class="text-harvard-crimson">Promise.</span></h1>
+                <p class="text-xl text-slate-400 max-w-3xl font-medium leading-relaxed">
+                    "A contract is not just a piece of paper. It is the meeting of minds, bound by the invisible chains of the law." — Welcome to the Indian Contract Act, 1872.
+                </p>
+            </div>
+        </div>
+        <div class="absolute -right-20 -bottom-20 text-[20rem] text-white/5 pointer-events-none serif-font italic">§2(h)</div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-20 space-y-32">
+
+        <section id="equation" class="space-y-16">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic">The Master Equation</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Section 2(h): "An agreement enforceable by law is a contract."</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+                <div class="equation-node bg-white p-8 rounded-full border-4 border-slate-100 w-48 h-48 flex flex-col items-center justify-center text-center shadow-lg">
+                    <i class="fas fa-hand-holding-heart text-3xl text-harvard-crimson mb-2"></i>
+                    <h3 class="font-black uppercase text-sm">Offer</h3>
+                    <p class="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-widest">Sec 2(a)</p>
+                </div>
+                <div class="text-3xl text-slate-300 font-black">+</div>
+                
+                <div class="equation-node bg-white p-8 rounded-full border-4 border-slate-100 w-48 h-48 flex flex-col items-center justify-center text-center shadow-lg">
+                    <i class="fas fa-check-double text-3xl text-emerald-600 mb-2"></i>
+                    <h3 class="font-black uppercase text-sm">Acceptance</h3>
+                    <p class="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-widest">Sec 2(b)</p>
+                </div>
+                <div class="text-3xl text-slate-300 font-black">+</div>
+                
+                <div class="equation-node bg-white p-8 rounded-full border-4 border-slate-100 w-48 h-48 flex flex-col items-center justify-center text-center shadow-lg">
+                    <i class="fas fa-coins text-3xl text-law-gold mb-2"></i>
+                    <h3 class="font-black uppercase text-sm">Consideration</h3>
+                    <p class="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-widest">Sec 2(d)</p>
+                </div>
+                <div class="text-3xl text-slate-300 font-black">=</div>
+
+                <div class="equation-node bg-harvard-crimson text-white p-8 rounded-[2rem] border-4 border-law-navy w-56 h-56 flex flex-col items-center justify-center text-center shadow-cartoon">
+                    <i class="fas fa-file-signature text-5xl mb-2"></i>
+                    <h3 class="font-black uppercase text-lg">Contract</h3>
+                    <p class="text-[10px] text-crimson-light font-bold mt-1 uppercase tracking-widest">Sec 2(h)</p>
+                </div>
+            </div>
+            <p class="text-center text-slate-500 max-w-2xl mx-auto italic font-medium leading-relaxed">
+                "Without all three elements, plus the Intention to Create Legal Relations, you merely have a social promise, not a legal shield."
+            </p>
+        </section>
+
+        <section id="cases" class="space-y-16">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic">The Lecture Hall: Case Studies</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Learn the rules through history.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="case-card p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-harvard-crimson text-white px-3 py-1 rounded-bl-xl text-[10px] font-black uppercase tracking-widest">The Offer</div>
+                    <div class="mb-6 mt-4">
+                        <h3 class="text-xl font-black serif-font italic text-law-navy">Carlill v. Carbolic Smoke Ball Co.</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-1">1893 • England</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <p class="text-sm text-slate-700 italic">"We will pay £100 to anyone who catches the flu after using our smoke ball as directed."</p>
+                        </div>
+                        <h4 class="font-black text-sm uppercase tracking-tight text-harvard-crimson">The Harvard Analysis:</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            A company argued their ad was just a "marketing puff." The Court ruled it was a <strong>General Offer</strong> to the whole world. Mrs. Carlill accepted the offer simply by performing the condition (using the ball). 
+                        </p>
+                        <p class="text-xs font-bold text-law-navy mt-4"><i class="fas fa-bolt text-law-gold mr-2"></i>Modern Example: Bug bounty programs by Google/Apple.</p>
+                    </div>
+                </div>
+
+                <div class="case-card p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-law-navy text-white px-3 py-1 rounded-bl-xl text-[10px] font-black uppercase tracking-widest">The Acceptance</div>
+                    <div class="mb-6 mt-4">
+                        <h3 class="text-xl font-black serif-font italic text-law-navy">Lalman Shukla v. Gauri Datt</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-1">1913 • Allahabad High Court</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <p class="text-sm text-slate-700 italic">A servant found his master's missing nephew. He later found out the master had offered a reward of ₹501.</p>
+                        </div>
+                        <h4 class="font-black text-sm uppercase tracking-tight text-law-navy">The Harvard Analysis:</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            The servant demanded the reward. The Court said <strong>No</strong>. You cannot accept an offer you do not know about. Acceptance requires absolute knowledge of the proposal.
+                        </p>
+                        <p class="text-xs font-bold text-law-navy mt-4"><i class="fas fa-bolt text-law-gold mr-2"></i>Rule: Ignorance of an offer defeats acceptance.</p>
+                    </div>
+                </div>
+
+                <div class="case-card p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-law-gold text-white px-3 py-1 rounded-bl-xl text-[10px] font-black uppercase tracking-widest">The Intent</div>
+                    <div class="mb-6 mt-4">
+                        <h3 class="text-xl font-black serif-font italic text-law-navy">Balfour v. Balfour</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-1">1919 • England</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <p class="text-sm text-slate-700 italic">A husband promised to pay his wife £30/month while she was sick. He stopped paying. She sued.</p>
+                        </div>
+                        <h4 class="font-black text-sm uppercase tracking-tight text-law-gold">The Harvard Analysis:</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            The Court dismissed her claim. Why? Because domestic and social agreements lack the <strong>Intention to create legal relations</strong>. The law does not enter the domain of dinner dates and marital promises.
+                        </p>
+                        <p class="text-xs font-bold text-law-navy mt-4"><i class="fas fa-bolt text-law-gold mr-2"></i>Modern Example: Promising to buy a friend a beer.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="mootcourt" class="bg-law-navy rounded-[3rem] p-8 md:p-16 shadow-cartoon border-8 border-harvard-crimson relative overflow-hidden">
+            <div class="text-center mb-12 relative z-10">
+                <i class="fas fa-gavel text-5xl text-harvard-crimson mb-4"></i>
+                <h2 class="text-4xl font-black text-white uppercase tracking-tighter serif-font italic">Moot Court Simulator</h2>
+                <p class="text-slate-400 font-bold text-sm mt-2">Test your legal instinct. Does a valid contract exist?</p>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 max-w-3xl mx-auto relative z-10 mb-8">
+                <div class="flex items-center gap-4 mb-4">
+                    <span class="bg-law-navy text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">Case 01</span>
+                    <h3 class="text-xl font-bold serif-font text-law-navy">The Accidental Amazon Price</h3>
+                </div>
+                <p class="text-slate-600 leading-relaxed mb-6 font-medium">
+                    Amazon glitches and lists a ₹1,00,000 MacBook for ₹100. You immediately click "Buy Now" and checkout. Amazon later cancels your order saying it was a pricing error. You sue Amazon for breach of contract. 
+                </p>
+                <div class="flex gap-4">
+                    <button onclick="revealVerdict('v1', false)" class="flex-1 border-2 border-law-navy text-law-navy hover:bg-law-navy hover:text-white py-3 rounded-xl font-black uppercase text-xs transition-colors">I win. Contract Formed.</button>
+                    <button onclick="revealVerdict('v1', true)" class="flex-1 border-2 border-harvard-crimson text-harvard-crimson hover:bg-harvard-crimson hover:text-white py-3 rounded-xl font-black uppercase text-xs transition-colors">Amazon wins. No Contract.</button>
+                </div>
+                
+                <div id="v1" class="verdict-reveal bg-slate-50 p-6 rounded-2xl border-l-4">
+                    <h4 id="v1-title" class="font-black text-lg mb-2 uppercase tracking-tighter"></h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        <strong>Legal Logic:</strong> Displaying an item on a website is an <em>"Invitation to Offer,"</em> not an Offer. When you click "Buy," YOU are making the offer to buy it for ₹100. Amazon has the right to reject your offer before they ship it. (Principle from <em>Pharmaceutical Society of Great Britain v. Boots Cash Chemists</em>).
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 max-w-3xl mx-auto relative z-10">
+                <div class="flex items-center gap-4 mb-4">
+                    <span class="bg-law-navy text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">Case 02</span>
+                    <h3 class="text-xl font-bold serif-font text-law-navy">The Lost Wallet</h3>
+                </div>
+                <p class="text-slate-600 leading-relaxed mb-6 font-medium">
+                    You lose your wallet. You put up posters saying "₹5,000 reward to anyone who returns it." Rahul finds your wallet, sees the poster, and returns it. You refuse to pay.
+                </p>
+                <div class="flex gap-4">
+                    <button onclick="revealVerdict('v2', true)" class="flex-1 border-2 border-law-navy text-law-navy hover:bg-law-navy hover:text-white py-3 rounded-xl font-black uppercase text-xs transition-colors">Rahul Wins. Pay up.</button>
+                    <button onclick="revealVerdict('v2', false)" class="flex-1 border-2 border-harvard-crimson text-harvard-crimson hover:bg-harvard-crimson hover:text-white py-3 rounded-xl font-black uppercase text-xs transition-colors">I win. It's a gift.</button>
+                </div>
+                
+                <div id="v2" class="verdict-reveal bg-slate-50 p-6 rounded-2xl border-l-4">
+                    <h4 id="v2-title" class="font-black text-lg mb-2 uppercase tracking-tighter"></h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        <strong>Legal Logic:</strong> This is a <em>General Offer</em>. Because Rahul knew about the poster (unlike in Lalman Shukla), returning the wallet constitutes valid Acceptance by performance. A binding contract was formed. Pay the man.
+                    </p>
+                </div>
+            </div>
+
+            <i class="fas fa-balance-scale absolute -right-20 -bottom-20 text-[250px] text-white/5"></i>
+        </section>
+
+    </main>
+
+    <footer class="bg-white py-12 border-t-8 border-harvard-crimson text-center">
+        <div class="max-w-4xl mx-auto space-y-6">
+            <h2 class="text-2xl font-black uppercase tracking-tighter text-law-navy">Module 01 Complete</h2>
+            <p class="text-slate-500 font-medium">You now understand the DNA of a promise. Next, we explore what makes consent "Free" (Coercion, Undue Influence, Fraud).</p>
+            <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest pt-6 italic">© 2026 Lawgic Bytes • Contract Protocol</p>
+        </div>
+    </footer>
+
+    <script>
+        function revealVerdict(id, isCorrect) {
+            const verdictBox = document.getElementById(id);
+            const title = document.getElementById(id + '-title');
+            
+            if(isCorrect) {
+                verdictBox.className = "verdict-reveal show bg-emerald-50 p-6 rounded-2xl border-l-4 border-emerald-500";
+                title.className = "font-black text-lg mb-2 uppercase tracking-tighter text-emerald-700";
+                title.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Correct Judgment';
+            } else {
+                verdictBox.className = "verdict-reveal show bg-red-50 p-6 rounded-2xl border-l-4 border-red-500";
+                title.className = "font-black text-lg mb-2 uppercase tracking-tighter text-red-700";
+                title.innerHTML = '<i class="fas fa-times-circle mr-2"></i> Objection Overruled';
+            }
+        }
+    </script>
+</body>
+</html>
+
+<section class="py-24 border-t-[12px] border-[#A51C30] mt-32 relative overflow-hidden">
+            <div class="text-center space-y-6 relative z-10">
+                <div class="inline-flex items-center gap-2 bg-[#A51C30]/10 text-[#A51C30] px-5 py-2 rounded-full border border-[#A51C30]/20 text-xs font-black uppercase tracking-[0.4em]">
+                    <i class="fas fa-university"></i> Professor's Module 02
+                </div>
+                <h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-none italic serif-font text-law-navy">The Illusion of <br><span class="text-[#A51C30]">Consent.</span></h2>
+                <p class="text-xl text-slate-500 max-w-3xl mx-auto font-medium leading-relaxed">
+                    "A signature is merely ink if the mind was manipulated. Today, we examine the legal safeguards that protect human free will."
+                </p>
+            </div>
+            <div class="absolute -left-10 top-0 text-[15rem] text-slate-100 pointer-events-none serif-font italic z-0 opacity-50">§14</div>
+        </section>
+
+        <section id="consent-foundation" class="space-y-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">Consensus Ad Idem</h2>
+                    <p class="text-slate-400 font-bold uppercase text-xs tracking-widest">Section 13: Meeting of the Minds</p>
+                    <p class="text-lg text-slate-600 font-medium leading-relaxed">
+                        Before we ask if consent is <em>free</em>, we must ask if it even <em>exists</em>. Section 13 dictates that two people consent when they agree upon the <strong>same thing in the same sense</strong>.
+                    </p>
+                    <div class="bg-white p-6 rounded-2xl border-l-4 border-law-gold shadow-sm">
+                        <h4 class="font-bold text-law-navy mb-2"><i class="fas fa-ship text-law-gold mr-2"></i> The "Peerless" Example</h4>
+                        <p class="text-sm text-slate-500 italic leading-relaxed">
+                            You agree to buy cotton arriving on a ship named "Peerless." But unknown to both of us, there are TWO ships named Peerless. You meant the one arriving in October; I meant the one arriving in December. Result? <strong>No contract.</strong> Our minds never met.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <div class="relative w-64 h-64 border-8 border-slate-100 rounded-full flex items-center justify-center bg-white shadow-xl">
+                        <div class="absolute left-6 w-24 h-24 bg-law-navy rounded-full mix-blend-multiply opacity-80 flex items-center justify-center text-white font-black text-xs shadow-inner">Party A</div>
+                        <div class="absolute right-6 w-24 h-24 bg-[#A51C30] rounded-full mix-blend-multiply opacity-80 flex items-center justify-center text-white font-black text-xs shadow-inner">Party B</div>
+                        <div class="z-10 text-center mt-32">
+                            <i class="fas fa-handshake text-3xl text-law-gold bg-white rounded-full p-2"></i>
+                            <p class="text-[10px] font-black uppercase tracking-widest mt-2 text-slate-400">Overlap = Consent</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="the-5-traps" class="space-y-16 mt-32">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">The 5 Traps of Free Consent</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Section 14: Consent is NOT free if caused by these.</p>
+                <div class="inline-block bg-slate-900 text-white px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest mt-4 shadow-lg">
+                    <span class="text-law-gold">Rule:</span> Traps 1-4 make it VOIDABLE (Victim can cancel). Trap 5 makes it VOID (Automatically dead).
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-[2rem] shadow-sm flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-[#A51C30] hover:shadow-xl border-2 border-transparent">
+                    <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="fas fa-gun"></i></div>
+                    <h3 class="font-black text-xl uppercase mb-1 text-law-navy">Coercion</h3>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Section 15</span>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Physical threat or force. Committing or threatening to commit any act forbidden by the Indian Penal Code to force a signature.
+                    </p>
+                    <div class="mt-auto pt-6 w-full">
+                        <div class="p-3 bg-slate-50 rounded-xl text-left border border-slate-100">
+                            <p class="text-[10px] font-bold text-law-navy italic">"Sign this property deed or I will shoot you."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2rem] shadow-sm flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-[#A51C30] hover:shadow-xl border-2 border-transparent">
+                    <div class="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="fas fa-brain"></i></div>
+                    <h3 class="font-black text-xl uppercase mb-1 text-law-navy">Undue Influence</h3>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Section 16</span>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Mental domination. Using a position of power (Doctor/Patient, Guru/Disciple) to obtain an unfair advantage over someone's will.
+                    </p>
+                    <div class="mt-auto pt-6 w-full">
+                        <div class="p-3 bg-slate-50 rounded-xl text-left border border-slate-100">
+                            <p class="text-[10px] font-bold text-law-navy italic">A doctor overcharging a desperate, dying patient.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2rem] shadow-sm flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:border-[#A51C30] hover:shadow-xl border-2 border-transparent">
+                    <div class="w-16 h-16 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="fas fa-mask"></i></div>
+                    <h3 class="font-black text-xl uppercase mb-1 text-law-navy">Fraud</h3>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Section 17</span>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        The deliberate lie. Making a false statement intentionally, or actively concealing a defect to deceive the other party.
+                    </p>
+                    <div class="mt-auto pt-6 w-full">
+                        <div class="p-3 bg-slate-50 rounded-xl text-left border border-slate-100">
+                            <p class="text-[10px] font-bold text-law-navy italic">Selling a car with a dead engine, painting it to look new.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2rem] shadow-sm flex flex-col items-center text-center md:col-start-1 md:col-end-3 lg:col-start-auto lg:col-end-auto transition-all duration-300 hover:-translate-y-2 hover:border-[#A51C30] hover:shadow-xl border-2 border-transparent">
+                    <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="fas fa-comment-slash"></i></div>
+                    <h3 class="font-black text-xl uppercase mb-1 text-law-navy">Misrepresentation</h3>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Section 18</span>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        The innocent lie. Making a false statement, but honestly believing it to be true. No intention to deceive, but it still misleads.
+                    </p>
+                    <div class="mt-auto pt-6 w-full">
+                        <div class="p-3 bg-slate-50 rounded-xl text-left border border-slate-100">
+                            <p class="text-[10px] font-bold text-law-navy italic">Selling a 45-acre farm, genuinely thinking it is 50 acres.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-law-navy text-white p-8 rounded-[2rem] shadow-cartoon flex flex-col items-center text-center md:col-span-2 transition-all duration-300 hover:-translate-y-2 hover:border-law-gold border-2 border-transparent">
+                    <div class="w-16 h-16 bg-slate-800 text-law-gold rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="fas fa-question-circle"></i></div>
+                    <h3 class="font-black text-xl uppercase mb-1 text-law-gold">Mistake (Bilateral)</h3>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Section 20</span>
+                    <p class="text-sm text-slate-300 leading-relaxed max-w-lg">
+                        When BOTH parties are mistaken about a fundamental fact essential to the agreement. This makes the contract completely <strong>VOID</strong> (dead from the start), not just voidable.
+                    </p>
+                    <div class="mt-auto pt-6 w-full max-w-lg mx-auto">
+                        <div class="p-4 bg-white/10 rounded-xl text-left border border-white/20">
+                            <p class="text-xs font-bold text-white italic">"A" agrees to buy "B's" horse. Unknown to both, the horse died the night before in the stable. The contract is void.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cases-part2" class="space-y-16 mt-32 pt-16 border-t-4 border-slate-100">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">The Jurist's Library: Landmark Cases</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Precedents that shaped the law.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                
+                <div class="case-card p-10 rounded-[2.5rem] relative overflow-hidden bg-white border-2 border-slate-100">
+                    <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest">Fraud (Sec 17)</div>
+                    <div class="mb-6 mt-4 border-b border-slate-100 pb-6">
+                        <h3 class="text-2xl font-black serif-font italic text-[#A51C30]">Shri Krishan v. Kurukshetra Univ.</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-2 tracking-widest">Is Silence Fraud?</p>
+                    </div>
+                    <div class="space-y-6">
+                        <p class="text-sm text-slate-600 font-medium leading-relaxed"><strong>The Facts:</strong> A student fell short of attendance but didn't mention it on his exam form. The University didn't check properly and let him sit for the exam. Later, they canceled his results, calling his silence "Fraud."</p>
+                        
+                        <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-law-gold">
+                            <h4 class="font-black text-xs uppercase tracking-widest text-law-navy mb-3">The Jurist's Analysis:</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed font-medium">
+                                The Supreme Court ruled in favor of the student. <strong>Mere silence is not fraud.</strong> The candidate had no legal duty to point out his own shortage of attendance. The University authorities should have checked the forms. <em>Caveat Emptor</em> (Let the evaluator beware) applies here.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="case-card p-10 rounded-[2.5rem] relative overflow-hidden bg-white border-2 border-slate-100">
+                    <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest">Coercion (Sec 15)</div>
+                    <div class="mb-6 mt-4 border-b border-slate-100 pb-6">
+                        <h3 class="text-2xl font-black serif-font italic text-[#A51C30]">Chikkam Ammiraju v. Seshama</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-2 tracking-widest">Madras High Court</p>
+                    </div>
+                    <div class="space-y-6">
+                        <p class="text-sm text-slate-600 font-medium leading-relaxed"><strong>The Facts:</strong> A Hindu man threatened to commit suicide unless his wife and son executed a property release deed in favor of his brother. Terrified, they signed. Later, they sued to cancel the deed.</p>
+                        
+                        <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-law-gold">
+                            <h4 class="font-black text-xs uppercase tracking-widest text-law-navy mb-3">The Jurist's Analysis:</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed font-medium">
+                                The Court held that the threat of suicide amounts to <strong>Coercion</strong>. Although suicide itself wasn't punishable (as the person is dead), an <em>attempt</em> to commit suicide was forbidden by the Indian Penal Code. The consent was forced, making the contract voidable.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="mootcourt-part2" class="bg-slate-900 rounded-[3.5rem] p-8 md:p-16 shadow-cartoon border-8 border-[#A51C30] relative overflow-hidden mt-32">
+            <div class="text-center mb-16 relative z-10">
+                <i class="fas fa-balance-scale-right text-6xl text-law-gold mb-6"></i>
+                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter serif-font italic">Moot Court Simulator II</h2>
+                <p class="text-slate-400 font-bold text-sm mt-4 uppercase tracking-widest">Identify the vitiating factor.</p>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 max-w-4xl mx-auto relative z-10 mb-12 shadow-xl">
+                <div class="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <span class="bg-law-navy text-white text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest">Docket 03</span>
+                    <h3 class="text-2xl font-bold serif-font text-law-navy italic">The Devoted Disciple</h3>
+                </div>
+                <p class="text-slate-600 text-lg leading-relaxed mb-8 font-medium">
+                    A spiritual Guru tells his wealthy but highly superstitious disciple, "If you gift your entire 100-acre estate to my ashram, your soul will achieve guaranteed salvation." The disciple, completely devoted and fearing spiritual ruin, signs the deed. A year later, his heirs want the land back.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="revealVerdict('v3', false)" class="flex-1 border-4 border-law-navy text-law-navy hover:bg-law-navy hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">Valid. Voluntary Gift.</button>
+                    <button onclick="revealVerdict('v3', true)" class="flex-1 border-4 border-[#A51C30] text-[#A51C30] hover:bg-[#A51C30] hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">Voidable. Undue Influence.</button>
+                </div>
+                
+                <div id="v3" class="verdict-reveal bg-slate-50 p-8 rounded-2xl border-l-8 mt-6">
+                    <h4 id="v3-title" class="font-black text-xl mb-3 uppercase tracking-tighter"></h4>
+                    <p class="text-base text-slate-700 leading-relaxed font-medium">
+                        <strong>Legal Logic (Section 16):</strong> This is a classic case of <em>Undue Influence</em>. A Guru-Disciple relationship is a fiduciary one where the Guru holds real or apparent authority over the disciple's mind. The Guru used this dominant position to obtain an unfair advantage. The heirs can have the contract set aside. (Based on <em>Mannu Singh v. Umadat Pande</em>).
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 max-w-4xl mx-auto relative z-10 shadow-xl">
+                <div class="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <span class="bg-law-navy text-white text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest">Docket 04</span>
+                    <h3 class="text-2xl font-bold serif-font text-law-navy italic">The Silent Seller</h3>
+                </div>
+                <p class="text-slate-600 text-lg leading-relaxed mb-8 font-medium">
+                    You go to buy a horse from Mr. X. The horse looks perfectly healthy, but it actually has a hidden mental disease. Mr. X knows this but says absolutely nothing. You don't ask any questions. You buy the horse, and it goes crazy the next day. You sue Mr. X for Fraud.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="revealVerdict('v4', true)" class="flex-1 border-4 border-law-navy text-law-navy hover:bg-law-navy hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">Mr. X wins. Silence isn't fraud.</button>
+                    <button onclick="revealVerdict('v4', false)" class="flex-1 border-4 border-[#A51C30] text-[#A51C30] hover:bg-[#A51C30] hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">I win. He hid the truth.</button>
+                </div>
+                
+                <div id="v4" class="verdict-reveal bg-slate-50 p-8 rounded-2xl border-l-8 mt-6">
+                    <h4 id="v4-title" class="font-black text-xl mb-3 uppercase tracking-tighter"></h4>
+                    <p class="text-base text-slate-700 leading-relaxed font-medium">
+                        <strong>Legal Logic (Section 17):</strong> The general rule is <em>"Mere silence as to facts likely to affect the willingness of a person to enter into a contract is not fraud."</em> Unless you asked him directly ("Is the horse sane?") and he lied, or if he had a fiduciary duty to tell you, it's your responsibility to check. <em>Caveat Emptor</em> (Buyer Beware) protects the seller here.
+                    </p>
+                </div>
+            </div>
+
+            <i class="fas fa-balance-scale absolute -right-20 -top-20 text-[350px] text-white/5 pointer-events-none"></i>
+        </section>
+
+<section class="py-24 border-t-[12px] border-[#A51C30] mt-32 relative overflow-hidden">
+            <div class="text-center space-y-6 relative z-10">
+                <div class="inline-flex items-center gap-2 bg-[#A51C30]/10 text-[#A51C30] px-5 py-2 rounded-full border border-[#A51C30]/20 text-xs font-black uppercase tracking-[0.4em]">
+                    <i class="fas fa-gavel"></i> Professor's Module 03
+                </div>
+                <h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-none italic serif-font text-law-navy">The Broken <br><span class="text-[#A51C30]">Promise.</span></h2>
+                <p class="text-xl text-slate-500 max-w-3xl mx-auto font-medium leading-relaxed">
+                    "Not all contracts reach a happy ending. Some are broken by choice, and others are destroyed by fate. Let us examine the law of Performance, Frustration, and Damages."
+                </p>
+            </div>
+            <div class="absolute -right-10 top-0 text-[15rem] text-slate-100 pointer-events-none serif-font italic z-0 opacity-50">§73</div>
+        </section>
+
+        <section id="performance-frustration" class="space-y-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                
+                <div class="bg-white p-10 rounded-[2.5rem] border-2 border-slate-100 shadow-sm hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-16 h-16 bg-law-navy text-white rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg group-hover:bg-law-gold transition-colors">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Section 37</span>
+                    <h3 class="font-black text-2xl uppercase mb-4 text-law-navy">The Obligation</h3>
+                    <p class="text-slate-600 leading-relaxed font-medium">
+                        The fundamental rule of contract law: <strong>Parties must perform their promises.</strong> You cannot simply walk away because the deal is no longer profitable. If you made the promise, the law expects you to fulfill it.
+                    </p>
+                </div>
+
+                <div class="bg-law-navy p-10 rounded-[2.5rem] border-4 border-[#A51C30] shadow-cartoon hover:-translate-y-2 transition-transform duration-300 text-white relative overflow-hidden">
+                    <div class="w-16 h-16 bg-[#A51C30] text-white rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg z-10 relative">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block z-10 relative">Section 56</span>
+                    <h3 class="font-black text-2xl uppercase mb-4 text-law-gold z-10 relative">Doctrine of Frustration</h3>
+                    <p class="text-slate-300 leading-relaxed font-medium z-10 relative">
+                        What happens if performance becomes <strong>impossible or unlawful</strong> after the contract is made? The contract becomes <strong>VOID</strong>. The law does not compel anyone to do the impossible (e.g., an earthquake destroys the factory).
+                    </p>
+                    <i class="fas fa-house-damage absolute -right-10 -bottom-10 text-[150px] opacity-10 z-0"></i>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="damages" class="space-y-16 mt-32">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">The Price of a Broken Word</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Sections 73 & 74: The Law of Damages</p>
+                <div class="inline-block bg-slate-100 text-slate-600 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest mt-4 shadow-sm border border-slate-200">
+                    <span class="text-[#A51C30]">Core Principle:</span> Damages are for compensation, not for punishment.
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border-2 border-slate-100 relative">
+                    <h3 class="text-2xl font-black uppercase mb-2 text-law-navy">Unliquidated Damages</h3>
+                    <span class="text-[10px] font-black bg-slate-100 text-slate-500 px-3 py-1 rounded-full uppercase tracking-widest mb-6 inline-block">Section 73</span>
+                    <p class="text-slate-600 font-medium leading-relaxed mb-6">
+                        When the contract doesn't state a penalty amount in advance, the Court calculates the loss. The breaching party must pay compensation for any loss that <strong>naturally arose</strong> in the usual course of things.
+                    </p>
+                    <div class="bg-red-50 p-5 rounded-2xl border-l-4 border-red-500">
+                        <h4 class="font-bold text-red-800 text-xs uppercase mb-2">The "Remoteness" Rule</h4>
+                        <p class="text-sm text-red-900 italic">
+                            You cannot claim damages for indirect, remote, or special losses unless the other party knew about them when making the contract.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border-2 border-slate-100 relative">
+                    <h3 class="text-2xl font-black uppercase mb-2 text-law-navy">Liquidated Damages</h3>
+                    <span class="text-[10px] font-black bg-law-gold/20 text-law-gold px-3 py-1 rounded-full uppercase tracking-widest mb-6 inline-block">Section 74</span>
+                    <p class="text-slate-600 font-medium leading-relaxed mb-6">
+                        When parties pre-agree on a specific penalty amount in the contract itself (e.g., "If you delay construction, pay ₹10,000 per day"). 
+                    </p>
+                    <div class="bg-blue-50 p-5 rounded-2xl border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-800 text-xs uppercase mb-2">The "Reasonable" Rule</h4>
+                        <p class="text-sm text-blue-900 italic">
+                            Even if the contract says the penalty is ₹1 Crore for a 1-day delay, the Indian Courts will only grant a <strong>reasonable compensation</strong> not exceeding the pre-agreed amount.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cases-part3" class="space-y-16 mt-32 pt-16 border-t-4 border-slate-100">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">The Jurist's Library</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">The Precedents that shaped the law.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                
+                <div class="case-card p-10 rounded-[2.5rem] relative overflow-hidden bg-white border-2 border-slate-100">
+                    <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest">Frustration (Sec 56)</div>
+                    <div class="mb-6 mt-4 border-b border-slate-100 pb-6">
+                        <h3 class="text-2xl font-black serif-font italic text-[#A51C30]">Taylor v. Caldwell</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-2 tracking-widest">England (1863)</p>
+                    </div>
+                    <div class="space-y-6">
+                        <p class="text-sm text-slate-600 font-medium leading-relaxed"><strong>The Facts:</strong> Caldwell agreed to let Taylor use his music hall for four grand concerts. A few days before the first concert, the music hall accidentally burned down to the ground. Taylor sued Caldwell for breach of contract.</p>
+                        
+                        <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-law-gold">
+                            <h4 class="font-black text-xs uppercase tracking-widest text-law-navy mb-3">The Jurist's Analysis:</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed font-medium">
+                                The Court ruled the contract was <strong>frustrated</strong>. The existence of the music hall was an implied condition essential for the contract. Since the destruction was not Caldwell's fault, the contract became impossible to perform and was discharged.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="case-card p-10 rounded-[2.5rem] relative overflow-hidden bg-white border-2 border-slate-100">
+                    <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest">Damages (Sec 73)</div>
+                    <div class="mb-6 mt-4 border-b border-slate-100 pb-6">
+                        <h3 class="text-2xl font-black serif-font italic text-[#A51C30]">Hadley v. Baxendale</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-2 tracking-widest">England (1854)</p>
+                    </div>
+                    <div class="space-y-6">
+                        <p class="text-sm text-slate-600 font-medium leading-relaxed"><strong>The Facts:</strong> Hadley's mill stopped working due to a broken crankshaft. He hired Baxendale (a courier) to deliver it for repairs. Baxendale delayed the delivery by several days. Hadley sued for the massive lost profits during those days.</p>
+                        
+                        <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-law-gold">
+                            <h4 class="font-black text-xs uppercase tracking-widest text-law-navy mb-3">The Jurist's Analysis:</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed font-medium">
+                                The Court established the legendary rule of <strong>Remoteness of Damages</strong>. Baxendale was not liable for the lost profits. Why? Because he was just a courier; he didn't know the entire mill would be shut down without that one shaft. You only pay for losses that are reasonably foreseeable.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="mootcourt-part3" class="bg-slate-900 rounded-[3.5rem] p-8 md:p-16 shadow-cartoon border-8 border-[#A51C30] relative overflow-hidden mt-32">
+            <div class="text-center mb-16 relative z-10">
+                <i class="fas fa-balance-scale-left text-6xl text-law-gold mb-6"></i>
+                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter serif-font italic">Moot Court Simulator III</h2>
+                <p class="text-slate-400 font-bold text-sm mt-4 uppercase tracking-widest">Test your logic on Damages & Impossibility.</p>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 max-w-4xl mx-auto relative z-10 mb-12 shadow-xl">
+                <div class="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <span class="bg-law-navy text-white text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest">Docket 05</span>
+                    <h3 class="text-2xl font-bold serif-font text-law-navy italic">The Strike vs. Act of God</h3>
+                </div>
+                <p class="text-slate-600 text-lg leading-relaxed mb-8 font-medium">
+                    A shipping company agrees to deliver your cargo in 5 days. Suddenly, their own workers go on strike for better wages, making delivery impossible. The company claims the contract is "Frustrated" (Section 56) and they are excused from liability.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="revealVerdict('v5', false)" class="flex-1 border-4 border-law-navy text-law-navy hover:bg-law-navy hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">Yes, Strike = Impossibility. Frustrated.</button>
+                    <button onclick="revealVerdict('v5', true)" class="flex-1 border-4 border-[#A51C30] text-[#A51C30] hover:bg-[#A51C30] hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">No, Strike = Bad Management. Breach.</button>
+                </div>
+                
+                <div id="v5" class="verdict-reveal bg-slate-50 p-8 rounded-2xl border-l-8 mt-6">
+                    <h4 id="v5-title" class="font-black text-xl mb-3 uppercase tracking-tighter"></h4>
+                    <p class="text-base text-slate-700 leading-relaxed font-medium">
+                        <strong>Legal Logic:</strong> Section 56 requires an event outside the control of the parties (Act of God, war, law change). A labor strike by your own employees is considered a commercial hardship or management failure, not a legal impossibility. It is a Breach of Contract, not Frustration.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 max-w-4xl mx-auto relative z-10 shadow-xl">
+                <div class="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <span class="bg-law-navy text-white text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest">Docket 06</span>
+                    <h3 class="text-2xl font-bold serif-font text-law-navy italic">The Catering Disaster</h3>
+                </div>
+                <p class="text-slate-600 text-lg leading-relaxed mb-8 font-medium">
+                    You hire a caterer for your wedding for ₹5 Lakhs. The contract says, "Penalty for failing to show up: ₹50 Lakhs." The caterer doesn't show up. You have to hire a last-minute replacement for ₹7 Lakhs (a loss of ₹2 Lakhs). You sue the original caterer for the full ₹50 Lakhs penalty.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="revealVerdict('v6', false)" class="flex-1 border-4 border-law-navy text-law-navy hover:bg-law-navy hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">I win ₹50 Lakhs. It's in the contract!</button>
+                    <button onclick="revealVerdict('v6', true)" class="flex-1 border-4 border-[#A51C30] text-[#A51C30] hover:bg-[#A51C30] hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">I only get ₹2 Lakhs. (Reasonable Loss).</button>
+                </div>
+                
+                <div id="v6" class="verdict-reveal bg-slate-50 p-8 rounded-2xl border-l-8 mt-6">
+                    <h4 id="v6-title" class="font-black text-xl mb-3 uppercase tracking-tighter"></h4>
+                    <p class="text-base text-slate-700 leading-relaxed font-medium">
+                        <strong>Legal Logic (Section 74):</strong> Indian law does not enforce absurd penalties. A pre-agreed sum is just the "upper limit." The Court will only award <em>reasonable compensation</em> for actual loss proved. Since your actual loss was ₹2 Lakhs, you get ₹2 Lakhs. The ₹50 Lakhs clause is an unenforceable penalty.
+                    </p>
+                </div>
+            </div>
+
+            <i class="fas fa-file-invoice-dollar absolute -right-20 -bottom-20 text-[250px] text-white/5 pointer-events-none"></i>
+        </section>
+
+        <div class="pt-20 text-center">
+            <h2 class="text-2xl font-black uppercase tracking-tighter text-law-navy">Modules 1, 2, & 3 Complete</h2>
+            <p class="text-slate-500 font-medium mt-2 max-w-2xl mx-auto">You now understand how contracts are formed, how consent is protected, and how the law calculates the price of a broken promise.</p>
+        </div>
+
+<section class="py-24 border-t-[12px] border-[#A51C30] mt-32 relative overflow-hidden">
+            <div class="text-center space-y-6 relative z-10">
+                <div class="inline-flex items-center gap-2 bg-[#A51C30]/10 text-[#A51C30] px-5 py-2 rounded-full border border-[#A51C30]/20 text-xs font-black uppercase tracking-[0.4em]">
+                    <i class="fas fa-ban"></i> Professor's Module 04
+                </div>
+                <h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-none italic serif-font text-law-navy">The Forbidden & <br><span class="text-[#A51C30]">The Accidental.</span></h2>
+                <p class="text-xl text-slate-500 max-w-3xl mx-auto font-medium leading-relaxed">
+                    "The law refuses to enforce certain promises because they harm society. Conversely, the law will invent a contract out of thin air to prevent one man from unjustly enriching himself at another's expense."
+                </p>
+            </div>
+            <div class="absolute -left-10 top-0 text-[15rem] text-slate-100 pointer-events-none serif-font italic z-0 opacity-50">§27</div>
+        </section>
+
+        <section id="void-agreements" class="space-y-12">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">The Forbidden Contracts</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Agreements expressly declared VOID by Law</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-[#A51C30] transition-colors group">
+                    <div class="text-4xl mb-4 text-[#A51C30] group-hover:scale-110 transition-transform"><i class="fas fa-ring"></i></div>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Section 26</span>
+                    <h3 class="font-black text-xl uppercase mb-3 text-law-navy">Restraint of Marriage</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        You cannot pay someone to <em>never</em> marry, or to not marry a specific person. The right to marry is a fundamental human liberty. Any contract restricting this (except for minors) is dead on arrival.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-[#A51C30] transition-colors group">
+                    <div class="text-4xl mb-4 text-law-navy group-hover:scale-110 transition-transform"><i class="fas fa-store-slash"></i></div>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Section 27</span>
+                    <h3 class="font-black text-xl uppercase mb-3 text-law-navy">Restraint of Trade</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        A contract that stops anyone from exercising a lawful profession, trade, or business is void. <strong>The "Non-Compete" Trap:</strong> You can't force an ex-employee to never work in your industry again. (Exception: Selling the "goodwill" of a business).
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-law-gold transition-colors group">
+                    <div class="text-4xl mb-4 text-law-gold group-hover:rotate-180 transition-transform duration-700"><i class="fas fa-dice"></i></div>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Section 30</span>
+                    <h3 class="font-black text-xl uppercase mb-3 text-law-navy">Wagering (Gambling)</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        Agreements by way of wager are void. You cannot sue someone in an Indian court to recover money won in a bet. The law does not act as a debt collector for casinos.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-law-navy p-10 md:p-16 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
+                <div class="text-center mb-10 relative z-10">
+                    <h3 class="text-3xl font-black uppercase tracking-tighter serif-font italic text-law-gold mb-2">Gambling vs. Insurance</h3>
+                    <p class="text-sm text-slate-300 font-medium">Why is paying a bookie illegal, but paying an insurance company legal?</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+                    <div class="bg-white/10 p-8 rounded-3xl border border-white/20 backdrop-blur-md">
+                        <div class="text-3xl mb-4 animate-bounce">🎲</div>
+                        <h4 class="font-bold text-lg mb-2 text-red-400 uppercase tracking-widest">The Wager (Void)</h4>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            "I bet you ₹10,000 your house will burn down." <br><br>
+                            Neither of us owns the house. We are just creating risk for entertainment. We have no <strong>Insurable Interest</strong> in the property.
+                        </p>
+                    </div>
+                    <div class="bg-white/10 p-8 rounded-3xl border border-white/20 backdrop-blur-md">
+                        <div class="text-3xl mb-4 animate-pulse">🛡️</div>
+                        <h4 class="font-bold text-lg mb-2 text-emerald-400 uppercase tracking-widest">Insurance (Valid Contract)</h4>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            "I pay you a premium, you pay me ₹10 Lakhs if MY house burns down." <br><br>
+                            I own the house. I suffer a real loss if it burns. The contract protects against an existing risk. This is a valid <strong>Contingent Contract (Sec 31)</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quasi-contracts" class="space-y-12 mt-32">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">Quasi-Contracts</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Sections 68-72: Unjust Enrichment</p>
+                <p class="text-lg text-slate-600 font-medium leading-relaxed max-w-3xl mx-auto">
+                    Sometimes, there is no Offer, no Acceptance, and no Agreement. Yet, the law will invent a "fictional" contract to prevent someone from getting rich at the expense of another. 
+                </p>
+            </div>
+
+            <div class="bg-amber-50 p-8 md:p-12 rounded-[3rem] border-4 border-law-gold shadow-cartoon relative overflow-hidden flex flex-col md:flex-row items-center gap-12">
+                <div class="w-full md:w-1/2 text-center relative">
+                    <div class="text-[100px] animate-bounce">🍕</div>
+                    <div class="absolute top-0 right-10 bg-white p-3 rounded-2xl border-2 border-law-navy shadow-md transform rotate-6">
+                        <p class="text-[10px] font-black text-law-navy uppercase">"Wrong House!"</p>
+                    </div>
+                    <div class="absolute bottom-0 left-10 bg-white p-3 rounded-2xl border-2 border-law-navy shadow-md transform -rotate-6">
+                        <p class="text-[10px] font-black text-law-navy uppercase">"But it's delicious..."</p>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 space-y-6">
+                    <div class="inline-block bg-law-gold text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Section 70</div>
+                    <h3 class="text-3xl font-black uppercase leading-none text-law-navy">The Pizza Rule</h3>
+                    <p class="text-slate-700 font-medium leading-relaxed">
+                        A delivery boy accidentally drops off a paid premium pizza at your house instead of your neighbor's. You know you didn't order it, but you eat it anyway. 
+                    </p>
+                    <div class="bg-white p-5 rounded-2xl border-l-4 border-[#A51C30]">
+                        <h4 class="font-black text-xs uppercase text-[#A51C30] mb-2">The Law Commands:</h4>
+                        <p class="text-sm text-slate-600 font-bold">
+                            You enjoyed the benefit of a non-gratuitous act. You must compensate the restaurant for the pizza. A Quasi-Contract is formed by your action of eating it.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cases-part4" class="space-y-16 mt-32 pt-16 border-t-4 border-slate-100">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">The Jurist's Library</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">The Precedents that shaped the law.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                
+                <div class="case-card p-10 rounded-[2.5rem] relative overflow-hidden bg-white border-2 border-slate-100">
+                    <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest">Trade (Sec 27)</div>
+                    <div class="mb-6 mt-4 border-b border-slate-100 pb-6">
+                        <h3 class="text-2xl font-black serif-font italic text-[#A51C30]">Nordenfelt v. Maxim Nordenfelt</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-2 tracking-widest">England (1894)</p>
+                    </div>
+                    <div class="space-y-6">
+                        <p class="text-sm text-slate-600 font-medium leading-relaxed"><strong>The Facts:</strong> Thorsten Nordenfelt was a famous inventor of guns. He sold his business to a company for a huge sum and signed a contract promising <em>not to make guns anywhere in the world for 25 years</em>. Later, he broke the promise and started making guns again.</p>
+                        
+                        <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-law-gold">
+                            <h4 class="font-black text-xs uppercase tracking-widest text-law-navy mb-3">The Jurist's Analysis:</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed font-medium">
+                                Normally, stopping someone from trading is void. But the Court ruled this restraint was <strong>valid</strong> because it was "reasonable." He sold the worldwide "goodwill" of his business for massive money; if he started competing immediately, the buyers would have bought nothing. (This is the primary exception to Section 27).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="case-card p-10 rounded-[2.5rem] relative overflow-hidden bg-white border-2 border-slate-100">
+                    <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest">Quasi (Sec 70)</div>
+                    <div class="mb-6 mt-4 border-b border-slate-100 pb-6">
+                        <h3 class="text-2xl font-black serif-font italic text-[#A51C30]">State of West Bengal v. B.K. Mondal</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-2 tracking-widest">Supreme Court of India (1962)</p>
+                    </div>
+                    <div class="space-y-6">
+                        <p class="text-sm text-slate-600 font-medium leading-relaxed"><strong>The Facts:</strong> A contractor built certain structures for the Government upon request from an officer. However, the strict legal formalities required to make a valid Government contract were not followed. The Govt used the buildings but refused to pay, saying "There is no valid contract!"</p>
+                        
+                        <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-law-gold">
+                            <h4 class="font-black text-xs uppercase tracking-widest text-law-navy mb-3">The Jurist's Analysis:</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed font-medium">
+                                The Supreme Court invoked <strong>Section 70</strong>. Even though the formal contract was void, the contractor did the work lawfully, didn't intend to do it for free, and the Government enjoyed the benefit. The Government was ordered to pay compensation based on Quasi-Contract.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="mootcourt-part4" class="bg-slate-900 rounded-[3.5rem] p-8 md:p-16 shadow-cartoon border-8 border-[#A51C30] relative overflow-hidden mt-32">
+            <div class="text-center mb-16 relative z-10">
+                <i class="fas fa-balance-scale-right text-6xl text-law-gold mb-6"></i>
+                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter serif-font italic">Moot Court Simulator IV</h2>
+                <p class="text-slate-400 font-bold text-sm mt-4 uppercase tracking-widest">Test your logic on Void & Quasi-Contracts.</p>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 max-w-4xl mx-auto relative z-10 mb-12 shadow-xl">
+                <div class="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <span class="bg-law-navy text-white text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest">Docket 07</span>
+                    <h3 class="text-2xl font-bold serif-font text-law-navy italic">The Rival Software Dev</h3>
+                </div>
+                <p class="text-slate-600 text-lg leading-relaxed mb-8 font-medium">
+                    You hire a brilliant coder for your tech startup. Her employment contract states: "If you leave this company, you cannot work as a software developer for any other company in India for the next 5 years." She resigns and immediately joins a rival startup. You sue to stop her.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="revealVerdict('v7', false)" class="flex-1 border-4 border-law-navy text-law-navy hover:bg-law-navy hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">I win. She signed the contract!</button>
+                    <button onclick="revealVerdict('v7', true)" class="flex-1 border-4 border-[#A51C30] text-[#A51C30] hover:bg-[#A51C30] hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">She wins. Contract is Void.</button>
+                </div>
+                
+                <div id="v7" class="verdict-reveal bg-slate-50 p-8 rounded-2xl border-l-8 mt-6">
+                    <h4 id="v7-title" class="font-black text-xl mb-3 uppercase tracking-tighter"></h4>
+                    <p class="text-base text-slate-700 leading-relaxed font-medium">
+                        <strong>Legal Logic (Section 27):</strong> She wins. Any agreement that restrains someone from exercising a lawful profession is <strong>VOID</strong>. Indian courts are extremely strict about this. You cannot enforce a total ban on an employee's right to earn a livelihood after they leave your company. The clause is dead.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 max-w-4xl mx-auto relative z-10 shadow-xl">
+                <div class="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <span class="bg-law-navy text-white text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest">Docket 08</span>
+                    <h3 class="text-2xl font-bold serif-font text-law-navy italic">The Fire Rescue</h3>
+                </div>
+                <p class="text-slate-600 text-lg leading-relaxed mb-8 font-medium">
+                    Your neighbor's house catches on fire while they are on vacation. To stop the fire from spreading to your house, you hire a private water truck for ₹10,000 to extinguish the flames on their property. When the neighbor returns, you ask them to reimburse the ₹10,000. They refuse, saying "I never signed a contract asking you to do that."
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="revealVerdict('v8', true)" class="flex-1 border-4 border-law-navy text-law-navy hover:bg-law-navy hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">I win. Quasi-Contract applies.</button>
+                    <button onclick="revealVerdict('v8', false)" class="flex-1 border-4 border-[#A51C30] text-[#A51C30] hover:bg-[#A51C30] hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">Neighbor wins. No agreement.</button>
+                </div>
+                
+                <div id="v8" class="verdict-reveal bg-slate-50 p-8 rounded-2xl border-l-8 mt-6">
+                    <h4 id="v8-title" class="font-black text-xl mb-3 uppercase tracking-tighter"></h4>
+                    <p class="text-base text-slate-700 leading-relaxed font-medium">
+                        <strong>Legal Logic (Section 70 & 69):</strong> You win. Under Quasi-Contract principles, if a person lawfully does anything for another person, not intending to do so gratuitously (for free), and the other person enjoys the benefit (their house was saved), they are bound to make compensation. The law invents a contract to ensure justice.
+                    </p>
+                </div>
+            </div>
+
+            <i class="fas fa-ban absolute -right-20 -bottom-20 text-[350px] text-white/5 pointer-events-none"></i>
+        </section>
+
+        <div class="pt-20 text-center">
+            <h2 class="text-2xl font-black uppercase tracking-tighter text-law-navy">Module 04 Complete</h2>
+            <p class="text-slate-500 font-medium mt-2 max-w-2xl mx-auto">You now understand the limits of contractual freedom and the power of the courts to invent contracts to prevent injustice. In the next and final module, we cover Indemnity, Guarantee, and Bailment.</p>
+        </div>
+
+<section class="py-24 border-t-[12px] border-prof-crimson mt-32 relative overflow-hidden">
+            <div class="text-center space-y-6 relative z-10">
+                <div class="inline-flex items-center gap-2 bg-prof-crimson/10 text-prof-crimson px-5 py-2 rounded-full border border-prof-crimson/20 text-xs font-black uppercase tracking-[0.4em]">
+                    <i class="fas fa-briefcase"></i> Professor's Module 05
+                </div>
+                <h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-none italic serif-font text-law-navy">The Specialized <br><span class="text-prof-crimson">Engagements.</span></h2>
+                <p class="text-xl text-slate-500 max-w-3xl mx-auto font-medium leading-relaxed">
+                    "Beyond simple exchange lies the architecture of trust. Indemnity protects against ruin, Guarantees secure credit, Bailment guards property, and Agency extends human reach."
+                </p>
+            </div>
+            <div class="absolute -left-10 top-0 text-[15rem] text-slate-100 pointer-events-none serif-font italic z-0 opacity-50">§124</div>
+        </section>
+
+        <section id="indemnity-guarantee" class="space-y-12">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">The Shields of Commerce</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Indemnity (Sec 124) vs. Guarantee (Sec 126)</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="bg-white p-10 rounded-[2.5rem] border-2 border-slate-100 shadow-sm relative overflow-hidden group hover:border-law-gold transition-colors">
+                    <div class="w-16 h-16 bg-amber-50 text-law-gold rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                        <i class="fas fa-umbrella"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Section 124</span>
+                    <h3 class="font-black text-2xl uppercase mb-4 text-law-navy">Indemnity</h3>
+                    <p class="text-slate-600 leading-relaxed font-medium mb-6">
+                        A contract where one party promises to save the other from loss caused to him by the conduct of the promisor himself, or by the conduct of any other person.
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p class="text-xs font-bold text-slate-700 italic">"If X sues you for selling me this car, I will pay your legal fees and any damages."</p>
+                    </div>
+                    <div class="mt-6 bg-amber-100 p-4 rounded-xl border-l-4 border-law-gold">
+                        <h4 class="font-black text-[10px] uppercase text-law-gold tracking-widest mb-1">Did You Know?</h4>
+                        <p class="text-xs text-amber-900 font-medium">In India, strictly speaking, Life and Fire Insurance do not fall under Section 124 (they are contingent contracts). But Marine Insurance and general indemnity bonds do.</p>
+                    </div>
+                </div>
+
+                <div class="bg-law-navy p-10 rounded-[2.5rem] border-4 border-prof-crimson shadow-cartoon text-white relative overflow-hidden group hover:border-crimson-light transition-colors">
+                    <div class="w-16 h-16 bg-white/10 text-crimson-light rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                        <i class="fas fa-handshake-angle"></i>
+                    </div>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Section 126</span>
+                    <h3 class="font-black text-2xl uppercase mb-4 text-white">Guarantee</h3>
+                    <p class="text-slate-300 leading-relaxed font-medium mb-6">
+                        A contract to perform the promise, or discharge the liability, of a third person in case of his default. It involves three parties: Surety, Principal Debtor, and Creditor.
+                    </p>
+                    <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                        <p class="text-xs font-bold text-white italic">"Give A the loan. If A does not pay you back, I will."</p>
+                    </div>
+                    <div class="mt-6 bg-prof-crimson/30 p-4 rounded-xl border-l-4 border-crimson-light">
+                        <h4 class="font-black text-[10px] uppercase text-crimson-light tracking-widest mb-1">Did You Know?</h4>
+                        <p class="text-xs text-red-100 font-medium">The modern global economy runs on Guarantees. "Letters of Credit" and "Bank Guarantees" are the mechanisms that allow international trade to happen when the buyer and seller don't trust each other.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="bailment" class="space-y-12 mt-32">
+            <div class="bg-white p-12 rounded-[3.5rem] border-2 border-slate-100 shadow-xl flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/2 space-y-6">
+                    <div class="inline-block bg-emerald-50 text-emerald-600 px-4 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Section 148</div>
+                    <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">Bailment</h2>
+                    <p class="text-lg text-slate-600 font-medium leading-relaxed">
+                        The delivery of goods by one person to another for some purpose, upon a contract that they shall, when the purpose is accomplished, be returned or otherwise disposed of.
+                    </p>
+                    <ul class="text-sm font-bold text-slate-500 space-y-3 border-t border-slate-100 pt-4">
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-emerald-500"></i> Delivery of Possession (not ownership).</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-emerald-500"></i> Must be for a specific purpose.</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-emerald-500"></i> Return of specific goods is mandatory.</li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-6 rounded-3xl text-center border border-slate-200">
+                            <div class="text-4xl mb-2">🚗</div>
+                            <h4 class="font-bold text-xs uppercase text-law-navy">Valet Parking</h4>
+                            <p class="text-[10px] text-slate-500 mt-1">You give the keys; they hold possession.</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-3xl text-center border border-slate-200">
+                            <div class="text-4xl mb-2">👔</div>
+                            <h4 class="font-bold text-xs uppercase text-law-navy">Dry Cleaning</h4>
+                            <p class="text-[10px] text-slate-500 mt-1">Goods delivered for a purpose, then returned.</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-3xl text-center border border-slate-200">
+                            <div class="text-4xl mb-2">🏦</div>
+                            <h4 class="font-bold text-xs uppercase text-law-navy">Bank Locker</h4>
+                            <p class="text-[10px] font-black text-red-500 mt-1 uppercase tracking-widest">NOT BAILMENT</p>
+                        </div>
+                        <div class="col-span-2 bg-red-50 p-4 rounded-xl border border-red-100 mt-2">
+                            <p class="text-[10px] text-red-800 font-bold leading-relaxed text-center">
+                                Why isn't a bank locker bailment? Because you hold the key. The bank does not have exclusive possession of your jewelry. (Established in <em>Atul Mehra v. Bank of Maharashtra</em>).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="agency" class="space-y-12 mt-32">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">The Law of Agency</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Section 182: Extending the Self</p>
+            </div>
+
+            <div class="bg-slate-900 rounded-[3.5rem] p-12 relative overflow-hidden shadow-2xl">
+                <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10 items-center">
+                    <div class="lg:col-span-5 space-y-6">
+                        <h3 class="text-2xl font-black uppercase text-white">Qui facit per alium, facit per se.</h3>
+                        <p class="text-sm text-slate-300 italic leading-relaxed">
+                            "He who acts through another does the act himself."
+                        </p>
+                        <p class="text-slate-400 font-medium leading-relaxed">
+                            An Agent is a person employed to do any act for another, or to represent another in dealings with third persons. The person for whom such act is done is the Principal.
+                        </p>
+                        <div class="bg-white/10 p-5 rounded-2xl border-l-4 border-law-gold">
+                            <h4 class="font-bold text-law-gold text-xs uppercase mb-2">The Golden Rule (Sec 226)</h4>
+                            <p class="text-sm text-white font-medium leading-relaxed">
+                                Contracts entered into through an agent have the same legal consequences as if the Principal had entered into them directly.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 flex flex-col items-center">
+                        <div class="flex items-center gap-4 w-full max-w-md">
+                            <div class="w-24 h-24 bg-law-navy border-4 border-law-gold rounded-full flex flex-col items-center justify-center z-10 text-white shadow-[0_0_20px_rgba(217,119,6,0.5)]">
+                                <i class="fas fa-building text-2xl"></i>
+                                <span class="text-[8px] font-black uppercase mt-1">Principal</span>
+                            </div>
+                            <div class="flex-1 h-2 bg-law-gold/50 relative overflow-hidden rounded-full">
+                                <div class="absolute top-0 left-0 h-full w-full bg-law-gold animate-[stream_1s_linear_infinite]" style="background: linear-gradient(90deg, transparent, #d97706, transparent); background-size: 200% 100%;"></div>
+                            </div>
+                            <div class="w-20 h-20 bg-white border-4 border-law-navy rounded-full flex flex-col items-center justify-center z-10 text-law-navy">
+                                <i class="fas fa-user-tie text-xl"></i>
+                                <span class="text-[8px] font-black uppercase mt-1">Agent</span>
+                            </div>
+                            <div class="flex-1 h-2 bg-slate-500/50 relative overflow-hidden rounded-full">
+                                <div class="absolute top-0 left-0 h-full w-full bg-slate-300 animate-[stream_1s_linear_infinite]" style="background: linear-gradient(90deg, transparent, #cbd5e1, transparent); background-size: 200% 100%;"></div>
+                            </div>
+                            <div class="w-24 h-24 bg-slate-200 border-4 border-slate-400 rounded-full flex flex-col items-center justify-center z-10 text-slate-600">
+                                <i class="fas fa-users text-2xl"></i>
+                                <span class="text-[8px] font-black uppercase mt-1">3rd Party</span>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-8 text-center max-w-xs">
+                            The Agent connects the Principal to the Third Party, creating a direct contract between them.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mootcourt-part5" class="bg-slate-100 rounded-[3.5rem] p-8 md:p-16 shadow-inner border-4 border-slate-200 relative overflow-hidden mt-32">
+            <div class="text-center mb-16 relative z-10">
+                <i class="fas fa-briefcase text-6xl text-law-navy mb-6"></i>
+                <h2 class="text-4xl md:text-5xl font-black text-law-navy uppercase tracking-tighter serif-font italic">Moot Court Simulator V</h2>
+                <p class="text-slate-500 font-bold text-sm mt-4 uppercase tracking-widest">Test your logic on Specialized Contracts.</p>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 max-w-4xl mx-auto relative z-10 mb-12 shadow-xl border border-slate-100">
+                <div class="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <span class="bg-law-navy text-white text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest">Docket 09</span>
+                    <h3 class="text-2xl font-bold serif-font text-law-navy italic">The Stolen Tailor</h3>
+                </div>
+                <p class="text-slate-600 text-lg leading-relaxed mb-8 font-medium">
+                    You give expensive silk cloth to a tailor to stitch a suit. That night, thieves break into the tailor's locked shop and steal everything, including your silk. You sue the tailor to pay for the lost cloth. The tailor proves he locked the shop securely.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="revealVerdict('v9', true)" class="flex-1 border-4 border-law-navy text-law-navy hover:bg-law-navy hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">Tailor wins. He took reasonable care.</button>
+                    <button onclick="revealVerdict('v9', false)" class="flex-1 border-4 border-prof-crimson text-prof-crimson hover:bg-prof-crimson hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">I win. He lost my goods.</button>
+                </div>
+                
+                <div id="v9" class="verdict-reveal bg-slate-50 p-8 rounded-2xl border-l-8 mt-6">
+                    <h4 id="v9-title" class="font-black text-xl mb-3 uppercase tracking-tighter"></h4>
+                    <p class="text-base text-slate-700 leading-relaxed font-medium">
+                        <strong>Legal Logic (Section 151 & 152):</strong> In a contract of bailment, the bailee (tailor) is bound to take as much care of the goods as a man of ordinary prudence would take of his own goods. If he proves he took that standard care (e.g., locked the shop), he is <strong>not responsible</strong> for the loss caused by theft or Act of God.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 max-w-4xl mx-auto relative z-10 shadow-xl border border-slate-100">
+                <div class="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <span class="bg-law-navy text-white text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest">Docket 10</span>
+                    <h3 class="text-2xl font-bold serif-font text-law-navy italic">The Unauthorized Agent</h3>
+                </div>
+                <p class="text-slate-600 text-lg leading-relaxed mb-8 font-medium">
+                    "A" works as a purchasing agent for "P". P tells A, "Buy 50 laptops, but do not pay more than ₹50,000 each." A finds laptops for ₹55,000 each and buys them anyway on P's behalf. P refuses to pay the supplier, saying A exceeded his authority. The supplier sues P.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="revealVerdict('v10', false)" class="flex-1 border-4 border-law-navy text-law-navy hover:bg-law-navy hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">P wins. The agent disobeyed orders.</button>
+                    <button onclick="revealVerdict('v10', true)" class="flex-1 border-4 border-prof-crimson text-prof-crimson hover:bg-prof-crimson hover:text-white py-4 rounded-2xl font-black uppercase text-sm transition-all shadow-sm">Supplier wins. P must pay.</button>
+                </div>
+                
+                <div id="v10" class="verdict-reveal bg-slate-50 p-8 rounded-2xl border-l-8 mt-6">
+                    <h4 id="v10-title" class="font-black text-xl mb-3 uppercase tracking-tighter"></h4>
+                    <p class="text-base text-slate-700 leading-relaxed font-medium">
+                        <strong>Legal Logic (Section 237 & Apparent Authority):</strong> The Supplier wins. If an agent does an act in the usual course of business, the Principal is bound by it even if the agent exceeded secret instructions, <em>provided the third party did not know about the secret limit.</em> P must pay the supplier, but P can separately sue his agent A for disobeying orders.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 mt-20 text-center space-y-8">
+            <div class="w-24 h-24 bg-law-gold text-white rounded-full flex items-center justify-center text-4xl mx-auto shadow-glow">
+                <i class="fas fa-check-double"></i>
+            </div>
+            <h2 class="text-5xl font-black uppercase tracking-tighter serif-font italic text-law-navy">Protocol Complete</h2>
+            <p class="text-xl text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
+                You have traversed the entire landscape of the Indian Contract Act, 1872. From the anatomy of a simple promise to the complex webs of agency and guarantee.
+            </p>
+         
+        </section>
+
+<section class="py-24 border-t-[12px] border-prof-crimson mt-32 relative overflow-hidden">
+            <div class="text-center space-y-6 relative z-10">
+                <div class="inline-flex items-center gap-2 bg-prof-crimson/10 text-prof-crimson px-5 py-2 rounded-full border border-prof-crimson/20 text-xs font-black uppercase tracking-[0.4em]">
+                    <i class="fas fa-book-open"></i> Professor's Module 06
+                </div>
+                <h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-none italic serif-font text-law-navy">The Tale of the <br><span class="text-prof-crimson">Midnight Bakery.</span></h2>
+                <p class="text-xl text-slate-500 max-w-3xl mx-auto font-medium leading-relaxed">
+                    "To truly understand the law, we must see it breathe. Let us weave every section of the Contract Act into a single story of ambition, disaster, and justice."
+                </p>
+            </div>
+            <div class="absolute -left-10 top-0 text-[15rem] text-slate-100 pointer-events-none serif-font italic z-0 opacity-50">§1-238</div>
+        </section>
+
+        <section id="the-story" class="max-w-5xl mx-auto space-y-12">
+            
+            <div class="bg-white p-8 md:p-12 rounded-[3rem] border-2 border-slate-100 shadow-sm relative overflow-hidden group hover:border-law-gold transition-colors">
+                <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest z-10">Chapter I: Formation</div>
+                <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                    <div class="w-32 h-32 bg-amber-50 text-law-gold rounded-full flex items-center justify-center text-5xl shrink-0 shadow-inner">🤝</div>
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-black serif-font italic text-law-navy">The Handshake</h3>
+                        <p class="text-slate-600 leading-relaxed font-medium">
+                            Arjun opens the 'Midnight Bakery'. He emails Ria, a coffee supplier: <em>"I will buy 100 kg of premium coffee beans for ₹50,000."</em> (<strong>The Offer - Sec 2a</strong>). Ria replies, <em>"I agree."</em> (<strong>The Acceptance - Sec 2b</strong>). 
+                            <br><br>
+                            Both are over 18 and of sound mind (<strong>Capacity - Sec 11</strong>). The coffee and the ₹50,000 act as the mutually beneficial price for the promise (<strong>Consideration - Sec 2d</strong>). A legally binding contract is born!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 md:p-12 rounded-[3rem] border-2 border-slate-100 shadow-sm relative overflow-hidden group hover:border-prof-crimson transition-colors">
+                <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest z-10">Chapter II: Vitiating Factors</div>
+                <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                    <div class="w-32 h-32 bg-red-50 text-prof-crimson rounded-full flex items-center justify-center text-5xl shrink-0 shadow-inner">🎭</div>
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-black serif-font italic text-law-navy">The Shadows of Deceit</h3>
+                        <p class="text-slate-600 leading-relaxed font-medium">
+                            A rival cafe owner threatens Ria: <em>"Cancel your deal with Arjun, or I'll burn your warehouse."</em> If Ria cancels out of fear, her consent is tainted by <strong>Coercion (Sec 15)</strong>. 
+                            <br><br>
+                            Alternatively, what if Ria deliberately mixes cheap tea powder into the premium coffee to trick Arjun? That is intentional deception—<strong>Fraud (Sec 17)</strong>. Because of this deceit, Arjun has the power to cancel the contract. It is <strong>Voidable</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 md:p-12 rounded-[3rem] border-2 border-slate-100 shadow-sm relative overflow-hidden group hover:border-law-accent transition-colors">
+                <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest z-10">Chapter III: Frustration & Breach</div>
+                <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                    <div class="w-32 h-32 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center text-5xl shrink-0 shadow-inner">⛈️</div>
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-black serif-font italic text-law-navy">The Storm & The Betrayal</h3>
+                        <p class="text-slate-600 leading-relaxed font-medium">
+                            Ria packs the coffee, but a massive cyclone washes away the entire highway. Delivery is physically impossible. The law forgives her under the <strong>Doctrine of Frustration (Sec 56)</strong>.
+                            <br><br>
+                            But what if there is no cyclone? What if Ria simply sells the coffee to someone else for ₹70,000? That is a <strong>Breach of Contract</strong>. Arjun loses his biggest wedding catering order because he had no coffee. Arjun sues Ria for <strong>Damages (Sec 73)</strong> to cover his lost profits.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-law-navy text-white p-8 md:p-12 rounded-[3rem] shadow-cartoon border-4 border-law-gold relative overflow-hidden group">
+                <div class="absolute top-0 right-0 bg-law-gold text-law-navy px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest z-10">Chapter IV: Special Contracts</div>
+                <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                    <div class="w-32 h-32 bg-white/10 text-law-gold rounded-full flex items-center justify-center text-5xl shrink-0 shadow-inner">🛡️</div>
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-black serif-font italic text-white">The Web of Trust</h3>
+                        <p class="text-slate-300 leading-relaxed font-medium">
+                            To survive the loss, Arjun takes a bank loan. The bank demands security. Arjun's wealthy friend, Kabir, steps in and says, <em>"Give him the loan. If he defaults, I will pay."</em> Kabir has created a <strong>Contract of Guarantee (Sec 126)</strong>. He is the Surety.
+                            <br><br>
+                            To expand, Arjun gives his delivery van to a mechanic for repairs. The mechanic holds the van strictly for that purpose. This is a <strong>Bailment (Sec 148)</strong>. Finally, Arjun hires an <strong>Agent (Sec 182)</strong> to negotiate coffee prices for him worldwide.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="final-exam" class="bg-slate-100 rounded-[3.5rem] p-8 md:p-16 shadow-inner border-4 border-slate-200 relative overflow-hidden mt-32">
+            <div class="text-center mb-16 relative z-10">
+                <div class="w-24 h-24 bg-prof-crimson text-white rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-academic animate-pulse">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black text-law-navy uppercase tracking-tighter serif-font italic">The Jurist's Final Exam</h2>
+                <p class="text-slate-500 font-bold text-sm mt-4 uppercase tracking-widest">Did you master the story? Prove it.</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto space-y-8">
+                
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg text-law-navy mb-6"><span class="text-prof-crimson mr-2">Q1.</span> When Ria agreed to give Arjun the coffee, what was the ₹50,000 legally called?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <button onclick="checkAnswer('q1', false, 'Incorrect. A wager is a gamble. This was a valid trade.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">A Wager</button>
+                        <button onclick="checkAnswer('q1', true, 'Correct! Section 2(d): Consideration is the price paid for the promise.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">Consideration</button>
+                        <button onclick="checkAnswer('q1', false, 'Incorrect. Bailment is about handing over goods, not the price paid.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">Bailment</button>
+                    </div>
+                    <div id="q1-result" class="hidden mt-4 p-4 rounded-xl text-sm font-bold"></div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg text-law-navy mb-6"><span class="text-prof-crimson mr-2">Q2.</span> When the cyclone washed away the highway making delivery impossible, which doctrine saved Ria?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <button onclick="checkAnswer('q2', false, 'Incorrect. Undue influence is mental domination. This was a physical impossibility.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">Undue Influence</button>
+                        <button onclick="checkAnswer('q2', false, 'Incorrect. Indemnity is promising to save someone from loss.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">Indemnity</button>
+                        <button onclick="checkAnswer('q2', true, 'Correct! Section 56: The Doctrine of Frustration invalidates a contract when an act becomes impossible.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">Frustration</button>
+                    </div>
+                    <div id="q2-result" class="hidden mt-4 p-4 rounded-xl text-sm font-bold"></div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg text-law-navy mb-6"><span class="text-prof-crimson mr-2">Q3.</span> Kabir told the bank: "Give Arjun the loan. If he defaults, I will pay." What is Kabir's legal role?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <button onclick="checkAnswer('q3', true, 'Correct! Section 126: Kabir is the Surety in a Contract of Guarantee.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">The Surety</button>
+                        <button onclick="checkAnswer('q3', false, 'Incorrect. The Principal is the person who hires an Agent.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">The Principal</button>
+                        <button onclick="checkAnswer('q3', false, 'Incorrect. A Bailee is someone who holds physical goods for a specific purpose.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">The Bailee</button>
+                    </div>
+                    <div id="q3-result" class="hidden mt-4 p-4 rounded-xl text-sm font-bold"></div>
+                </div>
+
+            </div>
+            
+            <i class="fas fa-certificate absolute -right-20 -bottom-20 text-[350px] text-law-navy/5 pointer-events-none"></i>
+        </section>
+
+        <script>
+            // Logic for the Final Exam
+            function checkAnswer(questionId, isCorrect, explanation) {
+                const resultDiv = document.getElementById(questionId + '-result');
+                resultDiv.classList.remove('hidden');
+                
+                if (isCorrect) {
+                    resultDiv.className = "mt-4 p-4 rounded-xl text-sm font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 animate-[pulse_0.5s_ease-in-out]";
+                    resultDiv.innerHTML = `<i class="fas fa-check-circle mr-2 text-emerald-600"></i> ${explanation}`;
+                } else {
+                    resultDiv.className = "mt-4 p-4 rounded-xl text-sm font-bold bg-red-100 text-red-800 border border-red-200";
+                    resultDiv.innerHTML = `<i class="fas fa-times-circle mr-2 text-red-600"></i> ${explanation}`;
+                }
+            }
+        </script>
+<section class="py-24 border-t-[12px] border-law-gold mt-32 relative overflow-hidden">
+            <div class="text-center space-y-6 relative z-10">
+                <div class="inline-flex items-center gap-2 bg-law-gold/10 text-law-gold px-5 py-2 rounded-full border border-law-gold/20 text-xs font-black uppercase tracking-[0.4em]">
+                    <i class="fas fa-scroll"></i> Professor's Module 07
+                </div>
+                <h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-none italic serif-font text-law-navy">The Midnight Bakery: <br><span class="text-law-gold">The Expansion.</span></h2>
+                <p class="text-xl text-slate-500 max-w-3xl mx-auto font-medium leading-relaxed">
+                    "Our story is not quite over. As Arjun expands his business, he encounters the law of Contingencies, the rules of Pledging assets, and the art of rewriting a contract."
+                </p>
+            </div>
+            <div class="absolute -right-10 top-0 text-[15rem] text-slate-100 pointer-events-none serif-font italic z-0 opacity-50">§31-172</div>
+        </section>
+
+        <section id="the-story-part2" class="max-w-5xl mx-auto space-y-12">
+            
+            <div class="bg-white p-8 md:p-12 rounded-[3rem] border-2 border-slate-100 shadow-sm relative overflow-hidden group hover:border-prof-crimson transition-colors">
+                <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest z-10">Chapter V: The "If" Clause</div>
+                <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                    <div class="w-32 h-32 bg-red-50 text-prof-crimson rounded-full flex items-center justify-center text-5xl shrink-0 shadow-inner">🎲</div>
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-black serif-font italic text-law-navy">The Contingent Contract</h3>
+                        <p class="text-slate-600 leading-relaxed font-medium">
+                            Arjun wants to buy a massive industrial oven from Germany. He tells the seller: <em>"I will buy this oven for ₹5 Lakhs, <strong>IF</strong> my ship carrying my coffee exports safely arrives in London next month."</em> 
+                            <br><br>
+                            This is a <strong>Contingent Contract (Sec 31)</strong>. The performance of the contract depends on an uncertain future event. If the ship sinks, the contract becomes void, and Arjun doesn't have to buy the oven. It is entirely legal (unlike a wager) because Arjun has a real business interest in the ship.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 md:p-12 rounded-[3rem] border-2 border-slate-100 shadow-sm relative overflow-hidden group hover:border-law-gold transition-colors">
+                <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest z-10">Chapter VI: The Security</div>
+                <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                    <div class="w-32 h-32 bg-amber-50 text-law-gold rounded-full flex items-center justify-center text-5xl shrink-0 shadow-inner">💎</div>
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-black serif-font italic text-law-navy">The Golden Pledge</h3>
+                        <p class="text-slate-600 leading-relaxed font-medium">
+                            While waiting for his shipment, Arjun runs out of cash to pay his staff. He goes to a moneylender and hands over his grandfather's vintage Rolex watch as security for a quick ₹50,000 loan. 
+                            <br><br>
+                            This specific type of bailment—keeping goods as security for a debt—is called a <strong>Pledge (Sec 172)</strong>. Arjun is the Pawnor; the moneylender is the Pawnee. If Arjun defaults, the moneylender has the right to sell the watch after giving reasonable notice.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 md:p-12 rounded-[3rem] border-2 border-slate-100 shadow-sm relative overflow-hidden group hover:border-blue-500 transition-colors">
+                <div class="absolute top-0 right-0 bg-law-navy text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest z-10">Chapter VII: The Debts</div>
+                <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                    <div class="w-32 h-32 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center text-5xl shrink-0 shadow-inner">🧾</div>
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-black serif-font italic text-law-navy">Appropriation of Payments</h3>
+                        <p class="text-slate-600 leading-relaxed font-medium">
+                            Arjun owes his flour supplier three separate bills: ₹10k for January, ₹20k for February, and ₹30k for March. Arjun sends a cheque for ₹15k but <em>forgets</em> to say which bill it is for. 
+                            <br><br>
+                            Under <strong>Section 59-61 (Clayton's Rule)</strong>, if the debtor doesn't specify, the creditor can apply it to any lawful debt. Usually, the law applies it to discharge the debts in order of time (clearing January's bill first).
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-law-navy text-white p-8 md:p-12 rounded-[3rem] shadow-cartoon border-4 border-prof-crimson relative overflow-hidden group">
+                <div class="absolute top-0 right-0 bg-prof-crimson text-white px-5 py-2 rounded-bl-2xl text-[10px] font-black uppercase tracking-widest z-10">Chapter VIII: The Clean Slate</div>
+                <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                    <div class="w-32 h-32 bg-white/10 text-crimson-light rounded-full flex items-center justify-center text-5xl shrink-0 shadow-inner">📜</div>
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-black serif-font italic text-white">Novation & Remission</h3>
+                        <p class="text-slate-300 leading-relaxed font-medium">
+                            Arjun owes the flour supplier a total of ₹60,000, but his business takes a hit. He meets the supplier and says, "I can't pay ₹60k. Will you accept a final settlement of ₹40k right now, and we tear up the old contract?" The supplier agrees.
+                            <br><br>
+                            This is perfectly legal! <strong>Section 62 (Novation)</strong> allows parties to substitute an old contract with a new one. Furthermore, <strong>Section 63 (Remission)</strong> allows a promisee to forgive or accept a lesser sum than what was owed. The old debt vanishes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="final-exam-2" class="bg-slate-100 rounded-[3.5rem] p-8 md:p-16 shadow-inner border-4 border-slate-200 relative overflow-hidden mt-32">
+            <div class="text-center mb-16 relative z-10">
+                <div class="w-24 h-24 bg-law-gold text-law-navy rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-academic animate-pulse">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black text-law-navy uppercase tracking-tighter serif-font italic">The Jurist's Exam: Part II</h2>
+                <p class="text-slate-500 font-bold text-sm mt-4 uppercase tracking-widest">Four final tests of legal logic.</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto space-y-8">
+                
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg text-law-navy mb-6"><span class="text-law-gold mr-2">Q4.</span> Arjun pledged his watch for a loan. If he doesn't pay it back, what can the moneylender do?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="checkAnswer('q4', true, 'Correct! Section 176: A Pawnee can sell the pledged goods after giving reasonable notice to the Pawnor.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">Sell it after giving notice.</button>
+                        <button onclick="checkAnswer('q4', false, 'Incorrect. He cannot just keep it silently; he must follow legal procedure to recover the debt.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">Keep it forever automatically.</button>
+                    </div>
+                    <div id="q4-result" class="hidden mt-4 p-4 rounded-xl text-sm font-bold"></div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg text-law-navy mb-6"><span class="text-law-gold mr-2">Q5.</span> Arjun and his supplier tore up the ₹60,000 contract and replaced it with a new one for ₹40,000. Does Arjun still have to perform the old contract?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="checkAnswer('q5', false, 'Incorrect. Once replaced by mutual agreement, the old contract is discharged.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">Yes, the old contract remains.</button>
+                        <button onclick="checkAnswer('q5', true, 'Correct! Section 62 (Novation): If parties agree to substitute a new contract for it, the original contract need not be performed.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">No, the old contract is dead.</button>
+                    </div>
+                    <div id="q5-result" class="hidden mt-4 p-4 rounded-xl text-sm font-bold"></div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-lg text-law-navy mb-6"><span class="text-law-gold mr-2">Q6.</span> If Arjun's ship never arrives in London (it sinks), what happens to his contingent contract to buy the German oven?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="checkAnswer('q6', true, 'Correct! Section 32: Contingent contracts to do anything if an uncertain future event happens cannot be enforced if that event becomes impossible.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">It becomes Void.</button>
+                        <button onclick="checkAnswer('q6', false, 'Incorrect. A contingent contract depends entirely on that specific condition.')" class="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all">He still has to buy the oven.</button>
+                    </div>
+                    <div id="q6-result" class="hidden mt-4 p-4 rounded-xl text-sm font-bold"></div>
+                </div>
+
+            </div>
+        </section>
+
+         
+        </section>
+<section class="py-24 border-t-[12px] border-law-navy mt-32 relative overflow-hidden">
+            <div class="text-center space-y-6 relative z-10">
+                <div class="inline-flex items-center gap-2 bg-law-navy/10 text-law-navy px-5 py-2 rounded-full border border-law-navy/20 text-xs font-black uppercase tracking-[0.4em]">
+                    <i class="fas fa-gem"></i> Bonus Module 08
+                </div>
+                <h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-none italic serif-font text-law-navy">The Jurist's <br><span class="text-law-gold">Edge.</span></h2>
+                <p class="text-xl text-slate-500 max-w-3xl mx-auto font-medium leading-relaxed">
+                    "Textbooks teach you the rules. History and logic teach you how to bend them. Here are the secrets and anomalies of the Contract Act that will put you ahead of the rest."
+                </p>
+            </div>
+            <div class="absolute -right-10 top-0 text-[15rem] text-slate-100 pointer-events-none serif-font italic z-0 opacity-50">1872</div>
+        </section>
+
+        <section class="space-y-12">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">The Time Capsule</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Did you know?</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-4xl mb-4 text-law-gold"><i class="fas fa-ghost"></i></div>
+                    <h3 class="font-black text-xl uppercase mb-3 text-law-navy">The Missing Chapters</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        If you read the bare act, you will notice <strong>Chapters VII and XI are missing!</strong> Why? In 1930 and 1932, the laws for selling goods and business partnerships became too big, so those chapters were "cut out" to create the Sale of Goods Act and the Partnership Act.
+                    </p>
+                </div>
+
+                <div class="bg-law-navy p-8 rounded-[2rem] border-4 border-law-gold shadow-cartoon hover:-translate-y-2 transition-transform duration-300 text-white">
+                    <div class="text-4xl mb-4 text-white"><i class="fas fa-laptop-code"></i></div>
+                    <h3 class="font-black text-xl uppercase mb-3 text-law-gold">1872 meets 2026</h3>
+                    <p class="text-sm text-slate-300 font-medium leading-relaxed">
+                        This Act was written by the British over 150 years ago. Yet, when you click "I Agree" on a software Terms & Conditions pop-up today, you are being governed by the exact same 1872 principles of Offer and Acceptance (aided by the IT Act, 2000). <strong>Good logic never ages.</strong>
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-4xl mb-4 text-[#A51C30]"><i class="fas fa-feather-alt"></i></div>
+                    <h3 class="font-black text-xl uppercase mb-3 text-law-navy">The Mastermind</h3>
+                    <p class="text-sm text-slate-600 font-medium leading-relaxed">
+                        The original draft was prepared by the Third Indian Law Commission, but the final version we read today was heavily influenced by <strong>Sir James Fitzjames Stephen</strong>. His focus was to make the law so simple that ordinary Indian merchants could understand it without lawyers.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-16 mt-32">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl font-black uppercase tracking-tighter serif-font italic text-law-navy">Complex Law, Simplified.</h2>
+                <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.3em]">Mastering the most confusing doctrines.</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-12">
+                
+                <div class="bg-slate-50 p-8 md:p-12 rounded-[3rem] border-l-8 border-law-navy shadow-sm relative overflow-hidden">
+                    <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                        <div class="w-24 h-24 bg-white text-law-navy rounded-full flex items-center justify-center text-4xl shrink-0 shadow-lg border-2 border-slate-200">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black uppercase text-law-navy mb-2">1. The "Stranger" Rule (Privity)</h3>
+                            <p class="text-sm text-slate-500 font-bold uppercase tracking-widest mb-4">Privity of Contract vs. Privity of Consideration</p>
+                            <p class="text-slate-700 leading-relaxed font-medium mb-4">
+                                <strong>The Confusion:</strong> Can a stranger sue? <br>
+                                <strong>The Simple Truth:</strong> Imagine A and B make a contract that A will pay C ₹10,000. 
+                                <br><br>
+                                <strong>Rule 1 (Stranger to Contract):</strong> C cannot sue A because C is not a party to the contract. Only B can sue A. 
+                                <br>
+                                <strong>Rule 2 (Stranger to Consideration):</strong> However, in India (unlike England), consideration can move from a third party! If C pays A the money on behalf of B, the contract between A and B is perfectly valid. (Established in <em>Chinnaya v. Ramayya</em>).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-red-50 p-8 md:p-12 rounded-[3rem] border-l-8 border-red-500 shadow-sm relative overflow-hidden">
+                    <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                        <div class="w-24 h-24 bg-white text-red-500 rounded-full flex items-center justify-center text-4xl shrink-0 shadow-lg border-2 border-red-100">
+                            <i class="fas fa-skull-crossbones"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black uppercase text-law-navy mb-2">2. Void vs. Illegal Agreements</h3>
+                            <p class="text-sm text-red-400 font-bold uppercase tracking-widest mb-4">The "Poison" Effect</p>
+                            <p class="text-slate-700 leading-relaxed font-medium mb-4">
+                                <strong>The Confusion:</strong> Aren't they the same thing? No! <br>
+                                <strong>The Simple Truth:</strong> 
+                                <ul class="list-disc pl-5 mt-2 space-y-2 text-sm text-slate-800">
+                                    <li><strong>VOID = Dead.</strong> If you and I make a wagering agreement (a bet), it is void. If I borrow ₹10,000 from a friend to pay you the bet, my friend CAN recover the loan from me. The loan is valid.</li>
+                                    <li><strong>ILLEGAL = Dead + Poisonous.</strong> If you and I agree to smuggle gold, it is illegal. If I borrow ₹10,000 from a friend to fund the smuggling (and he knows about it), the loan contract is also poisoned and dies. My friend CANNOT recover his money.</li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-emerald-50 p-8 md:p-12 rounded-[3rem] border-l-8 border-emerald-500 shadow-sm relative overflow-hidden">
+                    <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                        <div class="w-24 h-24 bg-white text-emerald-500 rounded-full flex items-center justify-center text-4xl shrink-0 shadow-lg border-2 border-emerald-100">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black uppercase text-law-navy mb-2">3. Quantum Meruit</h3>
+                            <p class="text-sm text-emerald-600 font-bold uppercase tracking-widest mb-4">"As much as is earned"</p>
+                            <p class="text-slate-700 leading-relaxed font-medium mb-4">
+                                <strong>The Confusion:</strong> What happens if a contract is canceled halfway through? Do I get paid nothing? <br>
+                                <strong>The Simple Truth:</strong> The law hates unfairness. If you hire me to paint your 10-room house, and after I paint 5 rooms, you wrongfully fire me and cancel the contract. I cannot sue for the full contract price because I didn't finish. BUT, under the doctrine of <em>Quantum Meruit</em>, I can sue you for the value of the 5 rooms I already painted. You must pay for "as much as is earned."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="py-20 mt-20 text-center space-y-8 bg-law-navy text-white rounded-[4rem] border-4 border-law-gold shadow-[0_0_50px_rgba(217,119,6,0.3)]">
+            <div class="w-32 h-32 bg-law-gold text-law-navy rounded-full flex items-center justify-center text-5xl mx-auto shadow-cartoon">
+                <i class="fas fa-award"></i>
+            </div>
+            <h2 class="text-5xl font-black uppercase tracking-tighter serif-font italic">You Are Now a Master.</h2>
+            <p class="text-xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">
+                You have unlocked the secrets of the Indian Contract Act, 1872. You don't just know the rules; you know the logic, the history, and the loopholes. 
+            </p>
+            <div class="pt-8">
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-white text-law-navy px-12 py-5 rounded-full font-black uppercase text-sm tracking-widest shadow-xl hover:bg-slate-200 transition-all">
+                    Return to Act Library
+                </button>
+            </div>
+        </section>
